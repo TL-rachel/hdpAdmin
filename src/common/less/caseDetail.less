@@ -1,0 +1,688 @@
+@charset "utf-8";
+body{
+  position:relative;
+}
+//两行文字超出后隐藏
+.two-lineHeight{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+
+//案件号名字
+.anjianhao {
+  color: #0060b1;
+  margin-left: 30px;
+  font-size: 18px;
+}
+//理赔流程进度条
+.lipei-process{
+  position: relative;
+  //top: -5px;
+  left: 3px;
+  background: url('../images/other-process-icon.png') no-repeat;
+  background-position: 0 0;
+  display: inline-block;
+  margin-left: 3px;
+  width: 600px;
+  height: 50px;
+}
+.lipei-process.i2{  background-position: 0 -50px;  }
+.lipei-process.i3{  background-position: 0 -100px;  }
+.lipei-process.i4{  background-position: 0 -150px;  }
+.lipei-process.i5{  background-position: 0 -200px;  }
+.lipei-process.i6{  background-position: 0 -250px;  }
+.lipei-process.none{  display: none;  }
+
+.fixDiv {
+  background-color: #f0f0f0;
+  border: solid 1px #000000;
+  position: absolute;
+  display: none;
+}
+
+.case-anjian{
+  width:95%;
+  font-size:16px;
+  margin:0 auto;
+  height:30px;
+}
+.zf-panel-list{
+  margin-bottom:20px;
+  border:1px solid #eee;
+  .zf-panel-title{
+    width:100%;
+    height:40px;
+    background:#D5DCE6;
+    >h4{
+      font-weight: 400;
+      line-height:40px;
+      position: relative;
+      .upload-icon,
+      .upload-icon1,
+      .upload-icon2,
+      .upload-icon3,
+      .upload-icon4,
+      .upload-user,
+      .claim-process{
+        position: absolute;
+        top: 5px;
+        left: 3px;
+        background: url('../images/case_icon.png') no-repeat;
+        background-position: 0 -400px;
+        display: inline-block;
+        margin-left: 3px;
+       .size(30px,30px);
+      }
+    }
+    .textIndent{
+      text-indent: 2em;
+      color: #333;
+    }
+    .open,
+    .open1,
+    .openCase
+    {
+      float: right;
+      color: #0099ff;
+      cursor: pointer;
+    }
+    .open-icon{
+      display: inline-block;
+      .size(7px,7px);
+      background-position: -43px -95px;
+      vertical-align: middle;
+      margin-right:20px;
+
+    }
+    .down{
+      background-position: -51px -95px;
+    }
+  }
+}
+.zf-panel-list.border-none{
+  border:none;
+}
+.peopleList .zf-panel-title{ background:#eee;  }
+
+.zf-panel-list .zf-panel-title>h4 .upload-icon1{  background-position:-270px -400px  }
+.zf-panel-list .zf-panel-title>h4 .upload-icon2{   background-position:-210px -400px; }
+.zf-panel-list .zf-panel-title>h4 .upload-icon3{ background-position:-300px -400px;}
+.zf-panel-list .zf-panel-title>h4 .upload-icon4{  background-position:-240px -400px;}
+.zf-panel-list .zf-panel-title>h4 .upload-user{  background-position:-90px -400px;}
+.zf-panel-list .zf-panel-title>h4 .claim-process{  background-position:-180px -400px; }
+
+
+
+.zf-common-list{
+  margin-bottom:20px;
+  padding: 30px;
+  //border-:1px solid #eee;
+  .zf-common-title{
+    width:95%;
+    height:40px;
+    //background:#f1f3f7;
+    >h4{
+      font-weight: 400;
+      line-height:40px;
+      position: relative;
+      border-bottom:1px solid #eee;
+    }
+  }
+}
+
+.zf-panel-content.pt10{
+  padding-top:10px;
+}
+
+//查看记录切换
+.upload-material{
+  width:100%;
+  height:50px;
+}
+.upload-material ul li {
+  background: #fff;
+  height: 33px;
+  /* line-height: 23px; */
+  float: left;
+  cursor: pointer;
+  padding: 10px;
+  margin-top: 17px;
+  margin-left: 30px;
+}
+.upload-material ul li.active{
+  border: 1px solid #eee;
+  border-top: 2px solid #0e90d2;
+  border-bottom: 14px solid #fff;
+  margin-bottom: 8px;
+  color: #0e90d2;
+
+}
+.upload-content{
+  width:90%;
+  padding-bottom: 20px;
+  border:1px solid #eee;
+  margin-left:30px;
+}
+.upload-material-title{
+  width:100%;
+  height:50px;
+}
+.upload-material-title ul,.gonggu-survey ul{
+  width: 100%;
+  height: 50px;
+  /*border-bottom: 1px solid #eee;*/
+}
+/*公估人-勘察人*/
+.gonggu-survey{
+
+}
+.gonggu-survey ul li {
+  float: left;
+  height: 35px;
+  line-height: 35px;
+  cursor: pointer;
+  margin-top: 15px;
+  padding: 0px 10px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.gonggu-survey ul li.active{
+  background: #005bac;
+  color: #fff;
+}
+/*其他tab切换*/
+.upload-material-title ul li{
+  height:24px;
+  line-height: 24px;
+  float: left;
+  cursor: pointer;
+  /*border:1px solid #eee;*/
+  margin:10px;
+  padding:2px 4px;
+}
+.upload-material-title ul li.active{
+  background: #005bac;
+  color: #fff;
+}
+.upload-material-title ul li:hover{
+  background: #e7e7e7;
+  color: #666;
+}
+.zf-panel-title ul li{
+  float: left;
+  height:35px;
+  font-size: 14px;
+  text-align: center;
+  width:120px;
+  padding-left:10px;
+  padding-right:10px;
+  line-height: 35px;
+  cursor: pointer;
+}
+.zf-panel-title ul li.active{
+  height:30px;
+  line-height: 30px;
+  border-left:1px solid #dcdcdc;
+  border-right:1px solid #dcdcdc;
+  border-top:4px solid #005abc;
+}
+.bianhao{
+  float:left;
+  /*padding-left:15px;*/
+  line-height: 30px;
+  color:#333333;
+}
+a.baozhang-look,a.baoan-look{
+  display:inline-block;
+  /*text-decoration: none;*/
+  color:#0099ff;
+  padding-right:15px;
+  line-height: 35px;
+}
+.case-detail-content{
+  min-height: 250px;
+}
+
+.upload-material-content .upload-list{
+  /*height:165px;*/
+  border-bottom:1px solid #ededed;
+}
+.gonggu-survey-content .upload-list{
+  border:0;
+}
+.upload-list-ok{
+  padding-top:50px;
+  padding-bottom:50px;
+  text-align: center;
+}
+
+p.pd5{
+  padding:5px;
+}
+
+/*上传流程中上传材料边框*/
+.upload-border{border:1px solid #eee; margin:0 30px 30px;}
+
+/*上传文件左边文字部分*/
+.upload-list-left{ width:10%;  }
+.upload-list-left p{  width:80%;  font-size:16px;  text-align: right;  }
+/*上传文件中间上传部分*/
+.upload-list-middle{  width:80%;  }
+.upload-list-middle>p.warning-info{
+  /*width: 75%;*/
+  /*color: #0099ff;*/
+  /* padding-top: 8px; */
+  padding: 0;
+  font-size: 12px;
+  height: 20px;
+  line-height: 20px;
+  overflow: hidden;
+  margin-bottom: 10px;}
+.upload-list-middle>p.zhushi{margin-left: -60px;}
+/*上传文件右边下载部分*/
+.upload-list-right{  width:20%;  position: relative;}
+.upload-list-right-btn { width:20%;  }
+.reserve{
+  height:40px;
+}
+.upload-list-right .right-state {
+  padding-top: 58px;
+  /* width: 270px; */
+}
+.right-state.pt20{
+  padding-top:20px;
+}
+.reserve span.reserve-btn{
+  cursor: pointer;
+  /*position: relative;*/
+  height:40px;
+  text-align: center;
+  width:100px;
+  line-height: 40px;
+  display: inline-block;
+  float: right;
+  margin-right:20px;
+  padding-left: 12px;
+  padding-right: 12px;
+  border: 1px solid #ddd;
+  background-color: #005bac;
+  color: #fff;
+}
+.reserve1 span.reserve-btn{
+  cursor: pointer;
+  height: 40px;
+  text-align: center;
+  width: 105px;
+  line-height: 40px;
+  display: inline-block;
+  float: right;
+  padding-left: 4px;
+  padding-right: 12px;
+  border: 1px solid #ddd;
+  background-color: #fd7045;
+  color: #fff;
+}
+.reserve span.reserve-btn:hover{
+  background-color:#0077ff;
+}
+.reserve1 span.reserve-btn:hover{
+  background-color:#e45c32;
+}
+.reserve-btn i{
+  position: relative;
+  top: 7px;
+  left: -5px;
+  background: url('../images/case_icon.png') no-repeat;
+  background-position: 0 -430px;
+  display: inline-block;
+  margin-left: 3px;
+  /* border: 1px solid #fff; */
+  width: 30px;
+  height: 25px;
+}
+.reserve1 span.reserve-btn-1ccb90{
+  background: #1ccb90;
+}
+.reserve1 span.reserve-btn-1ccb90:hover{
+  background: #16a96e;
+}
+
+
+/*示例及审核不通过部分*/
+.case-describe.w250{
+  width:250px;
+}
+
+
+
+.file-show{  width:100%;  height:100%;  padding-bottom:50px;  }
+.file-show-title{  width:20%;  padding-top:20px;  text-align: center;  }
+.file-show-li{ width:19%;  text-align: center;  float:left;  margin-left:8px;  margin-top:40px;  position:relative;  }
+.xiazai{  line-height: 90px;  margin-top:20%;  }
+.zhezhao{  display:none;  }
+.zhezhao a{  height:90px;  width:100%;  text-decoration: none;  background:#e8f4fc;  opacity:0.5;  position:absolute;  top:-10px;  left:0;  }
+.zhezhao a:hover{
+  height:100px;
+  width:100%;
+  text-decoration: none;
+  background:#e8f4fc;
+  filter:alpha(opacity=90); /*IE滤镜，透明度90%*/
+  -moz-opacity:0.9; /*Firefox私有，透明度90%*/
+  opacity:0.9;/*其他，透明度90%*/
+  position:absolute;
+  top:-10px;
+  left:0;
+  display:block;
+}
+.zhezhao a>img{  margin-top:40%;  }
+.file-show-li:hover .zhezhao{  display:block;  }
+.flieshow-img{  height:80px;  margin:auto;  }
+.flieshow-img img{  width:50px;  height:50px;  }
+.file-show-li .flieshow-p{  margin-top:10px;  margin-bottom:0;
+  padding:0;}
+.up-load-file{  width:100%;  border-bottom:2px solid #eee;  }
+.up-load-file.border-none{
+  border:none;}
+.up-load-file .left-title{  text-align: center;  }
+.up-load-file .left-title{  width:20%;  }
+.up-load-file .right-file-show{  width:85%;  margin:auto;  }
+.up-load-file .right-file-show.w0100{  width:100%; }
+
+
+
+/*物流各公估查勘人图片展示*/
+.show-upload-pic .batch-pic1{
+  max-height:480px;overflow-y: auto;
+}
+.show-upload-pic .batch-pic1 li{margin:0 11px 0 0;display:inline;  }
+
+//按钮透明
+.uploadbtn{  width:100%;  cursor: pointer; height:90px;  opacity: 0;  }
+
+/*上传按钮样式*/
+.btnbox .uploadbtn{
+  width:100%;
+  cursor: pointer;
+  height:90px;
+  opacity: 0;
+}
+.reserve{
+  height:40px;
+}
+.reserve span.reserve-btn{
+  cursor: pointer;
+  display: inline-block;
+  float: right;
+  margin-right:20px;
+  padding:5px 12px;
+  border: 1px solid #ddd;
+  background-color: #005bac;
+  color: #fff;
+}
+.reserve span.reserve-btn:hover{
+  background-color:#0077ff;
+}
+
+
+
+
+
+.lookup .textarea{
+  width:90%;
+  background:#fff;
+  border:1px solid #eee;
+  border-radius: 0;
+  line-height: 25px;
+  padding-left: 10px;
+  padding-right: 10px;
+  height:100px;
+  overflow-y:auto;
+  box-shadow: none;
+  margin-bottom:10px;
+}
+.lookup .textarea.w{
+  width:97%;
+}
+.chuxian-and-suopei{
+  margin-bottom:35px;
+  margin-left:50px;
+}
+.lookup-r{
+  float: right;
+  /*padding-right:;*/
+}
+.lookup-r.pr50{
+  padding-right:50px;
+  text-align: left;
+}
+.lookup-r.pr50 .Insure-name{
+  width:400px;
+  text-align: left;
+}
+
+
+.flexslider .slides,.bottom-cailiao{
+  padding-bottom:20px;
+}
+
+
+
+
+/*公估部分*/
+.gonggu-beizhu{
+  border:1px solid #eee;width:90%; margin:0 auto 30px;
+}
+.gonggu-beizhu>p{
+  padding:0;
+  line-height: 20px;
+}
+
+
+
+
+/*审核中的案件点击展示大图*/
+body{
+  position: relative;
+}
+[class*="entypo-"]:before {
+  font-family: 'entypo', sans-serif;
+}
+
+/*现场照片*/
+.scenePhotos{
+  height:250px;
+  overflow-y: auto;
+}
+
+.gallery {
+  list-style: none;
+}
+.portrait {
+  width: 158px;
+  background-color: #FFF;
+  padding: 9px;
+  /*margin-right:5px;*/
+  /*margin: 7px 0px 0px 7px;*/
+  text-align: center;
+  cursor: pointer;
+  float: left;
+}
+.portrait .pic {
+  width: 100%;
+  height:110px;
+}
+/*小图变大图部分 */
+.carrousels, .carrousels .wrapper {
+  margin: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+img.pic{
+  cursor: pointer;
+}
+
+.carrousels {
+  position: fixed;
+  background-color: rgba(10, 10, 10, 0.8);
+  display: none;
+}
+.carrousels .wrapper {
+  width: 600px;
+  height: 600px;
+  overflow: hidden;
+}
+.carrousels .wrapper > img {
+  width: 100%;
+}
+
+.closes {
+  cursor: pointer;
+  color: #FFF;
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  font-size: 18px;
+}
+.closes:hover {
+  font-size: 20px;
+  color: #DDD;
+}
+.flexslider .slides img{
+  margin:0;
+  margin-top:10px;
+}
+
+
+/*弹出图片层*/
+#lightbox {background-color:#eee;padding: 10px;border-bottom: 1px solid #666;border-right: 1px solid #666;}
+#lightboxCaption {
+  color: #333;background-color: #eee;
+  font-size: 90%;text-align: center;
+  border-bottom: 1px solid #666;
+  border-right: 1px solid #666;
+}
+#lightboxIndicator {border: 1px solid white;}
+#lightboxOverallView,#overlay {background-color: #000;opacity:0.5;}
+* html #lightboxOverallView,
+* html #overlay {background-color: #000;filter: Alpha(opacity=50); }
+
+
+
+
+/*案件总览流程*/
+.businessCulture {
+  width:770px;
+  background: #eee;
+}
+.table.h45 thead tr{
+  height:45px;
+}
+table.w095{
+  width:95%;
+}
+
+
+/*受理中理赔流程虚线及圆点左侧边线*/
+.bordLeft{
+  //border-left:1px solid #3399ff;
+  margin-top:30px;margin-bottom:30px;
+}
+.bordLeft.border-none{
+  border:none;
+}
+.title-dashed{
+  position: relative;
+  line-height: 30px;
+  font-size: 16px;
+  top:-15px;
+  padding:0;
+}
+.dotted-line{
+  display: inline-block;
+  position: relative;
+  top:-5px;
+  border-top:1px dashed #3399ff;
+  width:50px;
+}
+.s-blue-round-ball{
+  display:inline-block;
+  width:10px;height:10px;
+  border-radius:50%;background:#3399ff;border:1px solid #3399ff;position:relative;
+  margin-right:20px;
+  margin-left:1.5em;
+}
+
+.cont{margin-bottom:30px;padding:5px;}
+.cont table{
+  width:95%;
+  border-bottom:1px solid #eee ;
+  margin:auto;}
+.cont table tr{
+  border-top:1px dashed #eee;
+  &:first-child{
+     border-top: 0;
+  }
+}
+
+
+
+
+.table thead tr{text-align: center;vertical-align: middle ;font-weight: 400}
+
+table.h60 tbody tr{
+  height:60px;
+}
+table.h45 tr{
+  height:45px;
+}
+
+.file-down-text{
+  display: block;
+  font-size: 12px;
+  line-height: 20px;
+}
+.submissions tbody tr td:first-child{
+  background: #fcfcfc;
+  border-right:1px #eee solid;
+}
+
+/*其他材料*/
+.myPolicy-info .gongguren_cailiao{
+  text-indent:0;
+}
+.cailiao_xiazai{
+  color:#3399ff;
+}
+
+table.w95{
+  width:95%;
+}
+
+
+
+#mymodal {
+  width:410px;
+  margin-left: -150px;
+}
+
+
+.modal {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  z-index: 1050;
+  width: 560px;
+  margin-left: -280px;
+  background-color: #fff;
+  border: 1px solid #999;
+
+}
+

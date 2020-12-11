@@ -1,0 +1,40 @@
+/*如果要变更上下间距，修改如下变量高度即可*/
+@toolbar-search-height: 15px;
+
+
+/*顶部查询*/
+.main-content {
+  .toolbar-top {
+    padding:0 10px @toolbar-search-height;
+    margin:0;
+    border-bottom: 10px solid #f2f3f7;
+    .el-form-item__content {
+      line-height: 1
+    }
+    .search-condition{
+      float: left;
+      width:260px;
+      margin-top:@toolbar-search-height;
+      .el-form-item{
+        margin-bottom:0;
+      }
+      .el-form-item__content{
+        width:150px;
+      }
+    }
+    .timeSearch{
+      float: left;
+      width:515px;
+      margin-top:@toolbar-search-height;
+    }
+    .search-btn{
+      margin-left: 30px;
+      float:left;
+      margin-top:@toolbar-search-height;
+    }
+    label{
+      margin-bottom:0;
+      //padding: 8px 12px 8px 0
+    }
+  }
+}

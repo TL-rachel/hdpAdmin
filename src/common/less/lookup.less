@@ -1,0 +1,43 @@
+/*顶部查询部分*/
+.lookup {
+  width: 100%;
+  padding: 5px;
+  display: table;
+  content: '';
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+  &:extend(.clearfix all);
+
+  > .lookup-1,
+  .lookup-2,
+  .lookup-3,
+  .lookup-4,
+  .lookup-5 {
+    float: left;
+    display: inline-block;
+    margin:0  @padding-small-horizontal ;
+  }
+  .lookup-r{
+    float: right;
+    width:45%;
+    display: inline-block;
+    margin-right:100px;
+  }
+  label {
+    display: inline-block;
+    font-size: 14px;
+    font-weight:400;
+    margin-bottom:0;
+    line-height: 25px;
+    &:hover,
+    &:focus {
+      cursor: default;
+    }
+  }
+  input,
+  select{
+    width:160px;
+  }
+}

@@ -1,0 +1,184 @@
+/**************************左侧导航部分*********************************/
+/*左侧导航*/
+/*左侧导航文本*/
+div.left_bar {
+  float: left;
+}
+.left_bar_nav {
+  position: relative;
+  width: 185px;
+  background: #383c47;
+  background-repeat: repeat;
+}
+.left_bar_nav .nav_item {
+  width: 100%;
+  line-height: 45px;
+}
+.left_bar_nav .nav_item.active,
+.left_bar_nav .nav_item:hover {
+  color: #fff;
+  cursor: pointer;
+  background: #282f35;
+}
+.left_bar_nav .nav_item.active dt,
+.left_bar_nav .nav_item:hover dt {
+  border-left: 5px solid #009ce1;
+}
+.left_bar_nav .nav_item.active dt a,
+.left_bar_nav .nav_item:hover dt a {
+  text-decoration: none;
+  color: #009ce1;
+}
+.left_bar_nav .nav_item.active dt a span,
+.left_bar_nav .nav_item:hover dt a span {
+  margin-left: 55px;
+}
+.left_bar_nav .nav_item.active dt a i,
+.left_bar_nav .nav_item:hover dt a i {
+  left: 15px;
+}
+.left_bar_nav .nav_item.active i.menu1,
+.left_bar_nav .nav_item:hover i.menu1 {
+  background-position: -30px 0;
+}
+.left_bar_nav .nav_item.active i.menu2,
+.left_bar_nav .nav_item:hover i.menu2 {
+  background-position: -30px -30px;
+}
+.left_bar_nav .nav_item.active i.menu3,
+.left_bar_nav .nav_item:hover i.menu3 {
+  background-position: -30px -60px;
+}
+.left_bar_nav .nav_item.active i.menu4,
+.left_bar_nav .nav_item:hover i.menu4 {
+  background-position: -30px -90px;
+}
+.left_bar_nav .nav_item.active i.menu5,
+.left_bar_nav .nav_item:hover i.menu5 {
+  background-position: -30px -120px;
+}
+.left_bar_nav .nav_item.active i.menu6,
+.left_bar_nav .nav_item:hover i.menu6 {
+  background-position: -30px -150px;
+}
+.left_bar_nav .nav_item dt a {
+  display: block;
+  position: relative;
+  font-size: 16px;
+  height: 45px;
+  line-height: 45px;
+  color: #cccccc;
+}
+.left_bar_nav .nav_item dt a span {
+  display: inline-block;
+  width: 118.4px;
+  margin-left: 60px;
+}
+.left_bar_nav .nav_item dt a i {
+  display: inline-block;
+  position: absolute;
+  left: 20px;
+  top: 7.5px;
+  width: 30px;
+  height: 30px;
+  /*background-image: url("../image/icon30-30.png");
+  -moz-background-image: url("../image/icon30-30.png");
+  -o-background-image: url("../image/icon30-30.png");
+  -webkit-background-image: url("../image/icon30-30.png");*/
+  background-repeat: no-repeat;
+}
+.left_bar_nav .nav_item dt a i.menu1 {
+  background-position: 0 0;
+}
+.left_bar_nav .nav_item dt a i.menu2 {
+  background-position: 0 -30px;
+}
+.left_bar_nav .nav_item dt a i.menu3 {
+  background-position: 0 -60px;
+}
+.left_bar_nav .nav_item dt a i.menu4 {
+  background-position: 0 -90px;
+}
+.left_bar_nav .nav_item dt a i.menu5 {
+  background-position: 0 -120px;
+}
+.left_bar_nav .nav_item dt a i.menu6 {
+  background-position: 0 -150px;
+}
+.left_bar_nav .nav_item .nav-sub {
+  background: #273A49;
+  cursor: pointer;
+  display: none;
+  color: #494949;
+}
+.left_bar_nav .nav_item .nav-sub .current {
+  display: block;
+}
+.left_bar_nav .nav_item .nav-sub li {
+  /*background: url(../images1/menu_side_03.gif) no-repeat bottom;*/
+  text-align: center;
+  height: 45px;
+  line-height: 45px;
+  padding: 5px auto ;
+}
+.left_bar_nav .nav_item .nav-sub li.cur a {
+  color: #fff;
+  text-decoration: none;
+}
+.left_bar_nav .nav_item .nav-sub li a {
+  display: block;
+  padding: 3px 10px;
+  color: #fff;
+  cursor: pointer;
+  text-align: left;
+  font-size: 16px;
+  height: 45px;
+  line-height: 45px;
+}
+.left_bar_nav .nav_item .nav-sub li a:hover {
+  color: #fff;
+  text-decoration: none;
+}
+.left_bar_navn {
+  width: 185px;
+  background: #383c47;
+  background-repeat: repeat;
+}
+.left_bar_navn.itemmenu,
+.left_bar_navn.itemmenu ul {
+  -webkit-padding-start: 0;
+  padding-left: 15px;
+}
+.left_bar_navn li {
+  list-style: none;
+  position: relative;
+  width: 100%;
+  line-height: 45px;
+}
+.left_bar_navn .toggler {
+  cursor: pointer;
+}
+.left_bar_navn.itemmenu .toggler:before,
+.left_bar_navn .itemmenu .toggler:before {
+  display: inline-block;
+  position: absolute;
+  right: 15px;
+}
+.left_bar_navn li.item-empty > .toggler {
+  color: #aaa;
+}
+.left_bar_navn li.item-empty > .toggler:before {
+  content: "\2212";
+}
+.left_bar_navn li.item-closed > .toggler:before {
+  content: "+";
+}
+.left_bar_navn li.item-opened > .toggler:before {
+  content: "\2212";
+}
+/*
+.nav_item .nav-sub li a:hover, .nav_item .nav-sub li.cur a {
+  background:  url(../images/linkarrow.gif) no-repeat right center;
+  color: #fff;
+  text-decoration: none;
+}*/

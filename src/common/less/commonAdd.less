@@ -1,0 +1,71 @@
+ //展示大图
+.carrousels{
+  position: fixed;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: @zindex-carrousels;
+  background: @modal-backdrop-bg @modal-backdrop-opacity;//** Modal backdrop background color
+  //** Modal backdrop opacity
+  display: none;
+}
+.carrousels .wrapper {
+  width: 600px;
+  height: 600px;
+  overflow: hidden;
+}
+.carrousels .wrapper > img {
+  width: 100%;
+}
+.closes {
+  cursor: pointer;
+  color: @close-white-color;
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  font-size: 20px;
+}
+.closes:hover {
+  font-size: 22px;
+}
+.flexslider .slides img{
+  margin:0;
+  margin-top:10px;
+}
+
+//上传图片展示
+.portrait {
+   width: 158px;
+   background-color: #FFF;
+   padding: 9px;
+   text-align: center;
+   cursor: pointer;
+   float: left;
+ }
+ .portrait .pic {
+   width: 100%;
+ }
+ img.pic{
+   cursor: pointer;
+ }
+
+
+//加载过程
+body .loading{
+   position: absolute;
+   top: 0;left: 0;
+  .size(100%,100%);
+   z-index: @zindex-carrousels;
+   background-color: @modal-backdrop-bg,@modal-backdrop-opacity;
+   text-align: center;
+ }
+//加载过程中旋转图片
+.loading img{
+   position: fixed;
+   top:50%;
+   left:50%;
+ }
+
+

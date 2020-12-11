@@ -1,0 +1,172 @@
+//
+// 知风自定义样式Variables
+// --------------------------------------------------
+
+//==第三方全局
+body {
+  min-width: @min-width;
+  font-family: @font-family-Mic-Yahei;
+  box-sizing: content-box;
+  color: #666;
+  -moz-box-sizing: content-box; /* Firefox */
+  -webkit-box-sizing: content-box; /* Safari */
+}
+.container-fluid{
+  padding-right:0;
+  padding-left:0;
+  background: #eee;
+}
+.row-fluid .span10 {
+  width: 84.3%;
+}
+.content {
+  display: flex;
+  //position: absolute;
+  //top: @otherHeader-height;
+  bottom: 0px;
+  overflow: hidden;
+  padding:0;
+  margin:0;
+ /* margin:0;
+  padding: 0;
+  //position: relative;
+  min-width:@min-width;*/
+}
+.content-left {
+  flex: 0 0 @left_bar-width;
+  //width: 230px;
+  width:@left_bar-width;
+  //position: absolute;
+  left:0;
+  z-index: 100;
+  //float: left;
+  background:#383c47;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.content-right {
+  flex: 1;
+  overflow-y: scroll;
+  //padding: 20px;
+  //float: left;
+  //position:absolute;
+  width:100%;
+  //padding-left:@left_bar-width;
+  background: #eee;
+  min-width:@min-width;
+  margin:0!important;
+}
+/*.siglePageBJ{
+  //width:100%;
+  //background: url('../image/city.png') no-repeat ;
+  //background-size: 100%;
+}*/
+
+//公共 面包 屑部分
+.breadcrumb{
+  position: relative;
+  //background: #fff;
+}
+.row-fluid .breadcrumb{
+  color: #000;
+  line-height: 40px;
+  text-indent: 10px;
+  padding-right: 10px;
+  height: 40px;
+  //margin:10px auto;
+}
+//右侧垂直滚动部分
+.row-fluid{
+  position: relative;
+}
+//右侧主体部分
+.contentPortion{
+  width:98%;
+  position: absolute;
+  right:10px;
+  background: #fff;
+}
+.content-describe,.content-main{
+  min-width: 950px;
+  border-bottom:10px solid #eee;
+}
+.navigation{
+  height:40px;
+  ul {
+    height:40px;
+    li {
+      float: left;
+      padding-top: 10px;
+      padding-bottom:10px;
+      margin-right: 30px;
+      a{
+        padding:6px 12px ;
+        &:hover,
+        &:active,
+        &:focus
+        {
+          background:@zf-blue-base;
+        }
+      }
+    }
+  }
+}
+
+.content-auto,.content-auto-list{
+  overflow-y:  auto;
+}
+
+//日期格式
+.Wdate {
+  height: @input-height-small!important;
+}
+.check-icon{display: inline-block;width: 14px;height: 14px;background-position: -16px -57px;margin: 0 10px; vertical-align: middle;}
+.check-icon.checked{background-position: 0 -42px;}
+.border{
+  border:1px solid #eee;
+}
+.m20{
+  margin:20px;
+}
+.m30{
+  margin:30px;
+}
+.user-info.w90{
+  width:90px;
+}
+
+.success{
+  text-align: center;
+  .success-img{
+    display: inline-block;
+    background-position:0 -160px ;
+    width:120px;
+    height:120px;
+  }
+}
+.bor-t-n{
+  border-top:none;
+}
+.red-star{
+  color:red;
+}
+.leimuheader{
+  height:40px;
+
+  line-height:40px;
+  background:#d5dce6;
+  p{
+  margin-left:10px;
+  }
+}
+.none{
+  display:none;
+}
+.zf-panel-title {
+  height: 40px;
+  background: #f1f3f7;
+  .zf-panel-title .textIndent {
+    text-indent: 2em;
+    color: #333;
+  }
+}
