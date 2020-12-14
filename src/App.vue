@@ -32,7 +32,14 @@
         top: 0px;
         bottom: 0px;
         width: 100%;
+        min-width: 1440px;
         overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar-thumb{
+        background-color: #82848a!important;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
     }
 
     .el-submenu [class^=fa] {
