@@ -6,6 +6,16 @@ Vue.use(VueRouter);
 import Login from '../components/login';
 // 首页 home
 import Home from '../components/commonPage/Home';
+// 首页 home
+import HomePage from '../components/pages/homePage';
+// 设备列表
+import EquipmentList from '../components/pages/equipment/equipmentList'
+// 添加设备
+import AddEquipment from '../components/pages/equipment/addEquipment'
+// 区域列表
+import AreaList from '../components/pages/area/areaList'
+// 用户列表
+import UserList from '../components/pages/user/userList'
 
 let routes = [
     {
@@ -18,7 +28,50 @@ let routes = [
         path: '/',
         component: Home,
         meta: {title: '首页'},
-        children: []
+        children: [
+            {
+                path: '/home',
+                component: HomePage,
+                meta: {
+                    title: '首页',
+                }
+            },
+            {
+                path: '/',
+                component: HomePage,
+                meta: {
+                    title: '首页',
+                }
+            },
+            {
+                path: '/equipmentList',
+                component: EquipmentList,
+                meta: {
+                    title: '设备列表',
+                }
+            },
+            {
+                path: '/addEquipment',
+                component: AddEquipment,
+                meta: {
+                    title: '添加设备',
+                }
+            },
+            {
+                path: '/areaList',
+                component: AreaList,
+                meta: {
+                    title: '区域列表',
+                }
+            },
+            {
+                path: '/userList',
+                component: UserList,
+                meta: {
+                    title: '用户列表',
+                }
+            },
+        ]
     },
 ];
 

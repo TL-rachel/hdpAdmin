@@ -4,9 +4,9 @@
             class="sidebar-el-menu"
             :default-active="onRoutes"
             :collapse="collapse"
-            background-color="#383C47"
-            text-color="#929FAA"
-            active-text-color="#009ce1"
+            background-color="#fff"
+            text-color="#778CA2"
+            active-text-color="#f3f7fa"
             unique-opened
             router
         >
@@ -156,7 +156,7 @@ export default {
     display: block;
     position: absolute;
     left: 0;
-    top: 70px;
+    top: 52px;
     bottom: 0;
     overflow-y: scroll;
 }
@@ -164,7 +164,7 @@ export default {
     width: 0;
 }
 .sidebar-el-menu:not(.el-menu--collapse) {
-    width: 185px;
+    width: 210px;
 }
 .sidebar > ul {
     height: 100%;
@@ -174,9 +174,10 @@ export default {
 }
 .el-menu-item.is-active,
 .el-submenu.is-active .el-submenu__title {
-    border-left: 6px solid #009ce1;
+    border-left: 3px solid #4D7CFE;
     padding-left: 14px!important;
-    background-color: #1D2025!important;
+    background-color: #F2F7FA!important;
+    color: #4D7CFE!important;
 }
 .el-submenu .el-menu .el-menu-item.is-active {
     border: 0;

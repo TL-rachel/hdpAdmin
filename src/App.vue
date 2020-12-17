@@ -37,7 +37,7 @@
     }
 
     ::-webkit-scrollbar-thumb{
-        background-color: #82848a!important;
+        background-color: rgba(144,147,153,.3)!important;
         -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
         border-radius: 10px;
     }

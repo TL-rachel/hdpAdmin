@@ -8,6 +8,10 @@ import Vuex from 'vuex';
 import router from './routes/routes';
 import './common/less/index.less';
 
+import echarts from 'echarts'
+
+Vue.prototype.$echarts = echarts
+
 //-导入全局自定义方法
 import ZFCommon from './common/js/common-func';
 Vue.use(ZFCommon);

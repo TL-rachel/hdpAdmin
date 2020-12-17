@@ -1,6 +1,6 @@
 <template>
     <div class="main_top">
-        <div class="header-left"></div>
+        <div class="header-left">此处为系统名称</div>
         <div class="header-right">
             <div class="header-bar-left">
                 首页
@@ -59,6 +59,6 @@ export default {
         background: #fff;
         position: relative;
         z-index:100;
-        height: 70px;
+        height: 52px;
     }
 </style>
