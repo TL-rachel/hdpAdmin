@@ -95,7 +95,7 @@ export default {
                             title: '用户列表'
                         },
                         {
-                            index: 'healthData',
+                            index: 'healthDataList',
                             title: '健康数据'
                         }
                     ]

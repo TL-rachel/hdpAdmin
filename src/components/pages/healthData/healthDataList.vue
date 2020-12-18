@@ -30,30 +30,22 @@
                         <span class="user-name">{{scope.row.name}}</span>
                     </template>
                 </el-table-column>
+                <el-table-column prop="idId" label="ID" min-width="60"></el-table-column>
                 <el-table-column prop="age" label="年龄" min-width="60"></el-table-column>
                 <el-table-column prop="sex" label="性别" min-width="60"></el-table-column>
-                <el-table-column prop="enterprise" label="归属企业" width="180"></el-table-column>
-                <el-table-column prop="phoneNumber" label="手机号" min-width="120"></el-table-column>
-                <el-table-column prop="status" label="状态" min-width="60">
+                <el-table-column prop="enterprise" label="心率" width="180"></el-table-column>
+                <el-table-column prop="status" label="疲劳度" min-width="60">
                     <template slot-scope="scope">
                         <span v-if="scope.row.status == '1'">有效</span>
                         <span v-if="scope.row.status == '0'">无效效</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="addUser" label="添加人"> </el-table-column>
-                <el-table-column prop="bigTime" label="添加时间" min-width="150"> </el-table-column>
-                <el-table-column prop="updateUser" label="更新人"></el-table-column>
-                <el-table-column prop="updateTime" label="更新时间" min-width="150"></el-table-column>
-                <el-table-column prop="id" label="操作" width="90">
+                <el-table-column prop="phoneNumber" label="情绪值" min-width="120"></el-table-column>
+                <el-table-column prop="updateTime" label="检测时间" min-width="150"></el-table-column>
+                <el-table-column prop="id" label="操作" min-width="90">
                     <template slot-scope="scope">
-                        <a href="#">{{scope.row.id}}查看详情</a>
-                        <a href="#">更多操作</a>
-                        <router-link :to="{ path:'/caseList'}">
-                            <a>病例</a>
-                        </router-link>
-                        <router-link :to="{ path:'/medicalHistory'}">
-                            <a>病史</a>
-                        </router-link>
+                        <a href="#">{{scope.row.id}}病例</a>
+                        <a href="#">病史</a>
                     </template>
                 </el-table-column>
             </el-table>
@@ -63,7 +55,7 @@
 
 <script>
     export default {
-        name: 'userList',
+        name: 'healthDataList',
         data() {
             return {
                 userName: '',
@@ -151,19 +143,4 @@
 </script>
 
 <style lang="less">
-    .user-input {
-        width: 542px!important;
-    }
-    .head-portrait {
-        width: 38px;
-        height: 38px;
-        border-radius: 20px;
-    }
-    .table-list {
-        margin-top: 20px;
-    }
-    .user-name {
-        color: rgba(77, 124, 254, 100);
-        font-size: 16px;
-    }
 </style>
