@@ -157,7 +157,7 @@
                     stature: '', // 身高
                     weight: '', // 体重
                 }
-            }
+            };
         },
         methods: {
             handleAvatarSuccess(res, file) {
@@ -179,14 +179,13 @@
              * 提交数据
              */
             submitForm() {
-                console.log(this.form)
                 this.$router.push({path: '/userList'});
             },
             handleHistory() {
                 this.$router.back(-1);
             }
         }
-    }
+    };
 </script>
 
 <style lang="less">

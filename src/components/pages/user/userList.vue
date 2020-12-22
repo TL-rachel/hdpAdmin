@@ -140,14 +140,14 @@
                     }
                 ],
                 multipleSelection: []
-            }
+            };
         },
         methods: {
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             }
         }
-    }
+    };
 </script>
 
 <style lang="less">

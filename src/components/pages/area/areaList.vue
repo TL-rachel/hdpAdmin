@@ -258,10 +258,9 @@
                         ]
                     }
                 ]
-
-            }
+            };
         }
-    }
+    };
 </script>
 
 <style lang="less">

@@ -111,21 +111,20 @@
                     bigTime: '', // 添加时间
                     renewalTime: '', // 更新时间
                 }
-            }
+            };
         },
         methods: {
             /**
              * 提交数据
              */
             submitForm() {
-                console.log(this.form)
                 this.$router.push({path: '/equipmentList'});
             },
             handleHistory() {
                 this.$router.back(-1);
             }
         }
-    }
+    };
 </script>
 
 <style lang="less">

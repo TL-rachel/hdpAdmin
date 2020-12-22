@@ -141,25 +141,23 @@
                     weight: '57',
                     BMI: '21',
                 }
-            }
+            };
         },
         methods: {
             handleAvatarSuccess(res, file) {
                 this.imageUrl = URL.createObjectURL(file.raw);
-                console.log(file)
             },
             /**
              * 提交数据
              */
             submitForm() {
-                console.log(this.form)
                 this.$router.push({path: '/userList'});
             },
             handleHistory() {
                 this.$router.back(-1);
             }
         }
-    }
+    };
 </script>
 
 <style lang="less">

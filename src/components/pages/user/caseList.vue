@@ -239,14 +239,14 @@
                     weight: '57',
                     BMI: '21',
                 }
-            }
+            };
         },
         methods: {
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             }
         }
-    }
+    };
 </script>
 
 <style lang="less">
