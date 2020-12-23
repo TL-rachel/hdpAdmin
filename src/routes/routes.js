@@ -26,6 +26,8 @@ import MedicalHistory from '../components/pages/user/medicalHistory';
 import CaseList from '../components/pages/user/caseList';
 // 添加病例
 import AddCase from '../components/pages/user/addCase';
+// 直播
+import LiveStreaming from '../components/pages/play/liveStreaming';
 
 let routes = [
     {
@@ -114,6 +116,13 @@ let routes = [
                 component: HealthDataList,
                 meta: {
                     title: '健康数据',
+                }
+            },
+            {
+                path: '/liveStreaming',
+                component: LiveStreaming,
+                meta: {
+                    title: '直播',
                 }
             },
         ]
