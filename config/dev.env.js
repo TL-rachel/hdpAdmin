@@ -1,4 +1,4 @@
 module.exports =  {
     NODE_ENV: '"development"',
-    CASSERVERURL: '""',
+    CASSERVERURL: '"http://m47wtz.natappfree.cc"',
 }

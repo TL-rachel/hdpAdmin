@@ -20,12 +20,6 @@ Vue.use(ZFCommon);
 import ZFComponents from './components/modules';
 Vue.use(ZFComponents);
 
-import VideoPlayer from 'vue-video-player';
-import 'vue-video-player/src/custom-theme.css';
-import 'video.js/dist/video-js.css';
-
-Vue.use(VideoPlayer);
-
 // 将axios挂载到prototype上，在组件中可以直接使用this.axios访问
 Vue.prototype.axios = axios;
 var $http = axios.create({

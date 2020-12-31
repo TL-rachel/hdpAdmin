@@ -19,6 +19,9 @@
                 <template v-for="(t,i) in item.child">
                     <div class="equipmentDetail" :key="i">
                         <div class="equipmentTitle">
+                            <el-checkbox-group v-model="checkId">
+                                <el-checkbox :label="t.id"></el-checkbox>
+                            </el-checkbox-group>
                             <div class="equipment-name">设备名称{{t.name}}</div>
                             <div class="equipment-status">
                                 <span class="point-1" v-if="t.status == '1'"><span></span>正常</span>
@@ -134,7 +137,7 @@
                                 status: '1'
                             },
                             {
-                                id: '0',
+                                id: '4',
                                 name: 'DALHlHHK',
                                 encoding: 'GJFJKKGFFFFH',
                                 enterprise: '江苏省某某医药设备公司',
@@ -145,7 +148,7 @@
                                 status: '1'
                             },
                             {
-                                id: '0',
+                                id: '5',
                                 name: 'DALHlHHK',
                                 encoding: 'GJFJKKGFFFFH',
                                 enterprise: '江苏省某某医药设备公司',
@@ -156,7 +159,7 @@
                                 status: '1'
                             },
                             {
-                                id: '0',
+                                id: '6',
                                 name: 'DALHlHHK',
                                 encoding: 'GJFJKKGFFFFH',
                                 enterprise: '江苏省某某医药设备公司',
@@ -167,7 +170,7 @@
                                 status: '1'
                             },
                             {
-                                id: '0',
+                                id: '7',
                                 name: 'DALHlHHK',
                                 encoding: 'GJFJKKGFFFFH',
                                 enterprise: '江苏省某某医药设备公司',
@@ -178,7 +181,7 @@
                                 status: '1'
                             },
                             {
-                                id: '0',
+                                id: '8',
                                 name: 'DALHlHHK',
                                 encoding: 'GJFJKKGFFFFH',
                                 enterprise: '江苏省某某医药设备公司',
@@ -194,7 +197,7 @@
                         title: '病房护理设备',
                         child: [
                             {
-                                id: '0',
+                                id: '9',
                                 name: 'DALHlHHK',
                                 encoding: 'GJFJKKGFFFFH',
                                 enterprise: '江苏省某某医药设备公司',
@@ -205,7 +208,7 @@
                                 status: '1'
                             },
                             {
-                                id: '1',
+                                id: '10',
                                 name: 'QGHAPPY',
                                 encoding: 'GJFJKKGFFFFH',
                                 enterprise: '江苏省某某医药设备公司',
@@ -216,7 +219,7 @@
                                 status: '0'
                             },
                             {
-                                id: '3',
+                                id: '11',
                                 name: 'DALHlHHK',
                                 encoding: 'GJFJKKGFFFFH',
                                 enterprise: '江苏省某某医药设备公司',
@@ -227,7 +230,7 @@
                                 status: '1'
                             },
                             {
-                                id: '0',
+                                id: '12',
                                 name: 'DALHlHHK',
                                 encoding: 'GJFJKKGFFFFH',
                                 enterprise: '江苏省某某医药设备公司',
@@ -238,7 +241,7 @@
                                 status: '1'
                             },
                             {
-                                id: '0',
+                                id: '13',
                                 name: 'DALHlHHK',
                                 encoding: 'GJFJKKGFFFFH',
                                 enterprise: '江苏省某某医药设备公司',
@@ -249,7 +252,7 @@
                                 status: '1'
                             },
                             {
-                                id: '0',
+                                id: '14',
                                 name: 'DALHlHHK',
                                 encoding: 'GJFJKKGFFFFH',
                                 enterprise: '江苏省某某医药设备公司',
@@ -260,7 +263,7 @@
                                 status: '1'
                             },
                             {
-                                id: '0',
+                                id: '15',
                                 name: 'DALHlHHK',
                                 encoding: 'GJFJKKGFFFFH',
                                 enterprise: '江苏省某某医药设备公司',
@@ -271,7 +274,7 @@
                                 status: '1'
                             },
                             {
-                                id: '0',
+                                id: '16',
                                 name: 'DALHlHHK',
                                 encoding: 'GJFJKKGFFFFH',
                                 enterprise: '江苏省某某医药设备公司',
@@ -283,7 +286,8 @@
                             }
                         ]
                     }
-                ]
+                ],
+                checkId: []
             };
         },
         methods: {
@@ -298,6 +302,7 @@
                         this.tags[i].class = 'active';
                     }
                 }
+                console.log(this.checkId)
             },
         }
     };

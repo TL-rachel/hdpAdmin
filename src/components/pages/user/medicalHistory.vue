@@ -88,13 +88,16 @@
                             <el-radio label="1">有</el-radio>
                             <el-radio label="0">无</el-radio>
                         </el-radio-group>
-                        <el-form-item class="small-item" label="手术名">
-                            <el-input class="w160" v-model="form.name"></el-input>
-                        </el-form-item>
-                        <el-form-item class="small-item" label="手术时间">
-                            <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 160px;"></el-date-picker>
-                        </el-form-item>
-                        <button class="increased">新增</button>
+                        <template v-for="(item,index) in form.dataOperation">
+                            <el-form-item class="small-item" :key="index + '1'" label="手术名">
+                                <el-input class="w160" v-model="item.name"></el-input>
+                            </el-form-item>
+                            <el-form-item class="small-item" :key="index + '2'" label="手术时间">
+                                <el-date-picker type="date" placeholder="选择日期" v-model="item.date" style="width: 160px;"></el-date-picker>
+                                <i>删除</i>
+                            </el-form-item>
+                        </template>
+                        <button class="increased" @click="addOperation">新增</button>
                     </div>
                 </el-form-item>
 
@@ -172,6 +175,12 @@
                     previousHistoryMessage1: '',
                     previousHistoryMessage2: '',
                     previousHistoryMessage3: '',
+                    dataOperation: [
+                        {
+                            name: '',
+                            date: ''
+                        }
+                    ]
                 },
                 userData: {
                     img: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
@@ -186,6 +195,9 @@
             };
         },
         methods: {
+            addOperation() {
+                this.form.dataOperation.push({name: '',date: ''});
+            },
             /**
              * 提交数据
              */

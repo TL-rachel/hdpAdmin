@@ -28,6 +28,14 @@ import CaseList from '../components/pages/user/caseList';
 import AddCase from '../components/pages/user/addCase';
 // 直播
 import LiveStreaming from '../components/pages/play/liveStreaming';
+// 管理员
+import AdministratorList from '../components/pages/system/administratorList';
+// 添加管理员
+import AddAdministrator from '../components/pages/system/addAdministrator';
+// 角色列表
+import RoleManagement from '../components/pages/system/roleManagement';
+// 操作日志
+import OperationLog from '../components/pages/system/operationLog';
 
 let routes = [
     {
@@ -123,6 +131,34 @@ let routes = [
                 component: LiveStreaming,
                 meta: {
                     title: '直播',
+                }
+            },
+            {
+                path: '/administratorList',
+                component: AdministratorList,
+                meta: {
+                    title: '管理员',
+                }
+            },
+            {
+                path: '/addAdministrator',
+                component: AddAdministrator,
+                meta: {
+                    title: '添加管理员',
+                }
+            },
+            {
+                path: '/roleManagement',
+                component: RoleManagement,
+                meta: {
+                    title: '角色管理',
+                }
+            },
+            {
+                path: '/operationLog',
+                component: OperationLog,
+                meta: {
+                    title: '操作日志',
                 }
             },
         ]

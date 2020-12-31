@@ -4,12 +4,7 @@
             <el-tag v-for="(item,index) in tags" :key="index" :class="item.class" @click="cutTag(item.id)">{{item.name}}</el-tag>
         </div>
         <div class="chart clearfix">
-            <div v-for="(item,index) in myChart" :key="index" :id="item.id" :ref="item.ref" :style="{width: '555px', height: '352px',float: 'left','margin-right': '40px','margin-bottom': '40px'}"></div>
-            <!--<div id="chartPieIllness" :style="{width: '555px', height: '352px',float: 'left','margin-right': '40px','margin-bottom': '40px'}"></div>
-            <div id="chartPieSex" :style="{width: '555px', height: '352px',float: 'left','margin-right': '40px','margin-bottom': '40px'}"></div>
-            <div id="myChartEquipment" ref="myChartEquipment" :style="{width: '555px', height: '352px',float: 'left','margin-right': '40px','margin-bottom': '40px'}"></div>
-            <div id="chartPieGender" :style="{width: '555px', height: '352px',float: 'left','margin-right': '40px','margin-bottom': '40px'}"></div>
-            <div id="myChartEnterprise" ref="myChartEnterprise" :style="{width: '555px', height: '352px',float: 'left','margin-right': '40px','margin-bottom': '40px'}"></div>-->
+            <div v-for="(item,index) in myChart" :key="index" :id="item.id" :ref="item.ref" :style="{width: '555px', height: '352px',float: 'left','margin-right': '20px','margin-bottom': '40px'}"></div>
         </div>
     </div>
 </template>

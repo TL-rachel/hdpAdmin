@@ -103,7 +103,21 @@ export default {
                 {
                     icon: 'icon-icon_svg_houtai-10',
                     index: 'system',
-                    title: '系统管理'
+                    title: '系统管理',
+                    subs: [
+                        {
+                            index: 'administratorList',
+                            title: '管理员'
+                        },
+                        {
+                            index: 'roleManagement',
+                            title: '角色管理'
+                        },
+                        {
+                            index: 'operationLog',
+                            title: '操作日志'
+                        }
+                    ]
                 },
                 {
                     icon: 'icon-icon_svg_houtai-10',

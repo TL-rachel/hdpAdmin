@@ -20,7 +20,7 @@
                     </el-form-item>
                     <div class="crypto-operation">
                         <span class="remember-psw"><input type="checkbox" v-model="param.remember">记住密码</span>
-                        <span class="forget-psw">忘记密码找回</span>
+                        <!--<span class="forget-psw">忘记密码找回</span>-->
                     </div>
                     <div class="login-btn">
                         <el-button type="primary" @click="submitForm()">登 &nbsp; 录</el-button>
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-    import {} from '../api/api';
+    import {getLogin} from '../api/api';
 
     export default {
         data: function () {
@@ -84,11 +84,26 @@
             submitForm() {
                 this.$refs.login.validate(valid => {
                     if (valid) {
-                        if (this.param.remember) {
-                            window.document.cookie = 'username=' + this.param.username;
-                            window.document.cookie = 'password=' + this.param.password;
-                        }
-                        this.$router.push('/');
+                        let para = {
+                            username: this.param.username,
+                            password: this.param.password
+                        };
+                        getLogin(para).then((res) => {
+                            if (res.data.errno === 0) {
+                                if (this.param.remember) {
+                                    window.document.cookie = 'username=' + this.param.username;
+                                    window.document.cookie = 'password=' + this.param.password;
+                                }
+                                this.$router.push('/');
+                            } else {
+                                this.param.verifyCode = '';
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.errmsg,
+                                    type: 'error'
+                                });
+                            }
+                        });
                     }
                 });
             }
@@ -175,7 +190,8 @@
 
     .right-img {
         width: 50%;
-        background: #0e90d2;
+        background-image: url("../common/image/login-bg.png");
+        background-size: cover;
         height: 100%;
         float: right;
     }

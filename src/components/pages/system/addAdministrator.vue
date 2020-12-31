@@ -1,0 +1,137 @@
+<template>
+    <div class="administrator equipmentList">
+        <h4>新增管理员</h4>
+        <div class="form-save">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                <el-form-item label="账号" prop="username">
+                    <el-input class="w420" v-model="ruleForm.username" placeholder="包含6-12位英文字母"></el-input>
+                </el-form-item>
+                <el-form-item label="初始密码" prop="password">
+                    <el-input class="w420" type="password" v-model="ruleForm.password" placeholder="请输入密码"></el-input>
+                </el-form-item>
+                <el-form-item label="姓名" prop="username2">
+                    <el-input class="w420" v-model="ruleForm.username2" placeholder="请输入姓名"></el-input>
+                </el-form-item>
+                <el-form-item label="手机号" prop="tel">
+                    <el-input class="w420" v-model="ruleForm.tel" placeholder="请输入手机号"></el-input>
+                </el-form-item>
+                <el-form-item label="角色" prop="roleId">
+                    <el-select class="w420" v-model="ruleForm.roleId" placeholder="请选择角色">
+                        <el-option v-for="(item,index) in options" :label="item.label" :value="item.value" :key="index"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item class="operation-btn" label-width="0">
+                    <el-button type="primary" @click="submitForm('form')">保 存</el-button>
+                    <el-button @click="handleHistory">返 回</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+    </div>
+</template>
+
+<script>
+    import {adminCreate,roleOptions} from '../../../api/api'
+    export default {
+        name: 'addAdministrator',
+        data() {
+            return {
+                ruleForm: {
+                    username: '', // 账号
+                    password: '', // 初始密码
+                    username2: '', // 姓名
+                    tel: '', // 手机号
+                    roleId: '', // 角色
+                },
+                rules: {
+                    username: [
+                        { required: true, message: '请输入账号', trigger: 'blur' },
+                        { min: 6, max: 12, message: '长度在 6 到 12 位英文字母', trigger: 'blur' }
+                    ],
+                    password: [
+                        { required: true, message: '请输入初始密码', trigger: 'blur' }
+                    ],
+                    username2: [
+                        { required: true, message: '请输入姓名', trigger: 'blur' }
+                    ],
+                    tel: [
+                        { required: true, message: '请输入手机号', trigger: 'blur' }
+                    ],
+                    roleId: [
+                        { required: true, message: '请选择角色', trigger: 'change' }
+                    ]
+                },
+                options: [],
+            };
+        },
+        created() {
+            roleOptions().then(res => {
+                if (res.data.errno === 0) {
+                    this.options = res.data.data;
+                }
+            })
+        },
+        methods: {
+            submitForm() {
+                this.$refs.ruleForm.validate(valid => {
+                    if (valid) {
+                        let para = JSON.parse(JSON.stringify(this.ruleForm));
+                        para.roleIds = [];
+                        para.roleIds.push(para.roleId);
+                        delete para.roleId;
+                        adminCreate(para).then(res => {
+                            if (res.data.errno === 0) {
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.errmsg,
+                                    type: 'success'
+                                });
+                                this.$router.push('/administratorList');
+                            } else {
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.errmsg,
+                                    type: 'error'
+                                });
+                            }
+                        })
+                    }
+                });
+            },
+            handleHistory() {
+                this.$router.back(-1);
+            }
+        }
+    };
+</script>
+
+<style lang="less">
+    .administrator {
+        background: #fff;
+        h4 {
+            text-align: center;
+            color: rgba(42, 42, 53, 100);
+            font-size: 14px;
+            height: 80px;
+            line-height: 80px;
+            font-family: PingFangSC-Medium;
+        }
+        .demo-ruleForm {
+            width: 600px;
+            display: inline-block;
+            position: relative;
+            left: 50%;
+            margin-left: -300px;
+            .el-form-item {
+                width: 100%;
+            }
+        }
+    }
+    .el-form-item.is-error .el-input__inner,
+    .el-form-item.is-error .el-input__inner:focus,
+    .el-form-item.is-error .el-textarea__inner,
+    .el-form-item.is-error .el-textarea__inner:focus,
+    .el-message-box__input input.invalid,
+    .el-message-box__input input.invalid:focus {
+        border-color: #EB604B!important;
+    }
+</style>
