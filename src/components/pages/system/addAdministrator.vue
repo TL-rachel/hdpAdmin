@@ -6,7 +6,7 @@
                 <el-form-item label="账号" prop="username">
                     <el-input class="w420" v-model="ruleForm.username" placeholder="包含6-12位英文字母"></el-input>
                 </el-form-item>
-                <el-form-item label="初始密码" prop="password">
+                <el-form-item :label="$route.query.id?'新密码':'初始密码'" prop="password">
                     <el-input class="w420" type="password" v-model="ruleForm.password" placeholder="请输入密码"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名" prop="username2">
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-    import {adminCreate,roleOptions} from '../../../api/api'
+    import {adminCreate,roleOptions,adminUpdate,adminRead} from '../../../api/api';
     export default {
         name: 'addAdministrator',
         data() {
@@ -41,14 +41,16 @@
                     username2: '', // 姓名
                     tel: '', // 手机号
                     roleId: '', // 角色
+                    deleted: false, // 是否删除
                 },
+                // 必填校验
                 rules: {
                     username: [
                         { required: true, message: '请输入账号', trigger: 'blur' },
                         { min: 6, max: 12, message: '长度在 6 到 12 位英文字母', trigger: 'blur' }
                     ],
                     password: [
-                        { required: true, message: '请输入初始密码', trigger: 'blur' }
+                        { required: true, message: '请输入密码', trigger: 'blur' }
                     ],
                     username2: [
                         { required: true, message: '请输入姓名', trigger: 'blur' }
@@ -60,43 +62,94 @@
                         { required: true, message: '请选择角色', trigger: 'change' }
                     ]
                 },
+                // 角色列表
                 options: [],
             };
         },
         created() {
+            // 获取角色列表
             roleOptions().then(res => {
                 if (res.data.errno === 0) {
                     this.options = res.data.data;
                 }
-            })
+            });
+            // 获取管理员详情
+            if (this.$route.query.id) {
+                adminRead({id: this.$route.query.id}).then(res => {
+                    if (res.data.errno === 0) {
+                        // 成功
+                        this.ruleForm = res.data.data;
+                        this.ruleForm.roleId = res.data.data.roleIds[0];
+                    } else {
+                        // 失败
+                        this.$message({
+                            showClose: true,
+                            message: res.data.errmsg,
+                            type: 'error'
+                        });
+                    }
+                });
+            }
         },
         methods: {
+            /**
+             * 提交数据
+             */
             submitForm() {
+                // 必填校验
                 this.$refs.ruleForm.validate(valid => {
                     if (valid) {
                         let para = JSON.parse(JSON.stringify(this.ruleForm));
                         para.roleIds = [];
                         para.roleIds.push(para.roleId);
                         delete para.roleId;
-                        adminCreate(para).then(res => {
-                            if (res.data.errno === 0) {
-                                this.$message({
-                                    showClose: true,
-                                    message: res.data.errmsg,
-                                    type: 'success'
-                                });
-                                this.$router.push('/administratorList');
-                            } else {
-                                this.$message({
-                                    showClose: true,
-                                    message: res.data.errmsg,
-                                    type: 'error'
-                                });
-                            }
-                        })
+                        if (this.$route.query.id) {
+                            // 编辑
+                            adminUpdate(para).then(res => {
+                                if (res.data.errno === 0) {
+                                    // 成功
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'success'
+                                    });
+                                    this.$router.push('/administratorList');
+                                } else {
+                                    // 失败
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
+                            });
+                        } else {
+                            // 新增
+                            adminCreate(para).then(res => {
+                                if (res.data.errno === 0) {
+                                    // 成功
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'success'
+                                    });
+                                    this.$router.push('/administratorList');
+                                } else {
+                                    // 失败
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
+                            });
+                        }
                     }
                 });
             },
+            /**
+             * 返回上一页
+             */
             handleHistory() {
                 this.$router.back(-1);
             }

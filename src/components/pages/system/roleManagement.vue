@@ -1,13 +1,13 @@
 <template>
     <div class="equipmentList">
         <div class="query">
-            <div><el-input class="query-input user-input" type="text" placeholder="搜索用户" v-model="userName"></el-input></div>
+            <div><el-input class="query-input user-input" type="text" placeholder="搜索角色名称" @blur="getRoleList(1,10,name)" v-model="name"></el-input></div>
             <div class="query-btn">
-                <el-button @click="dialogFormVisible = true">添加</el-button>
-                <el-button>批量导入</el-button>
-                <el-button>批量导出</el-button>
-                <el-button>一键更新faceId</el-button>
-                <el-button>批量删除</el-button>
+                <el-button @click="openUpdateRole(0,{})"><i class="icon-picture icon-picture-add"></i> 添加</el-button>
+                <el-button><i class="icon-picture icon-picture-to-lead"></i>批量导入</el-button>
+                <el-button><i class="icon-picture icon-picture-export"></i>批量导出</el-button>
+                <el-button><i class="icon-picture icon-picture-update"></i>一键更新faceId</el-button>
+                <el-button><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             </div>
         </div>
         <div class="table-list">
@@ -19,20 +19,27 @@
                     @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column prop="id" label="ID" min-width="60"></el-table-column>
-                <el-table-column prop="name" label="账号" min-width="80"></el-table-column>
-                <el-table-column prop="age" label="姓名" min-width="60"></el-table-column>
-                <el-table-column prop="sex" label="管理员角色" min-width="60"></el-table-column>
-                <el-table-column prop="phoneNumber" label="手机号" min-width="120"></el-table-column>
-                <el-table-column prop="id" label="操作" width="90">
+                <el-table-column prop="name" label="角色名称" min-width="80"></el-table-column>
+                <el-table-column prop="desc" label="权限说明" min-width="60"></el-table-column>
+                <el-table-column prop="id" label="操作" width="180">
                     <template slot-scope="scope">
-                        <a href="#">{{scope.row.id}}</a>
-                        <router-link :to="{ path:'/caseList'}">
-                            <a>编辑</a>
-                        </router-link>
-                        <a href="#">删除</a>
+                        <a class="operation-table" @click="openUpdateRole(1,scope.row)">编辑</a>
+                        <a class="operation-table" @click="deleteRole(scope.row)">删除</a>
+                        <a class="operation-table">授权</a>
                     </template>
                 </el-table-column>
             </el-table>
+            <!--工具条-->
+            <!--引入页码 start-->
+            <el-col :span="24" class="toolbar" style="text-align: center;">
+                <div style="display:inline-block;text-align: center;">
+                    <el-button size="mini" type="primary" class="toolbar-go-btn">Go
+                    </el-button>
+                    <el-pagination layout="total,  prev, pager, next, jumper" @current-change="handleCurrentChange"
+                                   :page-size="10" :total="total" style="float:right;">
+                    </el-pagination>
+                </div>
+            </el-col>
         </div>
 
         <el-dialog title="收货地址" width="500" :visible.sync="dialogFormVisible">
@@ -40,8 +47,8 @@
                 <el-form-item label="角色名称" prop="name" label-width="100px">
                     <el-input class="w320" v-model="form.name" placeholder="请输入角色名称"></el-input>
                 </el-form-item>
-                <el-form-item label="角色说明" prop="state" label-width="100px">
-                    <el-input type="textarea" class="w320" v-model="form.state" placeholder="请输入角色说明"></el-input>
+                <el-form-item label="角色说明" prop="desc" label-width="100px">
+                    <el-input type="textarea" class="w320" v-model="form.desc" placeholder="请输入角色说明"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -53,16 +60,16 @@
 </template>
 
 <script>
-    import {roleOptions} from '../../../api/api';
+    import {roleList, roleCreate, roleUpdate} from '../../../api/api';
     export default {
         name: 'roleManagement',
         data() {
             return {
-                userName: '',
+                name: '',
                 tableData: [],
                 form: {
                     name: '',
-                    state: ''
+                    desc: ''
                 },
                 dialogFormVisible: false,
                 multipleSelection: '',
@@ -70,22 +77,152 @@
                     name: [
                         { required: true, message: '请输入姓名', trigger: 'blur' }
                     ],
-                    state: [
+                    desc: [
                         { required: true, message: '请输入角色说明', trigger: 'blur' }
                     ],
-                }
+                },
+                total: 0, // 条数
+                page: 1, // 页码
             };
         },
         created() {
-            roleOptions().then(res => {
-                console.log(res)
-            })
+            this.getRoleList(1,10,this.name);
         },
         methods: {
+            /**
+             * 删除角色
+             * @param {Object} obj 角色信息
+             */
+            deleteRole(obj) {
+                this.$confirm('此操作将永久删除该管理员, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let para = obj;
+                    para.deleted = true;
+                    roleUpdate(para).then(res => {
+                        if (res.data.errno === 0) {
+                            this.$message({
+                                showClose: true,
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                            this.getRoleList(this.page, 10,this.name);
+                        } else {
+                            this.$message({
+                                showClose: true,
+                                message: res.data.errmsg,
+                                type: 'error'
+                            });
+                        }
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+            /**
+             * 编辑角色
+             * @param {number} type 0 添加 1 编辑
+             * @param {Object} obj 编辑角色信息
+             */
+            openUpdateRole(type,obj) {
+                // 打开弹框
+                this.dialogFormVisible = true;
+                // 判断是否为编辑
+                if (type === 1) {
+                    this.form = obj;
+                } else {
+                    this.form = {
+                        name: '',
+                        desc: ''
+                    };
+                }
+            },
+            // 修改页数
+            handleCurrentChange(val) {
+                this.page = val;
+                this.getRoleList((typeof val === 'number' ? val : 1), 10,this.name);
+            },
+            /**
+             * 创建角色
+             */
             submitForm() {
+                // 必填
                 this.$refs.ruleForm.validate(valid => {
                     if (valid) {
-                        console.log(this.form)
+                        // 接口
+                        if (this.form.id) {
+                            // 编辑
+                            roleUpdate(this.form).then(res => {
+                                if (res.data.errno === 0) {
+                                    this.$message({
+                                        showClose: true,
+                                        message: '编辑成功',
+                                        type: 'success'
+                                    });
+                                    this.dialogFormVisible = false;
+                                    this.getRoleList(this.page, 10,this.name);
+                                } else {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
+                            });
+                        } else {
+                            // 添加
+                            roleCreate(this.form).then(res => {
+                                if (res.data.errno === 0) {
+                                    this.$message({
+                                        showClose: true,
+                                        message: '添加成功',
+                                        type: 'success'
+                                    });
+                                    this.dialogFormVisible = false;
+                                    this.getRoleList(this.page, 10,this.name);
+                                } else {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });
+            },
+            /**
+             * 查询角色列表
+             * @param {number} currentPage 当前页
+             * @param {number} pageSize 一页多少条
+             * @param {String} name 查询姓名
+             */
+            getRoleList(currentPage, pageSize,name) {
+                let para = {
+                    limit: pageSize,
+                    order: 'desc',
+                    sort: 'add_time',
+                    page: currentPage
+                };
+                if (name) {
+                    para.name = name;
+                }
+                roleList(para).then(res => {
+                    if (res.data.errno === 0) {
+                        this.tableData = res.data.data.items;
+                        this.total = res.data.data.total;
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: res.data.errmsg,
+                            type: 'error'
+                        });
                     }
                 });
             },

@@ -5,7 +5,7 @@
 <script>
     export default {
         name: 'operationLog'
-    }
+    };
 </script>
 
 <style scoped>
