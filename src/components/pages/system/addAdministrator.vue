@@ -21,7 +21,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item class="operation-btn" label-width="0">
-                    <el-button type="primary" @click="submitForm('form')">保 存</el-button>
+                    <el-button type="primary" @click="submitForm()">保 存</el-button>
                     <el-button @click="handleHistory">返 回</el-button>
                 </el-form-item>
             </el-form>

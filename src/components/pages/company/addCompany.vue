@@ -1,0 +1,226 @@
+<template>
+    <div class="equipmentList">
+        <div class="form-save">
+            <el-form ref="form" class="clearfix" :rules="rules" :model="form" label-width="80px">
+                <el-form-item label="企业ID" label-width="140px">
+                    <el-input class="w420" v-model="form.id" placeholder="请输入企业ID"></el-input>
+                </el-form-item>
+
+                <el-form-item label="企业名称" label-width="140px" prop="companyName">
+                    <el-input class="w420" v-model="form.companyName" placeholder="请输入企业名称"></el-input>
+                </el-form-item>
+
+                <el-form-item label="社会代码" label-width="140px" prop="companyCode">
+                    <el-input class="w420" v-model="form.companyCode" placeholder="请输入社会代码"></el-input>
+                </el-form-item>
+
+                <el-form-item label="企业地址" label-width="140px" prop="companyAddress">
+                    <el-input class="w420" v-model="form.companyAddress" placeholder="请输入企业地址"></el-input>
+                </el-form-item>
+
+                <el-form-item label="企业联系人" label-width="140px" prop="companyContacts">
+                    <el-input class="w420" v-model="form.companyContacts" placeholder="请输入企业联系人"></el-input>
+                </el-form-item>
+
+                <el-form-item label="企业邮箱" label-width="140px" prop="companyEmail">
+                    <el-input class="w420" v-model="form.companyEmail" placeholder="请输入企业邮箱"></el-input>
+                </el-form-item>
+
+                <el-form-item label="企业手机" label-width="140px" prop="companyPhone">
+                    <el-input class="w420" v-model="form.companyPhone" placeholder="请输入企业手机"></el-input>
+                </el-form-item>
+
+                <el-form-item label="企业负责人" label-width="140px" prop="companyLead">
+                    <el-input class="w420" v-model="form.companyLead" placeholder="请输入企业负责人"></el-input>
+                </el-form-item>
+                <el-form-item label="企业主要管理员" label-width="140px" prop="companyPrincipal">
+                    <el-input class="w420" v-model="form.companyPrincipal" placeholder="请输入企业主要管理员"></el-input>
+                </el-form-item>
+
+                <el-form-item label="资质证明附件" label-width="140px">
+                    <el-upload
+                            class="upload-demo"
+                            action="https://jsonplaceholder.typicode.com/posts/"
+                            multiple
+                            :on-success="handleAvatarSuccess"
+                            :limit="1">
+                        <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
+                        <span>未选择任何文件</span>
+                    </el-upload>
+                </el-form-item>
+
+                <el-form-item label="网络负责人授权证明" label-width="140px">
+                    <el-upload
+                            class="upload-demo"
+                            action="https://jsonplaceholder.typicode.com/posts/"
+                            multiple
+                            :on-success="handleAvatarSuccess"
+                            :limit="1">
+                        <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
+                        <span>未选择任何文件</span>
+                    </el-upload>
+                </el-form-item>
+                <el-form-item label="企业星级" label-width="140px" prop="companyStar">
+                    <el-select v-model="form.companyStar" placeholder="请选择企业星级">
+                        <el-option label="一星" value="1"></el-option>
+                        <el-option label="二星" value="2"></el-option>
+                        <el-option label="三星" value="3"></el-option>
+                        <el-option label="四星" value="4"></el-option>
+                        <el-option label="五星" value="5"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="星级变更方式" label-width="140px" prop="starChangeType">
+                    <el-select v-model="form.starChangeType" placeholder="请选择星级变更方式">
+                        <el-option label="系统" value="0"></el-option>
+                        <el-option label="人工" value="1"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="企业审核人" label-width="140px" prop="examineUserId">
+                    <el-input class="w420" v-model="form.examineUserId" placeholder="请输入企业审核人"></el-input>
+                </el-form-item>
+                <el-form-item label="审核状态" label-width="140px" prop="companyStatus">
+                    <el-select v-model="form.companyStatus" placeholder="请选择审核状态">
+                        <el-option label="待审核" value="0"></el-option>
+                        <el-option label="通过" value="1"></el-option>
+                        <el-option label="驳回" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="企业入驻时间" label-width="140px" prop="intoTime">
+                    <el-date-picker type="date" class="w420" placeholder="选择日期" v-model="form.intoTime"></el-date-picker>
+                </el-form-item>
+                <el-form-item label="更新时间" label-width="140px" prop="updatedTime">
+                    <el-date-picker type="date" class="w420" placeholder="选择日期" v-model="form.updatedTime"></el-date-picker>
+                </el-form-item>
+
+                <el-form-item class="operation-btn" label-width="0">
+                    <el-button type="primary" @click="submitForm()">保 存</el-button>
+                    <el-button @click="handleHistory">返 回</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+    </div>
+</template>
+
+<script>
+    import {companyCreate} from '../../../api/api';
+    export default {
+        name: 'addCompany',
+        data() {
+            return {
+                form: {
+                    id: '', // 企业ID
+                    companyName: '', // 企业名称
+                    companyCode: '', // 社会代码
+                    companyAddress: '', // 企业地址
+                    companyContacts: '', // 企业联系人
+                    companyEmail: '', // 企业邮箱
+                    companyPhone: '', // 企业手机
+                    companyLead: '', // 企业负责人
+                    companyPrincipal: '', // 企业主要管理员 多个人员逗号隔开
+                    companyPatha: '', // 资格证明附件地址
+                    companyPathb: '', // 网络资格人授权证明
+                    companyStar: '1', // 企业星级(1-一星；2-二星；3-三星；4-四星；5-五星,默认1)
+                    companyStatus: '0', // 企业状态;0-待审核；1-通过；2-驳回；
+                    starChangeType: '0', // 星级变更方式(0-系统；1-人工；默认0)
+                    examineUserId: '', // 企业审核人
+                    examineTime: '', // 审核时间
+                    intoTime: '', // 企业入驻时间
+                    updatedTime: '' // 更新时间
+                },
+                // 必填校验
+                rules: {
+                    companyName: [
+                        { required: true, message: '请输入企业名称', trigger: 'blur' }
+                    ],
+                    companyCode: [
+                        { required: true, message: '请输入社会代码', trigger: 'blur' }
+                    ],
+                    companyAddress: [
+                        { required: true, message: '请输入企业地址', trigger: 'blur' }
+                    ],
+                    companyContacts: [
+                        { required: true, message: '请输入企业联系人', trigger: 'blur' }
+                    ],
+                    companyEmail: [
+                        { required: true, message: '请输入企业邮箱', trigger: 'blur' }
+                    ],
+                    companyPhone: [
+                        { required: true, message: '请输入企业手机', trigger: 'blur' }
+                    ],
+                    companyLead: [
+                        { required: true, message: '请输入企业主要管理员', trigger: 'blur' }
+                    ],
+                    examineUserId: [
+                        { required: true, message: '请输入企业审核人', trigger: 'blur' }
+                    ],
+                    starChangeUserId: [
+                        { required: true, message: '请输入星级变更人', trigger: 'blur' }
+                    ],
+                    companyPrincipal: [
+                        { required: true, message: '请输入企业负责人', trigger: 'blur' }
+                    ],
+                    examineTime: [
+                        { required: true, message: '请选择审核时间', trigger: 'change' }
+                    ],
+                    companyStar: [
+                        { required: true, message: '请选择企业星级', trigger: 'change' }
+                    ],
+                    companyStatus: [
+                        { required: true, message: '请选择企业审核状态', trigger: 'change' }
+                    ],
+                    starChangeType: [
+                        { required: true, message: '请选择星级变更方式', trigger: 'change' }
+                    ],
+                    intoTime: [
+                        { required: true, message: '请选择企业入驻时间', trigger: 'change' }
+                    ],
+                    updatedTime: [
+                        { required: true, message: '请选择更新时间', trigger: 'change' }
+                    ]
+                },
+                imageUrl: '',
+            };
+        },
+        methods: {
+            handleAvatarSuccess(res, file) {
+                this.imageUrl = URL.createObjectURL(file.raw);
+            },
+            /**
+             * 提交数据
+             */
+            submitForm() {
+                // 必填校验
+                this.$refs.form.validate(valid => {
+                    if (valid) {
+                        companyCreate(this.form).then(res => {
+                            if (res.data.errno === 0) {
+                                // 成功
+                                this.$message({
+                                    showClose: true,
+                                    message: '添加成功',
+                                    type: 'success'
+                                });
+                                this.$router.push({path: '/companyList'});
+                            } else {
+                                // 失败
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.errmsg,
+                                    type: 'error'
+                                });
+                            }
+                        })
+                    }
+                })
+            },
+            handleHistory() {
+                this.$router.back(-1);
+            }
+        }
+    };
+</script>
+
+<style scoped>
+
+</style>

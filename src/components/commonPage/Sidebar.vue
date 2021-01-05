@@ -122,7 +122,17 @@ export default {
                 {
                     icon: 'icon-icon_svg_houtai-10',
                     index: 'enterprise',
-                    title: '企业管理'
+                    title: '企业管理',
+                    subs: [
+                        {
+                            index: 'companyList',
+                            title: '企业列表'
+                        },
+                        {
+                            index: 'addCompany',
+                            title: '添加企业'
+                        }
+                    ]
                 }
             ],
             // 上一级路由

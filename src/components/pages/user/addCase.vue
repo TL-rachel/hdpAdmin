@@ -32,7 +32,7 @@
                     <el-date-picker type="date" class="w420" placeholder="选择日期" v-model="form.date1"></el-date-picker>
                 </el-form-item>
 
-                <el-form-item label="血压" label-width="90px" style="width: 17%;">
+                <el-form-item label="血压" label-width="90px" style="width: 20%;">
                     舒适压 <el-input class="w100" v-model="form.credNo" placeholder="请输入舒适压"></el-input>
                 </el-form-item>
 

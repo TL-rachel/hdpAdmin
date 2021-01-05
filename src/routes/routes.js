@@ -36,6 +36,10 @@ import AddAdministrator from '../components/pages/system/addAdministrator';
 import RoleManagement from '../components/pages/system/roleManagement';
 // 操作日志
 import OperationLog from '../components/pages/system/operationLog';
+// 企业管理列表
+import CompanyList from '../components/pages/company/companyList';
+// 添加企业
+import AddCompany from '../components/pages/company/addCompany';
 
 let routes = [
     {
@@ -159,6 +163,20 @@ let routes = [
                 component: OperationLog,
                 meta: {
                     title: '操作日志',
+                }
+            },
+            {
+                path: '/companyList',
+                component: CompanyList,
+                meta: {
+                    title: '企业管理列表',
+                }
+            },
+            {
+                path: '/addCompany',
+                component: AddCompany,
+                meta: {
+                    title: '企业管理列表',
                 }
             },
         ]

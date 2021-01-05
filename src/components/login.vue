@@ -94,6 +94,12 @@
                                     window.document.cookie = 'username=' + this.param.username;
                                     window.document.cookie = 'password=' + this.param.password;
                                 }
+                                this.$message({
+                                    showClose: true,
+                                    message: '登陆成功',
+                                    type: 'success'
+                                });
+                                sessionStorage.setItem('token', res.data.data);
                                 this.$router.push('/');
                             } else {
                                 this.param.verifyCode = '';

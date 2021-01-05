@@ -25,7 +25,7 @@
                     <template slot-scope="scope">
                         <a class="operation-table" @click="openUpdateRole(1,scope.row)">编辑</a>
                         <a class="operation-table" @click="deleteRole(scope.row)">删除</a>
-                        <a class="operation-table">授权</a>
+                        <a class="operation-table" @click="openTree(scope.row)">授权</a>
                     </template>
                 </el-table-column>
             </el-table>
@@ -42,7 +42,7 @@
             </el-col>
         </div>
 
-        <el-dialog title="收货地址" width="500" :visible.sync="dialogFormVisible">
+        <el-dialog :title="titleName" width="500" :visible.sync="dialogFormVisible">
             <el-form :model="form" :rules="rules" ref="ruleForm">
                 <el-form-item label="角色名称" prop="name" label-width="100px">
                     <el-input class="w320" v-model="form.name" placeholder="请输入角色名称"></el-input>
@@ -56,23 +56,51 @@
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
             </div>
         </el-dialog>
+
+        <el-dialog title="授权" width="500" :visible.sync="dialogAuthorization">
+            <el-tree
+                    :data="authorizationList"
+                    show-checkbox
+                    node-key="id"
+                    ref="tree"
+                    :default-checked-keys = "authorizationData"
+                    :props="defaultProps"
+                    :render-content="renderContent">
+            </el-tree>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="authorizationForm()">确 定</el-button>
+                <el-button @click="dialogAuthorization = false">取 消</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
 <script>
-    import {roleList, roleCreate, roleUpdate} from '../../../api/api';
+    import {roleList, roleCreate, roleUpdate, rolePermissions,roleUpdatePermissions} from '../../../api/api';
     export default {
         name: 'roleManagement',
         data() {
             return {
-                name: '',
-                tableData: [],
+                name: '', // 查询姓名
+                tableData: [], // 列表
+                authorizationList: [], // 授权数据
+                authorizationData: [], // 角色的权限数据
+                // 创建角色
                 form: {
-                    name: '',
-                    desc: ''
+                    name: '', // 角色名称
+                    desc: '' // 角色说明
                 },
+                // 树形结构
+                defaultProps: {
+                    children: 'children',
+                    label: 'label'
+                },
+                // 创建编辑弹框
                 dialogFormVisible: false,
+                // 授权弹框
+                dialogAuthorization: false,
                 multipleSelection: '',
+                // 必填校验
                 rules: {
                     name: [
                         { required: true, message: '请输入姓名', trigger: 'blur' }
@@ -83,12 +111,70 @@
                 },
                 total: 0, // 条数
                 page: 1, // 页码
+                titleName: '添加角色', // 弹框title
+                roleId: '', // 授权使用角色id
             };
         },
         created() {
+            // 获取列表
             this.getRoleList(1,10,this.name);
         },
         methods: {
+            /* eslint-disable */
+            renderContent(h, { node, data, store }) {
+                console.log(node);
+                let labelApi = '';
+                if (node.childNodes.length === 0) {
+                    labelApi = node.key;
+                }
+                return (
+                    <span class="custom-tree-node"><span>{node.label} </span> {labelApi ? <span class="label-api"> {labelApi}</span> : <span></span>}</span>
+                );
+            },
+            /* eslint-disable */
+            openTree(obj) {
+                this.dialogAuthorization = true;
+                // 获取权限列表
+                rolePermissions({roleId: obj.id}).then(res => {
+                    if (res.data.errno === 0) {
+                        // 权限列表
+                        this.authorizationList = res.data.data.systemPermissions;
+                        // 角色自身权限
+                        this.authorizationData = res.data.data.assignedPermissions;
+                        this.roleId = obj.id;
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: res.data.errmsg,
+                            type: 'error'
+                        });
+                    }
+                });
+            },
+            authorizationForm() {
+                let rolePermissionsList = this.$refs.tree.getCheckedKeys(true);
+                console.log(rolePermissionsList);
+                let para = {
+                    roleId: this.roleId,
+                    permissions: rolePermissionsList
+                };
+                roleUpdatePermissions(para).then(res => {
+                    if (res.data.errno === 0) {
+                        this.$message({
+                            showClose: true,
+                            message: '授权成功',
+                            type: 'success'
+                        });
+                        this.dialogAuthorization = false;
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: res.data.errmsg,
+                            type: 'error'
+                        });
+                    }
+                })
+            },
             /**
              * 删除角色
              * @param {Object} obj 角色信息
@@ -125,7 +211,7 @@
                 });
             },
             /**
-             * 编辑角色
+             * 编辑角色  创建
              * @param {number} type 0 添加 1 编辑
              * @param {Object} obj 编辑角色信息
              */
@@ -135,11 +221,13 @@
                 // 判断是否为编辑
                 if (type === 1) {
                     this.form = obj;
+                    this.titleName = '编辑角色';
                 } else {
                     this.form = {
                         name: '',
                         desc: ''
                     };
+                    this.titleName = '添加角色';
                 }
             },
             // 修改页数
@@ -210,6 +298,7 @@
                     sort: 'add_time',
                     page: currentPage
                 };
+                // 是否查询
                 if (name) {
                     para.name = name;
                 }
@@ -262,5 +351,14 @@
     }
     .el-dialog__footer {
         text-align: center;
+    }
+    .label-api {
+        border: 1px solid #28dc29;
+        border-radius: 3px;
+        padding: 2px 10px;
+        margin-left: 20px;
+        background: #28dc29;
+        background: local;
+        color: #28dc29;
     }
 </style>
