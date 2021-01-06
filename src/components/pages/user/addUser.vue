@@ -2,127 +2,125 @@
     <div class="form-save">
         <el-form ref="form" class="clearfix" :rules="rules" :model="form" label-width="80px">
             <el-form-item :label="!$route.query.id?'创建用户':'用户ID'" class="whole100" label-width="90px">
-                <el-input v-if="$route.query.id" class="w420" v-model="form.userId" disabled placeholder="请输入用户ID"></el-input>
+                <el-input v-if="$route.query.id" class="w420" v-model="form.id" disabled placeholder="请输入用户ID"></el-input>
             </el-form-item>
 
             <el-form-item class="upload-img" label="上传图片" label-width="90px">
                 <el-upload
                         class="avatar-uploader"
-                        :disabled="$route.query.id?true:false"
-                        action="fakeaction"
+                        :disabled="$route.query.type==1?true:false"
+                        :action="actionUrl"
                         :show-file-list="false"
-                        :http-request="uploadImg1"
-                        :before-upload="beforeAvatarUpload"
-                >
-                    <img v-if="form.userImage1" :src="form.userImage1" class="avatar" />
+                        :on-success="handleAvatarSuccess1"
+                        :before-upload="beforeAvatarUpload">
+                    <img v-if="form.userImage1" :src="form.userImage1" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
                 <el-upload
                         class="avatar-uploader"
-                        :disabled="$route.query.id?true:false"
-                        action="fakeaction"
+                        :disabled="$route.query.type==1?true:false"
+                        :action="actionUrl"
                         :show-file-list="false"
-                        :http-request="uploadImg2"
-                        :before-upload="beforeAvatarUpload"
-                >
-                    <img v-if="form.userImage2" :src="form.userImage2" class="avatar" />
+                        :on-success="handleAvatarSuccess2"
+                        :before-upload="beforeAvatarUpload">
+                    <img v-if="form.userImage2" :src="form.userImage2" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
                 <el-upload
                         class="avatar-uploader"
-                        :disabled="$route.query.id?true:false"
-                        action="fakeaction"
+                        :disabled="$route.query.type==1?true:false"
+                        :action="actionUrl"
                         :show-file-list="false"
-                        :http-request="uploadImg3"
-                        :before-upload="beforeAvatarUpload"
-                >
-                    <img v-if="form.userImage3" :src="form.userImage3" class="avatar" />
+                        :on-success="handleAvatarSuccess3"
+                        :before-upload="beforeAvatarUpload">
+                    <img v-if="form.userImage3" :src="form.userImage3" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
+
                 <el-button>正面照</el-button>
                 <el-button>侧面照</el-button>
                 <el-button>3/4侧面照</el-button>
             </el-form-item>
 
             <el-form-item label="用户姓名" class="whole100" label-width="90px" prop="userName">
-                <el-input class="w420" v-model="form.userName" :disabled="$route.query.id?true:false" placeholder="请输入用户姓名"></el-input>
+                <el-input class="w420" v-model="form.userName" :disabled="$route.query.type==1?true:false" placeholder="请输入用户姓名"></el-input>
             </el-form-item>
 
             <el-form-item label="年龄" class="whole100" label-width="90px" prop="userAge">
-                <el-input class="w420" v-model="form.userAge" :disabled="$route.query.id?true:false" placeholder="请输入数字"></el-input>
+                <el-input class="w420" v-model="form.userAge" :disabled="$route.query.type==1?true:false" placeholder="请输入数字"></el-input>
             </el-form-item>
 
             <el-form-item label="性别" class="whole100" label-width="90px" prop="userSex">
-                <el-radio-group v-model="form.userSex" :disabled="$route.query.id?true:false">
-                    <el-radio label="0">男</el-radio>
-                    <el-radio label="1">女</el-radio>
+                <el-radio-group v-model="form.userSex" :disabled="$route.query.type==1?true:false">
+                    <el-radio :label="0">男</el-radio>
+                    <el-radio :label="1">女</el-radio>
                 </el-radio-group>
             </el-form-item>
 
             <el-form-item label="手机号" class="whole100" label-width="90px" prop="userPhone">
-                <el-input class="w420" v-model="form.userPhone" :disabled="$route.query.id?true:false" placeholder="请输入号码"></el-input>
+                <el-input class="w420" v-model="form.userPhone" :disabled="$route.query.type==1?true:false" placeholder="请输入号码"></el-input>
             </el-form-item>
 
             <el-form-item label="邮箱地址" label-width="90px" prop="userEmail">
-                <el-input class="w420" v-model="form.userEmail" :disabled="$route.query.id?true:false" placeholder="请输入邮箱地址"></el-input>
+                <el-input class="w420" v-model="form.userEmail" :disabled="$route.query.type==1?true:false" placeholder="请输入邮箱地址"></el-input>
             </el-form-item>
 
             <el-form-item label="证件类型" label-width="90px" style="width: 20%;" prop="userCertificatesType">
-                <el-select class="w140" v-model="form.userCertificatesType" :disabled="$route.query.id?true:false" placeholder="请选择证件类型">
-                    <el-option label="身份证" value="0"></el-option>
-                    <el-option label="驾照" value="1"></el-option>
-                    <el-option label="护照" value="2"></el-option>
+                <el-select class="w140" v-model="form.userCertificatesType" :disabled="$route.query.type==1?true:false" placeholder="请选择证件类型">
+                    <el-option label="身份证" :value="0"></el-option>
+                    <el-option label="驾照" :value="1"></el-option>
+                    <el-option label="护照" :value="2"></el-option>
                 </el-select>
             </el-form-item>
 
             <el-form-item label="证件号码" label-width="100px" style="width: 25%;" prop="certificatesNum">
-                <el-input class="w190" v-model="form.certificatesNum" :disabled="$route.query.id?true:false" placeholder="请输入证件号码"></el-input>
+                <el-input class="w190" v-model="form.certificatesNum" :disabled="$route.query.type==1?true:false" placeholder="请输入证件号码"></el-input>
             </el-form-item>
 
             <el-form-item label="血型" label-width="90px" prop="userBlood">
-                <el-input class="w420" v-model="form.userBlood" :disabled="$route.query.id?true:false" placeholder="请输入血型"></el-input>
+                <el-input class="w420" v-model="form.userBlood" :disabled="$route.query.type==1?true:false" placeholder="请输入血型"></el-input>
             </el-form-item>
 
             <el-form-item label="职业" label-width="90px" prop="userJob">
-                <el-input class="w420" v-model="form.userJob" :disabled="$route.query.id?true:false" placeholder="请输入职业"></el-input>
+                <el-input class="w420" v-model="form.userJob" :disabled="$route.query.type==1?true:false" placeholder="请输入职业"></el-input>
             </el-form-item>
 
             <el-form-item label="学历" label-width="90px" prop="userEducation">
-                <el-input class="w420" v-model="form.userEducation" :disabled="$route.query.id?true:false" placeholder="请输入学历"></el-input>
+                <el-input class="w420" v-model="form.userEducation" :disabled="$route.query.type==1?true:false" placeholder="请输入学历"></el-input>
             </el-form-item>
 
             <el-form-item label="归属企业" label-width="90px" prop="companyId">
-                <el-select class="w420" v-model="form.companyId" :disabled="$route.query.id?true:false" placeholder="请选择归属企业">
+                <el-select class="w420" v-model="form.companyId" :disabled="$route.query.type==1?true:false" placeholder="请选择归属企业">
                     <el-option v-for="(item,index) in companyList" :key="index" :label="item.companyName" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
 
             <el-form-item label="民族" label-width="90px" prop="userNation">
-                <el-select class="w420" v-model="form.userNation" :disabled="$route.query.id?true:false" placeholder="请选择民族">
+                <el-select class="w420" v-model="form.userNation" :disabled="$route.query.type==1?true:false" placeholder="请选择民族">
                     <el-option label="汉族" value="0"></el-option>
                     <el-option label="苗族" value="1"></el-option>
                 </el-select>
             </el-form-item>
 
             <el-form-item label="用户等级" label-width="90px" style="width: 21%;" prop="userLevel">
-                <el-select class="w140" v-model="form.userLevel" :disabled="$route.query.id?true:false" placeholder="请选择用户等级">
-                    <el-option label="一级" value="0"></el-option>
-                    <el-option label="二级" value="1"></el-option>
+                <el-select class="w140" v-model="form.userLevel" :disabled="$route.query.type==1?true:false" placeholder="请选择用户等级">
+                    <el-option label="一级" :value="0"></el-option>
+                    <el-option label="二级" :value="1"></el-option>
                 </el-select>
             </el-form-item>
 
             <el-form-item label="等级变更方式" label-width="110px" style="width: 20%;" prop="levelChangeType">
-                <el-select class="w140" v-model="form.levelChangeType" :disabled="$route.query.id?true:false" placeholder="请选择等级变更方式">
-                    <el-option label="系统" value="0"></el-option>
-                    <el-option label="人工" value="1"></el-option>
+                <el-select class="w140" v-model="form.levelChangeType" :disabled="$route.query.type==1?true:false" placeholder="请选择等级变更方式">
+                    <el-option label="系统" :value="0"></el-option>
+                    <el-option label="人工" :value="1"></el-option>
                 </el-select>
             </el-form-item>
 
             <el-form-item label="身高" label-width="90px" prop="userHeight">
-                <el-input class="w420" v-model="form.userHeight" :disabled="$route.query.id?true:false" placeholder="请输入身高"></el-input>
+                <el-input class="w420" v-model="form.userHeight" :disabled="$route.query.type==1?true:false" placeholder="请输入身高"></el-input>
             </el-form-item>
             <el-form-item label="体重" label-width="90px" prop="userWeight">
-                <el-input class="w420" v-model="form.userWeight" :disabled="$route.query.id?true:false" placeholder="请输入体重"></el-input>
+                <el-input class="w420" v-model="form.userWeight" :disabled="$route.query.type==1?true:false" placeholder="请输入体重"></el-input>
             </el-form-item>
             <el-form-item class="operation-btn" label-width="0">
                 <el-button type="primary" @click="submitForm()">保 存</el-button>
@@ -133,13 +131,13 @@
 </template>
 
 <script>
-    import {userCreate,hdCompanyList} from '../../../api/api';
+    import {userCreate,hdCompanyList,userRead,userUpdate} from '../../../api/api';
     export default {
         name: 'addUser',
         data() {
             return {
                 form: {
-                    userId: '', // 用户ID
+                    id: '', // 用户ID
                     certificatesNum: '', //证件号码
                     companyId: '', //所属企业ID
                     delFlag: false, //默认false
@@ -150,9 +148,9 @@
                     userEducation: '', //学历
                     userEmail: '', //email
                     userHeight: '', //身高
-                    userImage1: '', //图片1的base64位编码
-                    userImage2: '', //图片2的base64位编码
-                    userImage3: '', //图片3的base64位编码
+                    userImage1: 'http://hdposs.zerorui.cn/i5nyubzubju70h92hnej.jpg', //图片1的base64位编码
+                    userImage2: 'http://hdposs.zerorui.cn/i5nyubzubju70h92hnej.jpg', //图片2的base64位编码
+                    userImage3: 'http://hdposs.zerorui.cn/i5nyubzubju70h92hnej.jpg', //图片3的base64位编码
                     userJob: '', //职业
                     userLevel: '0', //用户等级默认1
                     userName: '', //姓名
@@ -217,10 +215,27 @@
                 },
                 // 所属企业列表
                 companyList: [],
-                imgType: ['image/jpg', 'image/png']
+                imgType: ['image/jpg', 'image/png'],
+                /* eslint-disable */
+                actionUrl: CAS_SERVER_URL + '/admin/storage/create',
+                /* eslint-disable */
             };
         },
         created() {
+            if (this.$route.query.id) {
+                userRead(this.$route.query.id).then(res => {
+                    if (res.data.errno === 0) {
+                        this.form = res.data.data;
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: res.data.errmsg,
+                            type: 'error'
+                        });
+                    }
+                })
+            }
+            // 获取归属企业列表
             hdCompanyList({page: 1,limit: 1000,sort: 'created_time',order: 'desc'}).then(res => {
                 if (res.data.errno === 0) {
                     this.companyList = res.data.data.items;
@@ -234,7 +249,15 @@
             })
         },
         methods: {
-            // 上传文件判断
+            handleAvatarSuccess1(res, file) {
+                this.form.userImage1 = file.response.data.url;
+            },
+            handleAvatarSuccess2(res, file) {
+                this.form.userImage2 = file.response.data.url;
+            },
+            handleAvatarSuccess3(res, file) {
+                this.form.userImage3 = file.response.data.url;
+            },
             beforeAvatarUpload(file) {
                 // 调用testFileType方法，把定义的imgType数组和我们上传的图片类型file.type一起传进去
                 const isTYPE = this.testFileType(this.imgType, file.type);
@@ -253,66 +276,47 @@
                     return fileType === el[index];
                 });
             },
-            // 上传文件
-            uploadImg1(params) {
-                // Promise的数据需要用.then得到
-                this.getBase64(params.file).then(res => {
-                    this.form.userImage1 = res; // res就是base64格式的图片数据
-                });
-            },
-            // 上传文件
-            uploadImg2(params) {
-                // Promise的数据需要用.then得到
-                this.getBase64(params.file).then(res => {
-                    this.form.userImage2 = res; // res就是base64格式的图片数据
-                });
-            },
-            // 上传文件
-            uploadImg3(params) {
-                // Promise的数据需要用.then得到
-                this.getBase64(params.file).then(res => {
-                    this.form.userImage3 = res; // res就是base64格式的图片数据
-                });
-            },
-            // 转换格式
-            getBase64(file) {
-                return new Promise((resolve, reject) => {
-                    let reader = new FileReader();
-                    let fileResult = '';
-                    reader.readAsDataURL(file); //开始转
-                    reader.onload = function () {
-                        fileResult = reader.result;
-                    }; //转 失败
-                    reader.onerror = function (error) {
-                        reject(error);
-                    }; //转 结束  咱就 resolve 出去
-                    reader.onloadend = function () {
-                        resolve(fileResult);
-                    };
-                });
-            },
             /**
              * 提交数据
              */
             submitForm() { // 必填校验
                 this.$refs.form.validate(valid => {
                     if (valid) {
-                        userCreate(this.form).then(res => {
-                            if (res.data.errno === 0) {
-                                this.$message({
-                                    showClose: true,
-                                    message: '添加用户成功',
-                                    type: 'success'
-                                });
-                                this.$router.push({path: '/userList'});
-                            } else {
-                                this.$message({
-                                    showClose: true,
-                                    message: res.data.errmsg,
-                                    type: 'error'
-                                });
-                            }
-                        });
+                        if (this.$route.query.id) {
+                            userUpdate(this.form).then(res => {
+                                if (res.data.errno === 0) {
+                                    this.$message({
+                                        showClose: true,
+                                        message: '更新用户成功',
+                                        type: 'success'
+                                    });
+                                    this.$router.push({path: '/userList'});
+                                } else {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
+                            })
+                        } else {
+                            userCreate(this.form).then(res => {
+                                if (res.data.errno === 0) {
+                                    this.$message({
+                                        showClose: true,
+                                        message: '添加用户成功',
+                                        type: 'success'
+                                    });
+                                    this.$router.push({path: '/userList'});
+                                } else {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
+                            });
+                        }
                     }
                 });
             },

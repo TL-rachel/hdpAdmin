@@ -4,10 +4,10 @@
             <div><el-input class="query-input" type="text" placeholder="搜索设备" v-model="equipmentName"></el-input></div>
            <div class="query-btn">
                <router-link :to="{ path:'/addEquipment'}">
-                   <el-button>添加</el-button>
+                   <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
                </router-link>
-               <el-button>批量检测</el-button>
-               <el-button>批量删除</el-button>
+               <el-button><i class="icon-picture icon-picture-detection"></i>批量检测</el-button>
+               <el-button @click="regionDelete(t.id,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
            </div>
         </div>
         <div class="tag-top" style="margin-top: 20px;">
@@ -41,7 +41,7 @@
                             <el-button>编辑</el-button>
                             <el-button>直播</el-button>
                             <el-button>录播</el-button>
-                            <el-button>删除</el-button>
+                            <el-button @click="regionDelete(t.id,1)">删除</el-button>
                         </div>
                     </div>
                 </template>
@@ -52,6 +52,7 @@
 </template>
 
 <script>
+    import {regionList, regionBatchDelete, regionDelete} from '../../../api/api';
     export default {
         name: 'equipmentList',
         data() {
@@ -290,6 +291,9 @@
                 checkId: []
             };
         },
+        created() {
+            this.getRegionList(1,10);
+        },
         methods: {
             /**
              * 切换标签
@@ -304,6 +308,81 @@
                 }
                 console.log(this.checkId)
             },
+            /**
+             * 删除操作
+             * @param {Number} id 删除区域id
+             * @param {Number} type 删除标记 1 单个  2  批量
+             */
+            regionDelete(id,type) {
+                this.$confirm('此操作将永久删除区域, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    if (type === 1) {
+                        regionDelete({id: id}).then(res => {
+                            if (res.data.errno === 0) {
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.errmsg,
+                                    type: 'success'
+                                });
+                                this.getRegionList(1, 10);
+                            } else {
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.errmsg,
+                                    type: 'error'
+                                });
+                            }
+                        });
+                    } else {
+                        regionBatchDelete({ids: id}).then(res => {
+                            if (res.data.errno === 0) {
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.errmsg,
+                                    type: 'success'
+                                });
+                                this.getRegionList(1, 10);
+                            } else {
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.errmsg,
+                                    type: 'error'
+                                });
+                            }
+                        });
+                    }
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+            /**
+             * 查询区域
+             * @param {Number} currentPage 第几页
+             * @param {Number} pageSize 多少条
+             */
+            getRegionList(currentPage, pageSize) {
+                let para = {
+                    limit: pageSize,
+                    page: currentPage
+                };
+                regionList(para).then(res => {
+                    if (res.data.errno === 0) {
+                        this.equipmentList = res.data.data;
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: res.data.errmsg,
+                            type: 'error'
+                        });
+                    }
+                })
+            }
         }
     };
 </script>
@@ -362,6 +441,12 @@
             padding: 14px 7px;
             float: left;
             margin-right: 16px;
+            position: relative;
+            .module-checkbox {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
             .equipmentTitle {
                 display: flex;
                 justify-content: space-between;

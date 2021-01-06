@@ -32,86 +32,154 @@ instance.interceptors.response.use(function (response) {
 });
 // 登陆
 export const getLogin = params => {
-    return instance.post(`${base}/hdp/admin/auth/login`, params);
+    return instance.post(`${base}/admin/auth/login`, params);
 };
 // 角色
 export const roleOptions = params => {
-    return instance.post(`${base}/hdp/admin/role/options`, params);
+    return instance.post(`${base}/admin/role/options`, params);
 };
 
 // 添加管理员
 export const adminCreate = params => {
-    return instance.post(`${base}/hdp/admin/admin/create`, params);
+    return instance.post(`${base}/admin/admin/create`, params);
 };
 
 // 管理员列表
 export const adminList = params => {
-    return instance.post(`${base}/hdp/admin/admin/list`, params);
+    return instance.post(`${base}/admin/admin/list`, params);
 };
 
 // 管理员详情
 export const adminRead = params => {
-    return instance.get(`${base}/hdp/admin/admin/read`,{params: params});
+    return instance.get(`${base}/admin/admin/read`,{params: params});
 };
 
 // 修改管理员
 export const adminUpdate = params => {
-    return instance.post(`${base}/hdp/admin/admin/update`, params);
+    return instance.post(`${base}/admin/admin/update`, params);
 };
 
 // 添加角色
 export const roleCreate = params => {
-    return instance.post(`${base}/hdp/admin/role/create`, params);
+    return instance.post(`${base}/admin/role/create`, params);
 };
 
 // 添加角色
 export const roleUpdate = params => {
-    return instance.post(`${base}/hdp/admin/role/update`, params);
+    return instance.post(`${base}/admin/role/update`, params);
 };
 
 // 角色权限列表
 export const rolePermissions = params => {
-    return instance.get(`${base}/hdp/admin/role/permissions`,{params: params});
+    return instance.get(`${base}/admin/role/permissions`,{params: params});
 };
 
 // 角色赋权
 export const roleUpdatePermissions = params => {
-    return instance.post(`${base}/hdp/admin/role/updatePermissions`, params);
+    return instance.post(`${base}/admin/role/updatePermissions`, params);
 };
 
 // 角色列表
 export const roleList = params => {
-    return instance.post(`${base}/hdp/admin/role/list`, params);
+    return instance.post(`${base}/admin/role/list`, params);
 };
 
 // 操作类型
 export const selectByOptType = params => {
-    return instance.get(`${base}/hdp/admin/hd_operation_log/selectByOptType`,{params: params});
+    return instance.get(`${base}/admin/hd_operation_log/selectByOptType`,{params: params});
 };
 
 // 操作日志
 export const operationLogList = params => {
-    return instance.get(`${base}/hdp/admin/hd_operation_log/list`,{params: params});
+    return instance.get(`${base}/admin/hd_operation_log/list`,{params: params});
 };
 
 // 创建用户
 export const userCreate = params => {
-    return instance.post(`${base}/hdp/admin/user/create`, params);
+    return instance.post(`${base}/admin/user/create`, params);
+};
+
+// 修改用户
+export const userUpdate = params => {
+    return instance.post(`${base}/admin/user/update`, params);
+};
+
+// 用户详情
+export const userRead = params => {
+    return instance.get(`${base}/admin/user/read/` + params);
+};
+
+// 删除用户
+export const userDelete = params => {
+    return instance.post(`${base}/admin/user/delete/` + params);
+};
+
+// 批量删除用户
+export const userBatchDelete = params => {
+    return instance.get(`${base}/admin/user/batch-delete`, {params: params});
 };
 
 // 用户列表
 export const hdUserList = params => {
-    return instance.get(`${base}/hdp/admin/user/list`,{params: params});
+    return instance.get(`${base}/admin/user/list`,{params: params});
 };
 
 // 所属企业列表
 export const hdCompanyList = params => {
-    return instance.get(`${base}/hdp/admin/hd_company/list`,{params: params});
+    return instance.get(`${base}/admin/hd_company/list`,{params: params});
 };
 
-// 所属企业列表
+// 新增企业列表
 export const companyCreate = params => {
-    return instance.post(`${base}/hdp/admin/hd_company/create`,params);
+    return instance.post(`${base}/admin/hd_company/create`,params);
+};
+
+// 删除企业
+export const companyDelete = params => {
+    return instance.get(`${base}/admin/hd_company/delete`,{params: params});
+};
+
+// 批量删除企业
+export const companyBatchDelete = params => {
+    return instance.get(`${base}/admin/hd_company/batch-delete`,{params: params});
+};
+
+// 企业详情
+export const companyRead = params => {
+    return instance.get(`${base}/admin/hd_company/read`,{params: params});
+};
+
+// 企业变更
+export const companyUpdate = params => {
+    return instance.post(`${base}/admin/hd_company/update`,params);
+};
+
+// 区域列表
+export const regionList = params => {
+    return instance.post(`${base}/admin/hd_region/list`,params);
+};
+
+// 新增区域
+export const regionCreate = params => {
+    return instance.post(`${base}/admin/hd_region/create`,params);
+};
+
+// 修改区域
+export const regionUpdate = params => {
+    return instance.post(`${base}/admin/hd_region/update`,params);
+};
+
+// 区域详情
+export const regionRead = params => {
+    return instance.get(`${base}/admin/hd_region/read`,{params: params});
+};
+// 区域批量删除
+export const regionBatchDelete = params => {
+    return instance.get(`${base}/admin/hd_region/batch-delete`,{params: params});
+};
+// 区域删除
+export const regionDelete = params => {
+    return instance.get(`${base}/admin/hd_region/delete`,{params: params});
 };
 
 /* eslint-disable */

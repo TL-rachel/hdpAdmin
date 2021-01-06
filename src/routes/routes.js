@@ -14,6 +14,8 @@ import EquipmentList from '../components/pages/equipment/equipmentList';
 import AddEquipment from '../components/pages/equipment/addEquipment';
 // 区域列表
 import AreaList from '../components/pages/area/areaList';
+// 添加区域
+import AddArea from '../components/pages/area/addArea';
 // 用户列表
 import UserList from '../components/pages/user/userList';
 // 添加用户
@@ -177,6 +179,13 @@ let routes = [
                 component: AddCompany,
                 meta: {
                     title: '企业管理列表',
+                }
+            },
+            {
+                path: '/addArea',
+                component: AddArea,
+                meta: {
+                    title: '添加区域',
                 }
             },
         ]

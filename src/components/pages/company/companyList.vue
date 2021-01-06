@@ -9,7 +9,7 @@
                 <el-button><i class="icon-picture icon-picture-to-lead"></i>批量导入</el-button>
                 <el-button><i class="icon-picture icon-picture-export"></i>批量导出</el-button>
                 <el-button><i class="icon-picture icon-picture-update"></i>一键更新faceId</el-button>
-                <el-button><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+                <el-button @click="deleteCompany(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             </div>
         </div>
         <div class="table-list">
@@ -24,7 +24,7 @@
                 <el-table-column prop="companyName" label="企业名称" min-width="80"></el-table-column>
                 <el-table-column prop="companyCode" label="社会代码" min-width="120"></el-table-column>
                 <el-table-column prop="companyContacts" label="联系人" min-width="60"></el-table-column>
-                <el-table-column prop="companyTele" label="联系电话" min-width="120"></el-table-column>
+                <el-table-column prop="companyPhone" label="联系电话" min-width="120"></el-table-column>
                 <el-table-column prop="createdTime" label="添加时间" min-width="120"></el-table-column>
                 <el-table-column prop="updatedTime" label="更新时间" min-width="120"></el-table-column>
                 <el-table-column prop="companyStatus" label="审核状态" min-width="120">
@@ -34,12 +34,15 @@
                         <span v-if="scope.row.companyStatus==2">驳回</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="id" label="操作" width="120">
+                <el-table-column prop="id" label="操作" width="180">
                     <template slot-scope="scope">
-                        <router-link :to="{ path:'/addAdministrator',query: {id:scope.row.id}}">
+                        <router-link :to="{ path:'/addCompany',query: {id:scope.row.id,type:1}}">
+                            <a class="operation-table">查看</a>
+                        </router-link>
+                        <router-link :to="{ path:'/addCompany',query: {id:scope.row.id}}">
                             <a class="operation-table">编辑</a>
                         </router-link>
-                        <a class="operation-table" @click="deleteCompany(scope.row)">删除</a>
+                        <a class="operation-table" @click="deleteCompany(scope.row,1)">删除</a>
                     </template>
                 </el-table-column>
             </el-table>
@@ -60,7 +63,7 @@
 </template>
 
 <script>
-    import {hdCompanyList,adminUpdate} from '../../../api/api';
+    import {hdCompanyList,companyDelete,companyBatchDelete} from '../../../api/api';
     export default {
         name: 'companyList',
         data() {
@@ -68,7 +71,7 @@
                 userName: '',
                 tableData: [],
                 options: [],
-                multipleSelection: [],
+                multipleSelection: '',
                 total: 0, // 条数
                 page: 1, // 页码
             };
@@ -77,8 +80,19 @@
             this.getCompanyList(1,10);
         },
         methods: {
+            /**
+             * 获取选中事件 获取选中id
+             * @param {Object} val 值
+             */
             handleSelectionChange(val) {
-                this.multipleSelection = val;
+                this.multipleSelection = '';
+                for (let i = 0; i < val.length; i++) {
+                    if (i < val.length - 1) {
+                        this.multipleSelection += val[i].id + ',';
+                    } else {
+                        this.multipleSelection += val[i].id;
+                    }
+                }
             },
             // 修改页数
             handleCurrentChange(val) {
@@ -111,31 +125,49 @@
             /**
              * 删除企业
              * @param {Object} detail 企业信息
+             * @param {number} type 删除标记 1 单个   2 多个
              */
-            deleteCompany(detail) {
-                this.$confirm('此操作将永久删除该管理员, 是否继续?', '提示', {
+            deleteCompany(detail,type) {
+                this.$confirm('此操作将永久删除企业, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    let para = detail;
-                    para.deleted = true;
-                    adminUpdate(para).then(res => {
-                        if (res.data.errno === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: res.data.errmsg,
-                                type: 'success'
-                            });
-                            this.getCompanyList(this.page, 10);
-                        } else {
-                            this.$message({
-                                showClose: true,
-                                message: res.data.errmsg,
-                                type: 'error'
-                            });
-                        }
-                    });
+                    if (type === 1) {
+                        companyDelete({id: detail.id}).then(res => {
+                            if (res.data.errno === 0) {
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.errmsg,
+                                    type: 'success'
+                                });
+                                this.getCompanyList(this.page, 10);
+                            } else {
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.errmsg,
+                                    type: 'error'
+                                });
+                            }
+                        });
+                    } else {
+                        companyBatchDelete({ids: detail}).then(res => {
+                            if (res.data.errno === 0) {
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.errmsg,
+                                    type: 'success'
+                                });
+                                this.getCompanyList(this.page, 10);
+                            } else {
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.errmsg,
+                                    type: 'error'
+                                });
+                            }
+                        });
+                    }
                 }).catch(() => {
                     this.$message({
                         type: 'info',

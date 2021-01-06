@@ -9,7 +9,7 @@
                 <el-button><i class="icon-picture icon-picture-to-lead"></i>批量导入</el-button>
                 <el-button><i class="icon-picture icon-picture-export"></i>批量导出</el-button>
                 <el-button><i class="icon-picture icon-picture-update"></i>一键更新faceId</el-button>
-                <el-button><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+                <el-button @click="userDelete(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             </div>
         </div>
         <div class="table-list">
@@ -51,16 +51,29 @@
                 <el-table-column prop="updatedTime" label="更新时间" min-width="150"></el-table-column>
                 <el-table-column prop="id" label="操作" width="90">
                     <template slot-scope="scope">
-                        <router-link :to="{ path:'/addUser',query: {id:scope.row.id}}">
+                        <router-link :to="{ path:'/addUser',query: {id:scope.row.id,type: 1}}">
                             <a>查看详情</a>
                         </router-link>
-                        <a href="#">更多操作</a>
-                        <router-link :to="{ path:'/caseList'}">
-                            <a>病例</a>
-                        </router-link>
-                        <router-link :to="{ path:'/medicalHistory'}">
-                            <a>病史</a>
-                        </router-link>
+                        <el-popover trigger="hover" placement="bottom">
+                            <p>
+                                <router-link :to="{ path:'/addUser',query: {id:scope.row.id}}">
+                                    <a>编辑</a>
+                                </router-link>
+                                <a @click="userDelete(scope.row.id,1)">删除</a>
+                            </p>
+                            <p>
+                                <router-link :to="{ path:'/caseList'}">
+                                    <a>病例</a>
+                                </router-link>
+                                <router-link :to="{ path:'/medicalHistory'}">
+                                    <a>病史</a>
+                                </router-link>
+                            </p>
+                            <div slot="reference" class="name-wrapper text-overflow-1">
+                                <a>更多操作</a>
+                            </div>
+                        </el-popover>
+
                     </template>
                 </el-table-column>
             </el-table>
@@ -80,14 +93,14 @@
 </template>
 
 <script>
-    import {hdUserList} from '../../../api/api';
+    import {hdUserList, userBatchDelete, userDelete} from '../../../api/api';
     export default {
         name: 'userList',
         data() {
             return {
                 userName: '',
                 tableData: [],
-                multipleSelection: [],
+                multipleSelection: '',
                 total: 0, // 条数
                 page: 1, // 页码
             };
@@ -95,8 +108,62 @@
         created() {
             this.getUserList(1,10);
         },
-        methods: { /**
-             * 查询管理员列表
+        methods: {
+            /**
+             * 删除操作
+             * @param {Number} id 删除用户id
+             * @param {Number} type 删除标记 1 单个  2  批量
+             */
+            userDelete(id,type) {
+                this.$confirm('此操作将永久删除用户, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    if (type === 1) {
+                        userDelete(id).then(res => {
+                            if (res.data.errno === 0) {
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.errmsg,
+                                    type: 'success'
+                                });
+                                this.getUserList(1, 10);
+                            } else {
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.errmsg,
+                                    type: 'error'
+                                });
+                            }
+                        });
+                    } else {
+                        userBatchDelete({ids: id}).then(res => {
+                            if (res.data.errno === 0) {
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.errmsg,
+                                    type: 'success'
+                                });
+                                this.getUserList(1, 10);
+                            } else {
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.errmsg,
+                                    type: 'error'
+                                });
+                            }
+                        });
+                    }
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+            /**
+             * 查询用户列表
              * @param {number} currentPage 当前页
              * @param {number} pageSize 一页多少条
              */
@@ -126,8 +193,19 @@
                 this.page = val;
                 this.getUserList((typeof val === 'number' ? val : 1), 10);
             },
+            /**
+             * 获取选中事件 获取选中id
+             * @param {Object} val 值
+             */
             handleSelectionChange(val) {
-                this.multipleSelection = val;
+                this.multipleSelection = '';
+                for (let i = 0; i < val.length; i++) {
+                    if (i < val.length - 1) {
+                        this.multipleSelection += val[i].id + ',';
+                    } else {
+                        this.multipleSelection += val[i].id;
+                    }
+                }
             }
         }
     };
@@ -148,5 +226,11 @@
     .user-name {
         color: rgba(77, 124, 254, 100);
         font-size: 16px;
+    }
+    .el-popover {
+        text-align: center;
+        a {
+            color: #009ce1;
+        }
     }
 </style>

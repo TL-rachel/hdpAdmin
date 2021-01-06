@@ -60,4 +60,33 @@ export default {
     ::-webkit-scrollbar-thumb {
         background-color: #d5dce6;
     }
+    .icon-picture {
+        width: 20px;
+        height: 20px;
+        line-height: 16px;
+        display: inline-block;
+        background-size: cover;
+        vertical-align: text-top;
+    }
+    .icon-picture.icon-picture-add {
+        background-image: url("../../common/image/page_icons_new.png");
+    }
+    .icon-picture.icon-picture-to-lead {
+        background-image: url("../../common/image/page_icons_import.png");
+    }
+    .icon-picture.icon-picture-export {
+        background-image: url("../../common/image/page_icons_export.png");
+    }
+    .icon-picture.icon-picture-update {
+        background-image: url("../../common/image/page_icons_faceId.png");
+    }
+    .icon-picture.icon-picture-delete {
+        background-image: url("../../common/image/page_icons_delete.png");
+    }
+    .icon-picture.icon-picture-query {
+        background-image: url("../../common/image/page_icons_new.png");
+    }
+    .icon-picture.icon-picture-detection {
+        background-image: url("../../common/image/page_icons_new_maintain.png");
+    }
 </style>

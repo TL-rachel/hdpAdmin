@@ -3,65 +3,71 @@
         <div class="form-save">
             <el-form ref="form" class="clearfix" :rules="rules" :model="form" label-width="80px">
                 <el-form-item label="企业ID" label-width="140px">
-                    <el-input class="w420" v-model="form.id" placeholder="请输入企业ID"></el-input>
+                    <el-input class="w420" disabled v-model="form.id" placeholder="请输入企业ID"></el-input>
                 </el-form-item>
 
                 <el-form-item label="企业名称" label-width="140px" prop="companyName">
-                    <el-input class="w420" v-model="form.companyName" placeholder="请输入企业名称"></el-input>
+                    <el-input class="w420" :disabled="$route.query.type?true:false" v-model="form.companyName" placeholder="请输入企业名称"></el-input>
                 </el-form-item>
 
                 <el-form-item label="社会代码" label-width="140px" prop="companyCode">
-                    <el-input class="w420" v-model="form.companyCode" placeholder="请输入社会代码"></el-input>
+                    <el-input class="w420" :disabled="$route.query.type?true:false" v-model="form.companyCode" placeholder="请输入社会代码"></el-input>
                 </el-form-item>
 
                 <el-form-item label="企业地址" label-width="140px" prop="companyAddress">
-                    <el-input class="w420" v-model="form.companyAddress" placeholder="请输入企业地址"></el-input>
+                    <el-input class="w420" :disabled="$route.query.type?true:false" v-model="form.companyAddress" placeholder="请输入企业地址"></el-input>
                 </el-form-item>
 
                 <el-form-item label="企业联系人" label-width="140px" prop="companyContacts">
-                    <el-input class="w420" v-model="form.companyContacts" placeholder="请输入企业联系人"></el-input>
+                    <el-input class="w420" :disabled="$route.query.type?true:false" v-model="form.companyContacts" placeholder="请输入企业联系人"></el-input>
                 </el-form-item>
 
                 <el-form-item label="企业邮箱" label-width="140px" prop="companyEmail">
-                    <el-input class="w420" v-model="form.companyEmail" placeholder="请输入企业邮箱"></el-input>
+                    <el-input class="w420" :disabled="$route.query.type?true:false" v-model="form.companyEmail" placeholder="请输入企业邮箱"></el-input>
                 </el-form-item>
 
                 <el-form-item label="企业手机" label-width="140px" prop="companyPhone">
-                    <el-input class="w420" v-model="form.companyPhone" placeholder="请输入企业手机"></el-input>
+                    <el-input class="w420" :disabled="$route.query.type?true:false" v-model="form.companyPhone" placeholder="请输入企业手机"></el-input>
                 </el-form-item>
 
                 <el-form-item label="企业负责人" label-width="140px" prop="companyLead">
-                    <el-input class="w420" v-model="form.companyLead" placeholder="请输入企业负责人"></el-input>
+                    <el-input class="w420" :disabled="$route.query.type?true:false" v-model="form.companyLead" placeholder="请输入企业负责人"></el-input>
                 </el-form-item>
                 <el-form-item label="企业主要管理员" label-width="140px" prop="companyPrincipal">
-                    <el-input class="w420" v-model="form.companyPrincipal" placeholder="请输入企业主要管理员"></el-input>
+                    <el-input class="w420" :disabled="$route.query.type?true:false" v-model="form.companyPrincipal" placeholder="请输入企业主要管理员"></el-input>
                 </el-form-item>
 
                 <el-form-item label="资质证明附件" label-width="140px">
                     <el-upload
                             class="upload-demo"
-                            action="https://jsonplaceholder.typicode.com/posts/"
+                            :disabled="$route.query.type?true:false"
+                            :action="actionUrl"
                             multiple
-                            :on-success="handleAvatarSuccess"
+                            accept = "application/pdf"
+                            :on-success="handleAvatarSuccess1"
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
-                        <span>未选择任何文件</span>
+                        <span v-if="!form.companyPatha">未选择任何文件</span>
+                        <a v-else :href="form.companyPatha" target="_blank">这是一个上传文件，点击查看</a>
                     </el-upload>
                 </el-form-item>
 
                 <el-form-item label="网络负责人授权证明" label-width="140px">
                     <el-upload
                             class="upload-demo"
-                            action="https://jsonplaceholder.typicode.com/posts/"
+                            :disabled="$route.query.type?true:false"
+                            :action="actionUrl"
                             multiple
-                            :on-success="handleAvatarSuccess"
+                            accept = "application/pdf"
+                            :on-success="handleAvatarSuccess2"
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
-                        <span>未选择任何文件</span>
+                        <span v-if="!form.companyPathb">未选择任何文件</span>
+                        <a v-else :href="form.companyPathb" target="_blank">这是一个上传文件，点击查看</a>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="企业星级" label-width="140px" prop="companyStar">
-                    <el-select v-model="form.companyStar" placeholder="请选择企业星级">
+                    <el-select v-model="form.companyStar" :disabled="$route.query.type?true:false" placeholder="请选择企业星级">
                         <el-option label="一星" value="1"></el-option>
                         <el-option label="二星" value="2"></el-option>
                         <el-option label="三星" value="3"></el-option>
@@ -69,28 +75,28 @@
                         <el-option label="五星" value="5"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="星级变更方式" label-width="140px" prop="starChangeType">
-                    <el-select v-model="form.starChangeType" placeholder="请选择星级变更方式">
+                <el-form-item v-if="$route.query.id?true:false" label="星级变更方式" label-width="140px" prop="starChangeType">
+                    <el-select v-model="form.starChangeType" :disabled="$route.query.type?true:false" placeholder="请选择星级变更方式">
                         <el-option label="系统" value="0"></el-option>
                         <el-option label="人工" value="1"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="企业审核人" label-width="140px" prop="examineUserId">
-                    <el-input class="w420" v-model="form.examineUserId" placeholder="请输入企业审核人"></el-input>
+                <el-form-item v-if="$route.query.id?true:false" label="企业审核人" label-width="140px" prop="examineUserId">
+                    <el-input class="w420" v-model="form.examineUserId" disabled placeholder="请输入企业审核人"></el-input>
                 </el-form-item>
-                <el-form-item label="审核状态" label-width="140px" prop="companyStatus">
-                    <el-select v-model="form.companyStatus" placeholder="请选择审核状态">
+                <el-form-item v-if="$route.query.id?true:false" label="审核状态" label-width="140px" prop="companyStatus">
+                    <el-select v-model="form.companyStatus" disabled placeholder="请选择审核状态">
                         <el-option label="待审核" value="0"></el-option>
                         <el-option label="通过" value="1"></el-option>
                         <el-option label="驳回" value="2"></el-option>
                     </el-select>
                 </el-form-item>
 
-                <el-form-item label="企业入驻时间" label-width="140px" prop="intoTime">
-                    <el-date-picker type="date" class="w420" placeholder="选择日期" v-model="form.intoTime"></el-date-picker>
+                <el-form-item v-if="$route.query.id?true:false" label="企业入驻时间" label-width="140px" prop="intoTime">
+                    <el-date-picker type="date" class="w420" :disabled="$route.query.type?true:false" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.intoTime"></el-date-picker>
                 </el-form-item>
-                <el-form-item label="更新时间" label-width="140px" prop="updatedTime">
-                    <el-date-picker type="date" class="w420" placeholder="选择日期" v-model="form.updatedTime"></el-date-picker>
+                <el-form-item v-if="$route.query.id?true:false" label="更新时间" label-width="140px" prop="updatedTime">
+                    <el-date-picker type="date" class="w420" :disabled="$route.query.type?true:false" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.updatedTime"></el-date-picker>
                 </el-form-item>
 
                 <el-form-item class="operation-btn" label-width="0">
@@ -103,7 +109,7 @@
 </template>
 
 <script>
-    import {companyCreate} from '../../../api/api';
+    import {companyCreate,companyRead,companyUpdate} from '../../../api/api';
     export default {
         name: 'addCompany',
         data() {
@@ -124,7 +130,6 @@
                     companyStatus: '0', // 企业状态;0-待审核；1-通过；2-驳回；
                     starChangeType: '0', // 星级变更方式(0-系统；1-人工；默认0)
                     examineUserId: '', // 企业审核人
-                    examineTime: '', // 审核时间
                     intoTime: '', // 企业入驻时间
                     updatedTime: '' // 更新时间
                 },
@@ -134,7 +139,8 @@
                         { required: true, message: '请输入企业名称', trigger: 'blur' }
                     ],
                     companyCode: [
-                        { required: true, message: '请输入社会代码', trigger: 'blur' }
+                        { required: true, message: '请输入社会代码', trigger: 'blur' },
+                        { min: 18, max: 18, message: '长度在 18 位数字', trigger: 'blur' }
                     ],
                     companyAddress: [
                         { required: true, message: '请输入企业地址', trigger: 'blur' }
@@ -146,7 +152,8 @@
                         { required: true, message: '请输入企业邮箱', trigger: 'blur' }
                     ],
                     companyPhone: [
-                        { required: true, message: '请输入企业手机', trigger: 'blur' }
+                        { required: true, message: '请输入企业手机', trigger: 'blur' },
+                        { min: 11, max: 11, message: '长度在 11 位数字', trigger: 'blur' }
                     ],
                     companyLead: [
                         { required: true, message: '请输入企业主要管理员', trigger: 'blur' }
@@ -159,9 +166,6 @@
                     ],
                     companyPrincipal: [
                         { required: true, message: '请输入企业负责人', trigger: 'blur' }
-                    ],
-                    examineTime: [
-                        { required: true, message: '请选择审核时间', trigger: 'change' }
                     ],
                     companyStar: [
                         { required: true, message: '请选择企业星级', trigger: 'change' }
@@ -180,11 +184,38 @@
                     ]
                 },
                 imageUrl: '',
+                imgType: ['application/pdf'],
+                /* eslint-disable */
+                actionUrl: CAS_SERVER_URL + '/admin/storage/create',
+                /* eslint-disable */
             };
         },
+        created() {
+            if (this.$route.query.id) {
+                companyRead({id: this.$route.query.id}).then(res => {
+                    if (res.data.errno === 0) {
+                        // 成功
+                        this.form = res.data.data;
+                        this.form.companyStar = this.form.companyStar + '';
+                    } else {
+                        // 失败
+                        this.$message({
+                            showClose: true,
+                            message: res.data.errmsg,
+                            type: 'error'
+                        });
+                    }
+                })
+            }
+        },
         methods: {
-            handleAvatarSuccess(res, file) {
-                this.imageUrl = URL.createObjectURL(file.raw);
+            // 资格证明附件地址
+            handleAvatarSuccess1(res, file) {
+                this.form.companyPatha = file.response.data.url;
+            },
+            // 网络资格人授权证明
+            handleAvatarSuccess2(res, file) {
+                this.form.companyPathb = file.response.data.url;
             },
             /**
              * 提交数据
@@ -193,24 +224,45 @@
                 // 必填校验
                 this.$refs.form.validate(valid => {
                     if (valid) {
-                        companyCreate(this.form).then(res => {
-                            if (res.data.errno === 0) {
-                                // 成功
-                                this.$message({
-                                    showClose: true,
-                                    message: '添加成功',
-                                    type: 'success'
-                                });
-                                this.$router.push({path: '/companyList'});
-                            } else {
-                                // 失败
-                                this.$message({
-                                    showClose: true,
-                                    message: res.data.errmsg,
-                                    type: 'error'
-                                });
-                            }
-                        })
+                        if (this.$route.query.id) {
+                            companyUpdate(this.form).then(res => {
+                                if (res.data.errno === 0) {
+                                    // 成功
+                                    this.$message({
+                                        showClose: true,
+                                        message: '更新成功',
+                                        type: 'success'
+                                    });
+                                    this.$router.push({path: '/companyList'});
+                                } else {
+                                    // 失败
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
+                            })
+                        } else {
+                            companyCreate(this.form).then(res => {
+                                if (res.data.errno === 0) {
+                                    // 成功
+                                    this.$message({
+                                        showClose: true,
+                                        message: '添加成功',
+                                        type: 'success'
+                                    });
+                                    this.$router.push({path: '/companyList'});
+                                } else {
+                                    // 失败
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
+                            })
+                        }
                     }
                 })
             },

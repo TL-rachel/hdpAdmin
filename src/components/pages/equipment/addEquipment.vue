@@ -1,6 +1,6 @@
 <template>
     <div class="form-save">
-        <el-form ref="form" class="clearfix" :model="form" label-width="80px">
+        <el-form ref="form" class="clearfix" :rules="rules" :model="form" label-width="80px">
             <el-form-item label="设备ID" label-width="90px">
                 <el-input class="w420" v-model="form.equipmentId" placeholder="请输入设备ID"></el-input>
             </el-form-item>
@@ -80,7 +80,7 @@
                 <el-date-picker class="w420" type="datetime" placeholder="选择日期" v-model="form.renewalTime"></el-date-picker>
             </el-form-item>
             <el-form-item class="operation-btn" label-width="0">
-                <el-button type="primary" @click="submitForm('agreementsForm')">保 存</el-button>
+                <el-button type="primary" @click="submitForm()">保 存</el-button>
                 <el-button @click="handleHistory">返 回</el-button>
             </el-form-item>
         </el-form>
@@ -88,6 +88,7 @@
 </template>
 
 <script>
+    import {regionCreate,regionUpdate,regionRead} from '../../../api/api';
     export default {
         name: 'addEquipment',
         data() {
@@ -110,15 +111,81 @@
                     equipmentUpdate: '', // 更新人
                     bigTime: '', // 添加时间
                     renewalTime: '', // 更新时间
+                },
+                rules: {
+                    equipmentId: [
+                        { required: true, message: '请输入企业负责人', trigger: 'blur' }
+                    ],
+                    equipmentEncoding: [
+                        { required: true, message: '请选择企业星级', trigger: 'change' }
+                    ]
                 }
             };
+        },
+        created() {
+            if (this.$route.query.id) {
+                regionRead({id: this.$route.query.id}).then(res => {
+                    if (res.data.errno === 0) {
+                        this.form = res.data.data;
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: res.data.errmsg,
+                            type: 'error'
+                        });
+                    }
+                })
+            }
         },
         methods: {
             /**
              * 提交数据
              */
             submitForm() {
-                this.$router.push({path: '/equipmentList'});
+                // 必填校验
+                this.$refs.form.validate(valid => {
+                    if (valid) {
+                        if (this.$route.query.id) {
+                            regionUpdate(this.form).then(res => {
+                                if (res.data.errno === 0) {
+                                    // 成功
+                                    this.$message({
+                                        showClose: true,
+                                        message: '更新成功',
+                                        type: 'success'
+                                    });
+                                    this.$router.push({path: '/equipmentList'});
+                                } else {
+                                    // 失败
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
+                            })
+                        } else {
+                            regionCreate(this.form).then(res => {
+                                if (res.data.errno === 0) {
+                                    // 成功
+                                    this.$message({
+                                        showClose: true,
+                                        message: '添加成功',
+                                        type: 'success'
+                                    });
+                                    this.$router.push({path: '/equipmentList'});
+                                } else {
+                                    // 失败
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
+                            })
+                        }
+                    }
+                });
             },
             handleHistory() {
                 this.$router.back(-1);

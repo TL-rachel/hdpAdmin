@@ -1,4 +1,4 @@
 module.exports = {
     NODE_ENV: '"production"',
-    CASSERVERURL: '""'
+    CASSERVERURL: '"http://sass.zerorui.cn/hdp-server"'
 }
