@@ -8,7 +8,7 @@
                 </router-link>
                 <el-button><i class="icon-picture icon-picture-to-lead"></i>批量导入</el-button>
                 <el-button><i class="icon-picture icon-picture-export"></i>批量导出</el-button>
-                <el-button><i class="icon-picture icon-picture-update"></i>一键更新faceId</el-button>
+                <el-button @click="batchFaceId()"><i class="icon-picture icon-picture-update"></i>一键更新faceId</el-button>
                 <el-button @click="userDelete(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             </div>
         </div>
@@ -93,7 +93,7 @@
 </template>
 
 <script>
-    import {hdUserList, userBatchDelete, userDelete} from '../../../api/api';
+    import {hdUserList, userBatchDelete, userDelete,userBatchFaceId} from '../../../api/api';
     export default {
         name: 'userList',
         data() {
@@ -109,6 +109,26 @@
             this.getUserList(1,10);
         },
         methods: {
+            /**
+             * 用户一键更新faceId
+             */
+            batchFaceId() {
+              userBatchFaceId().then(res => {
+                  if (res.data.errno === 0) {
+                      this.$message({
+                          showClose: true,
+                          message: '更新成功',
+                          type: 'success'
+                      });
+                  } else {
+                      this.$message({
+                          showClose: true,
+                          message: res.data.errmsg,
+                          type: 'error'
+                      });
+                  }
+              });
+            },
             /**
              * 删除操作
              * @param {Number} id 删除用户id

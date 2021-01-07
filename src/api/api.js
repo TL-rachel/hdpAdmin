@@ -109,6 +109,11 @@ export const userRead = params => {
     return instance.get(`${base}/admin/user/read/` + params);
 };
 
+// 用户一键更新faceId
+export const userBatchFaceId = params => {
+    return instance.get(`${base}/admin/user/batchFaceId`,{params: params});
+};
+
 // 删除用户
 export const userDelete = params => {
     return instance.post(`${base}/admin/user/delete/` + params);
@@ -156,7 +161,7 @@ export const companyUpdate = params => {
 
 // 区域列表
 export const regionList = params => {
-    return instance.post(`${base}/admin/hd_region/list`,params);
+    return instance.get(`${base}/admin/hd_region/list`,{params: params});
 };
 
 // 新增区域
@@ -180,6 +185,49 @@ export const regionBatchDelete = params => {
 // 区域删除
 export const regionDelete = params => {
     return instance.get(`${base}/admin/hd_region/delete`,{params: params});
+};
+
+// 设备列表
+export const deviceList = params => {
+    return instance.get(`${base}/admin/hd_device/list`,{params: params});
+};
+
+// 设备列表
+export const regionAllRegions = params => {
+    return instance.get(`${base}/admin/hd_region/allRegions`,{params: params});
+};
+
+// 新增设备
+export const deviceCreate = params => {
+    return instance.post(`${base}/admin/hd_device/create`,params);
+};
+
+// 修改设备
+export const deviceUpdate = params => {
+    return instance.post(`${base}/admin/hd_device/update`,params);
+};
+
+// 设备详情
+export const deviceRead = params => {
+    return instance.get(`${base}/admin/hd_device/read`,{params: params});
+};
+
+// 厂商 和 设备类型
+export const getCommonValues = params => {
+    return instance.get(`${base}/admin/common/getCommonValues`,{params: params});
+};
+// 设备批量删除
+export const deviceBatchDelete = params => {
+    return instance.get(`${base}/admin/hd_device/batch-delete`,{params: params});
+};
+// 设备删除
+export const deviceDelete = params => {
+    return instance.get(`${base}/admin/hd_device/delete`,{params: params});
+};
+
+// 图表数据接口
+export const adminChart = params => {
+    return instance.get(`${base}/admin/admin/chart`,{params: params});
 };
 
 /* eslint-disable */

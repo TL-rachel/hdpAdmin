@@ -6,39 +6,43 @@
                <router-link :to="{ path:'/addEquipment'}">
                    <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
                </router-link>
-               <el-button><i class="icon-picture icon-picture-detection"></i>批量检测</el-button>
-               <el-button @click="regionDelete(t.id,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+               <el-button @click="getRegionList()"><i class="icon-picture icon-picture-detection"></i>批量检测</el-button>
+               <el-button @click="regionDelete(checkId,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
            </div>
         </div>
         <div class="tag-top" style="margin-top: 20px;">
             <el-tag v-for="(item,index) in tags" :key="index" :class="item.class" @click="cutTag(item.id)">{{item.name}}</el-tag>
         </div>
         <template v-for="(item,index) in equipmentList">
-            <div class="equipmentType clearfix" :key="index">
-                <h4>{{item.title}}</h4>
-                <template v-for="(t,i) in item.child">
+            <div class="equipmentType clearfix" v-if="item.devices.length" :key="index">
+                <h4>{{item.regionName}}</h4>
+                <template v-for="(t,i) in item.devices">
                     <div class="equipmentDetail" :key="i">
                         <div class="equipmentTitle">
-                            <el-checkbox-group v-model="checkId">
+                            <el-checkbox-group class="module-checkbox" v-model="checkId">
                                 <el-checkbox :label="t.id"></el-checkbox>
                             </el-checkbox-group>
-                            <div class="equipment-name">设备名称{{t.name}}</div>
+                            <div class="equipment-name">设备名称{{t.deviceName}}</div>
                             <div class="equipment-status">
-                                <span class="point-1" v-if="t.status == '1'"><span></span>正常</span>
-                                <span class="point-0" v-if="t.status == '0'"><span></span>断开</span>
+                                <span class="point-1" v-if="t.deviceStatus == '0'"><span></span>正常</span>
+                                <span class="point-0" v-if="t.deviceStatus == '1'"><span></span>断开</span>
                             </div>
                         </div>
-                        <span class="encoding">编码{{t.encoding}}</span>
+                        <span class="encoding">编码{{t.deviceCode}}</span>
                         <span class="wire"></span>
-                        <div class="rests">归属企业：{{t.enterprise}}</div>
-                        <div class="rests">负责人：{{t.principal}}</div>
-                        <div class="rests">设备区域：{{t.area}}</div>
-                        <div class="rests">添加时间：{{t.bigTime}}</div>
-                        <div class="rests">更新时间：{{t.renewalTime}}</div>
+                        <div class="rests">归属企业：{{t.companyName}}</div>
+                        <div class="rests">负责人：{{t.deviceLead}}</div>
+                        <div class="rests">设备区域：{{t.regionName}}</div>
+                        <div class="rests">添加时间：{{t.createdTime}}</div>
+                        <div class="rests">更新时间：{{t.updatedTime}}</div>
                         <span class="wire"></span>
                         <div class="button-btn">
-                            <el-button>查看</el-button>
-                            <el-button>编辑</el-button>
+                            <router-link :to="{ path:'/addEquipment',query: {id:t.id,type:1}}">
+                                <el-button>查看</el-button>
+                            </router-link>
+                            <router-link :to="{ path:'/addEquipment',query: {id:t.id}}">
+                                <el-button>编辑</el-button>
+                            </router-link>
                             <el-button>直播</el-button>
                             <el-button>录播</el-button>
                             <el-button @click="regionDelete(t.id,1)">删除</el-button>
@@ -52,12 +56,12 @@
 </template>
 
 <script>
-    import {regionList, regionBatchDelete, regionDelete} from '../../../api/api';
+    import {deviceList, deviceBatchDelete, deviceDelete} from '../../../api/api';
     export default {
         name: 'equipmentList',
         data() {
             return {
-                equipmentName: '',
+                equipmentName: '', // 查询的设备名称
                 tags: [
                     {
                         id: '0',
@@ -100,199 +104,12 @@
                         class: ''
                     }
                 ],
-                equipmentList: [
-                    {
-                        title: '基础设施设备',
-                        child: [
-                            {
-                                id: '0',
-                                name: 'DALHlHHK',
-                                encoding: 'GJFJKKGFFFFH',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1'
-                            },
-                            {
-                                id: '1',
-                                name: 'QGHAPPY',
-                                encoding: 'GJFJKKGFFFFH',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '0'
-                            },
-                            {
-                                id: '3',
-                                name: 'DALHlHHK',
-                                encoding: 'GJFJKKGFFFFH',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1'
-                            },
-                            {
-                                id: '4',
-                                name: 'DALHlHHK',
-                                encoding: 'GJFJKKGFFFFH',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1'
-                            },
-                            {
-                                id: '5',
-                                name: 'DALHlHHK',
-                                encoding: 'GJFJKKGFFFFH',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1'
-                            },
-                            {
-                                id: '6',
-                                name: 'DALHlHHK',
-                                encoding: 'GJFJKKGFFFFH',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1'
-                            },
-                            {
-                                id: '7',
-                                name: 'DALHlHHK',
-                                encoding: 'GJFJKKGFFFFH',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1'
-                            },
-                            {
-                                id: '8',
-                                name: 'DALHlHHK',
-                                encoding: 'GJFJKKGFFFFH',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1'
-                            }
-                        ]
-                    },
-                    {
-                        title: '病房护理设备',
-                        child: [
-                            {
-                                id: '9',
-                                name: 'DALHlHHK',
-                                encoding: 'GJFJKKGFFFFH',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1'
-                            },
-                            {
-                                id: '10',
-                                name: 'QGHAPPY',
-                                encoding: 'GJFJKKGFFFFH',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '0'
-                            },
-                            {
-                                id: '11',
-                                name: 'DALHlHHK',
-                                encoding: 'GJFJKKGFFFFH',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1'
-                            },
-                            {
-                                id: '12',
-                                name: 'DALHlHHK',
-                                encoding: 'GJFJKKGFFFFH',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1'
-                            },
-                            {
-                                id: '13',
-                                name: 'DALHlHHK',
-                                encoding: 'GJFJKKGFFFFH',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1'
-                            },
-                            {
-                                id: '14',
-                                name: 'DALHlHHK',
-                                encoding: 'GJFJKKGFFFFH',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1'
-                            },
-                            {
-                                id: '15',
-                                name: 'DALHlHHK',
-                                encoding: 'GJFJKKGFFFFH',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1'
-                            },
-                            {
-                                id: '16',
-                                name: 'DALHlHHK',
-                                encoding: 'GJFJKKGFFFFH',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1'
-                            }
-                        ]
-                    }
-                ],
-                checkId: []
+                equipmentList: [], // 设备列表
+                checkId: [], // 用于批量删除的设备id
             };
         },
         created() {
-            this.getRegionList(1,10);
+            this.getRegionList();
         },
         methods: {
             /**
@@ -306,28 +123,27 @@
                         this.tags[i].class = 'active';
                     }
                 }
-                console.log(this.checkId)
             },
             /**
              * 删除操作
-             * @param {Number} id 删除区域id
+             * @param {*} id 删除区域id
              * @param {Number} type 删除标记 1 单个  2  批量
              */
             regionDelete(id,type) {
-                this.$confirm('此操作将永久删除区域, 是否继续?', '提示', {
+                this.$confirm('此操作将永久删除设备, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
                     if (type === 1) {
-                        regionDelete({id: id}).then(res => {
+                        deviceDelete({id: id}).then(res => {
                             if (res.data.errno === 0) {
                                 this.$message({
                                     showClose: true,
                                     message: res.data.errmsg,
                                     type: 'success'
                                 });
-                                this.getRegionList(1, 10);
+                                this.getRegionList();
                             } else {
                                 this.$message({
                                     showClose: true,
@@ -337,14 +153,22 @@
                             }
                         });
                     } else {
-                        regionBatchDelete({ids: id}).then(res => {
+                        let ids = '';
+                        for (let i = 0; i < id.length; i++) {
+                            if (i < id.length - 1) {
+                                ids += id[i] + ',';
+                            } else {
+                                ids += id[i];
+                            }
+                        }
+                        deviceBatchDelete({ids: ids}).then(res => {
                             if (res.data.errno === 0) {
                                 this.$message({
                                     showClose: true,
                                     message: res.data.errmsg,
                                     type: 'success'
                                 });
-                                this.getRegionList(1, 10);
+                                this.getRegionList();
                             } else {
                                 this.$message({
                                     showClose: true,
@@ -363,15 +187,9 @@
             },
             /**
              * 查询区域
-             * @param {Number} currentPage 第几页
-             * @param {Number} pageSize 多少条
              */
-            getRegionList(currentPage, pageSize) {
-                let para = {
-                    limit: pageSize,
-                    page: currentPage
-                };
-                regionList(para).then(res => {
+            getRegionList() {
+                deviceList().then(res => {
                     if (res.data.errno === 0) {
                         this.equipmentList = res.data.data;
                     } else {
@@ -381,7 +199,7 @@
                             type: 'error'
                         });
                     }
-                })
+                });
             }
         }
     };

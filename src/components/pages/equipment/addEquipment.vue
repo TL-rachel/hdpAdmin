@@ -1,83 +1,82 @@
 <template>
     <div class="form-save">
         <el-form ref="form" class="clearfix" :rules="rules" :model="form" label-width="80px">
-            <el-form-item label="设备ID" label-width="90px">
-                <el-input class="w420" v-model="form.equipmentId" placeholder="请输入设备ID"></el-input>
+            <el-form-item label="设备ID" label-width="110px">
+                <el-input class="w420" v-model="form.id" disabled placeholder="请输入设备ID"></el-input>
             </el-form-item>
 
-            <el-form-item label="设备编码" label-width="90px">
-                <el-input class="w420" v-model="form.equipmentEncoding" placeholder="请输入设备编码"></el-input>
+            <el-form-item label="设备编码" label-width="110px" prop="deviceCode">
+                <el-input class="w420" :disabled="$route.query.type==1?true:false" v-model="form.deviceCode" placeholder="请输入设备编码"></el-input>
             </el-form-item>
 
-            <el-form-item label="设备名称" label-width="90px">
-                <el-input class="w420" v-model="form.equipmentName" placeholder="请输入设备名称"></el-input>
+            <el-form-item label="设备名称" label-width="110px" prop="deviceName">
+                <el-input class="w420" :disabled="$route.query.type==1?true:false" v-model="form.deviceName" placeholder="请输入设备名称"></el-input>
             </el-form-item>
 
-            <el-form-item label="设备类型" label-width="90px">
-                <el-select class="w420" v-model="form.equipmentType" placeholder="请选择设备类型">
-                    <el-option label="类型一" value="shanghai"></el-option>
-                    <el-option label="类型二" value="beijing"></el-option>
+            <el-form-item label="设备类型" label-width="110px" prop="deviceType">
+                <el-select class="w420" :disabled="$route.query.type==1?true:false" v-model="form.deviceType" placeholder="请选择设备类型">
+                    <el-option v-for="(item,index) in equipmentList" :key="index" :label="item.value" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="设备负责人" label-width="90px">
-                <el-input class="w420" v-model="form.equipmentPrincipal" placeholder="请输入人名"></el-input>
+            <el-form-item label="设备负责人" label-width="110px" prop="deviceLead">
+                <el-input class="w420" :disabled="$route.query.type==1?true:false" v-model="form.deviceLead" placeholder="请输入人名"></el-input>
             </el-form-item>
 
-            <el-form-item label="联系方式" label-width="90px">
-                <el-input class="w420" v-model="form.contactInformation" placeholder="请输入手机号"></el-input>
+            <el-form-item label="联系方式" label-width="110px" prop="leadPhone">
+                <el-input class="w420" :disabled="$route.query.type==1?true:false" v-model="form.leadPhone" placeholder="请输入手机号"></el-input>
             </el-form-item>
 
-            <el-form-item label="设备区域" label-width="90px">
-                <el-input class="w420" v-model="form.equipmentArea" placeholder="请输入区域"></el-input>
-            </el-form-item>
-
-            <el-form-item label="设备状态" label-width="90px">
-                <el-select class="w420" v-model="form.equipmentStatus" placeholder="请选择设备状态">
-                    <el-option label="正常" value="shanghai"></el-option>
-                    <el-option label="断开" value="beijing"></el-option>
+            <el-form-item label="设备区域" label-width="110px" prop="deviceRegionId">
+                <el-select class="w420" :disabled="$route.query.type==1?true:false" v-model="form.deviceRegionId" placeholder="请选择设备区域">
+                    <el-option v-for="(item,index) in allRegions" :key="index" :label="item.regionName" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="设备厂家" label-width="90px">
-                <el-select class="w420" v-model="form.equipmentVender" placeholder="请选择设备厂家">
-                    <el-option label="厂家一" value="shanghai"></el-option>
-                    <el-option label="厂家二" value="beijing"></el-option>
+            <el-form-item label="设备状态" label-width="110px" prop="deviceStatus">
+                <el-select class="w420" :disabled="$route.query.type==1?true:false" v-model="form.deviceStatus" placeholder="请选择设备状态">
+                    <el-option label="正常" :value="0"></el-option>
+                    <el-option label="断开" :value="1"></el-option>
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="厂家联系人" label-width="90px" style="width: 22%;">
-                <el-input class="w140" v-model="form.venderContact" placeholder="请输入人名"></el-input>
-            </el-form-item>
-            <el-form-item label="厂家联系方式" label-width="100px" style="width: 25%;">
-                <el-input class="w140" v-model="form.venderContactInformation" placeholder="请输入手机号"></el-input>
-            </el-form-item>
-
-            <el-form-item label="归属企业" label-width="90px">
-                <el-select class="w420" v-model="form.equipmentEnterprise" placeholder="请选择归属企业">
-                    <el-option label="企业一" value="shanghai"></el-option>
-                    <el-option label="企业二" value="beijing"></el-option>
+            <el-form-item label="设备厂家" label-width="110px" prop="deviceManufactor">
+                <el-select class="w420" :disabled="$route.query.type==1?true:false" v-model="form.deviceManufactor" placeholder="请选择设备厂家">
+                    <el-option v-for="(item,index) in manufacturer" :key="index" :label="item.value" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="链接地址" label-width="90px" style="width: 100%;">
-                <el-input class="w420" v-model="form.equipmentAddress" placeholder="请输入网络地址"></el-input>
+
+            <el-form-item label="厂家联系人" label-width="110px" style="width: 280px;" prop="manufactorPeople">
+                <el-input class="w140" :disabled="$route.query.type==1?true:false" v-model="form.manufactorPeople" placeholder="请输入人名"></el-input>
+            </el-form-item>
+            <el-form-item label="厂家联系方式" label-width="110px" style="width: 310px" prop="manufactorPhone">
+                <el-input class="w140" :disabled="$route.query.type==1?true:false" v-model="form.manufactorPhone" placeholder="请输入手机号"></el-input>
+            </el-form-item>
+
+            <el-form-item label="归属企业" label-width="110px" prop="companyId">
+                <el-select class="w420" :disabled="$route.query.type==1?true:false" v-model="form.companyId" placeholder="请选择归属企业">
+                    <el-option v-for="(item,index) in companyList" :key="index" :label="item.companyName" :value="item.id"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="链接地址" label-width="110px" style="width: 100%;" prop="devicePath">
+                <el-input class="w420" :disabled="$route.query.type==1?true:false" v-model="form.devicePath" placeholder="请输入网络地址"></el-input>
                 <el-button class="test-btn">点击测试</el-button>
                 <span class="point"><span></span>网络正常</span>
             </el-form-item>
 
-            <el-form-item label="添加人" label-width="90px">
-                <el-input class="w420" v-model="form.equipmentAdd" placeholder="请输入人名"></el-input>
+            <el-form-item label="添加人" v-if="$route.query.id?true:false" label-width="110px" prop="createdUserId">
+                <el-input class="w420" :disabled="$route.query.type==1?true:false" v-model="form.createdUserId" placeholder="请输入人名"></el-input>
             </el-form-item>
-            <el-form-item label="更新人" label-width="90px">
-                <el-input class="w420" v-model="form.equipmentUpdate" placeholder="请输入人名"></el-input>
-            </el-form-item>
-
-            <el-form-item label="添加时间" label-width="90px">
-                <el-date-picker class="w420" type="datetime" placeholder="选择日期" v-model="form.bigTime"></el-date-picker>
+            <el-form-item label="更新人" v-if="$route.query.id?true:false" label-width="110px" prop="updatedUserId">
+                <el-input class="w420" :disabled="$route.query.type==1?true:false" v-model="form.updatedUserId" placeholder="请输入人名"></el-input>
             </el-form-item>
 
-            <el-form-item label="更新时间" label-width="90px">
-                <el-date-picker class="w420" type="datetime" placeholder="选择日期" v-model="form.renewalTime"></el-date-picker>
+            <el-form-item label="添加时间" v-if="$route.query.id?true:false" label-width="110px" prop="createdTime">
+                <el-date-picker class="w420" :disabled="$route.query.type==1?true:false" type="datetime" placeholder="选择日期" v-model="form.createdTime"></el-date-picker>
+            </el-form-item>
+
+            <el-form-item label="更新时间" v-if="$route.query.id?true:false" label-width="110px" prop="updatedTime">
+                <el-date-picker class="w420" :disabled="$route.query.type==1?true:false" type="datetime" placeholder="选择日期" v-model="form.updatedTime"></el-date-picker>
             </el-form-item>
             <el-form-item class="operation-btn" label-width="0">
                 <el-button type="primary" @click="submitForm()">保 存</el-button>
@@ -88,43 +87,141 @@
 </template>
 
 <script>
-    import {regionCreate,regionUpdate,regionRead} from '../../../api/api';
+    import {deviceCreate, deviceUpdate, deviceRead, regionAllRegions, hdCompanyList,getCommonValues} from '../../../api/api';
     export default {
         name: 'addEquipment',
         data() {
             return {
                 form: {
-                    equipmentId: '', // 设备ID
-                    equipmentEncoding: '', // 设备编码
-                    equipmentName: '', // 设备名称
-                    equipmentType: '', // 设备类型
-                    equipmentPrincipal: '', // 设备负责人
-                    contactInformation: '', // 联系方式
-                    equipmentArea: '', // 设备区域
-                    equipmentStatus: '', // 设备状态
-                    equipmentVender: '', //设备厂家
-                    venderContact: '', // 厂家联系人
-                    venderContactInformation: '', // 厂家联系方式
-                    equipmentEnterprise: '', // 归属企业
-                    equipmentAddress: '', // 链接地址
-                    equipmentAdd: '', // 添加人
-                    equipmentUpdate: '', // 更新人
-                    bigTime: '', // 添加时间
-                    renewalTime: '', // 更新时间
+                    id: '', // 设备ID
+                    deviceCode: '', // 设备编码
+                    deviceName: '', // 设备名称
+                    deviceType: '', // 设备类型
+                    deviceLead: '', // 设备负责人
+                    leadPhone: '', // 联系方式
+                    deviceRegionId: '', // 设备区域
+                    deviceStatus: '', // 设备状态
+                    deviceManufactor: '', //设备厂家
+                    manufactorPeople: '', // 厂家联系人
+                    manufactorPhone: '', // 厂家联系方式
+                    companyId: '', // 归属企业
+                    devicePath: '', // 链接地址
+                    createdUserId: '', // 添加人
+                    updatedUserId: '', // 更新人
+                    createdTime: '', // 添加时间
+                    updatedTime: '', // 更新时间
                 },
                 rules: {
+                    deviceCode: [
+                        { required: true, message: '请输入设备编码', trigger: 'blur' }
+                    ],
+                    deviceName: [
+                        { required: true, message: '请输入设备名称', trigger: 'blur' }
+                    ],
+                    deviceLead: [
+                        { required: true, message: '请输入设备负责人', trigger: 'blur' }
+                    ],
+                    leadPhone: [
+                        { required: true, message: '请输入联系方式', trigger: 'blur' }
+                    ],
+                    manufactorPeople: [
+                        { required: true, message: '请输入厂家联系人', trigger: 'blur' }
+                    ],
+                    manufactorPhone: [
+                        { required: true, message: '请输入厂家联系方式', trigger: 'blur' }
+                    ],
+                    deviceRegionId: [
+                        { required: true, message: '请选择设备区域', trigger: 'change' }
+                    ],
+                    updatedUserId: [
+                        { required: true, message: '请输入更新人', trigger: 'blur' }
+                    ],
+                    createdUserId: [
+                        { required: true, message: '请输入添加人', trigger: 'blur' }
+                    ],
+                    devicePath: [
+                        { required: true, message: '请输入链接地址', trigger: 'blur' }
+                    ],
+                    deviceManufactor: [
+                        { required: true, message: '请选择设备厂家', trigger: 'change' }
+                    ],
+                    deviceStatus: [
+                        { required: true, message: '请选择设备状态', trigger: 'change' }
+                    ],
                     equipmentId: [
                         { required: true, message: '请输入企业负责人', trigger: 'blur' }
                     ],
-                    equipmentEncoding: [
-                        { required: true, message: '请选择企业星级', trigger: 'change' }
+                    deviceType: [
+                        { required: true, message: '请选择设备类型', trigger: 'change' }
+                    ],
+                    createdTime: [
+                        { required: true, message: '请选择添加时间', trigger: 'change' }
+                    ],
+                    updatedTime: [
+                        { required: true, message: '请选择更新时间', trigger: 'change' }
+                    ],
+                    companyId: [
+                        { required: true, message: '请选择归属企业', trigger: 'change' }
                     ]
-                }
+                },
+                allRegions: [], // 所有区域
+                companyList: [], // 企业列表
+                manufacturer: [], // 厂商列表
+                equipmentList: [], // 设备类型
             };
         },
         created() {
+            // 获取区域列表
+            regionAllRegions().then(res => {
+                if (res.data.errno === 0) {
+                    this.allRegions = res.data.data;
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: res.data.errmsg,
+                        type: 'error'
+                    });
+                }
+            });
+            // 获取归属企业列表
+            hdCompanyList({page: 1,limit: 1000,sort: 'created_time',order: 'desc'}).then(res => {
+                if (res.data.errno === 0) {
+                    this.companyList = res.data.data.items;
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: res.data.errmsg,
+                        type: 'error'
+                    });
+                }
+            });
+            // 设备类型
+            getCommonValues({type: '00'}).then(res => {
+                if (res.data.errno === 0) {
+                    this.equipmentList = res.data.data;
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: res.data.errmsg,
+                        type: 'error'
+                    });
+                }
+            });
+            // 厂商
+            getCommonValues({type: '01'}).then(res => {
+                if (res.data.errno === 0) {
+                    this.manufacturer = res.data.data;
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: res.data.errmsg,
+                        type: 'error'
+                    });
+                }
+            });
+            // 获取详情
             if (this.$route.query.id) {
-                regionRead({id: this.$route.query.id}).then(res => {
+                deviceRead({id: this.$route.query.id}).then(res => {
                     if (res.data.errno === 0) {
                         this.form = res.data.data;
                     } else {
@@ -134,7 +231,7 @@
                             type: 'error'
                         });
                     }
-                })
+                });
             }
         },
         methods: {
@@ -146,7 +243,7 @@
                 this.$refs.form.validate(valid => {
                     if (valid) {
                         if (this.$route.query.id) {
-                            regionUpdate(this.form).then(res => {
+                            deviceUpdate(this.form).then(res => {
                                 if (res.data.errno === 0) {
                                     // 成功
                                     this.$message({
@@ -163,9 +260,9 @@
                                         type: 'error'
                                     });
                                 }
-                            })
+                            });
                         } else {
-                            regionCreate(this.form).then(res => {
+                            deviceCreate(this.form).then(res => {
                                 if (res.data.errno === 0) {
                                     // 成功
                                     this.$message({
@@ -182,11 +279,12 @@
                                         type: 'error'
                                     });
                                 }
-                            })
+                            });
                         }
                     }
                 });
             },
+            // 返回上一页
             handleHistory() {
                 this.$router.back(-1);
             }

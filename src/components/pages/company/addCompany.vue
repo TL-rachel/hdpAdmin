@@ -224,6 +224,22 @@
                 // 必填校验
                 this.$refs.form.validate(valid => {
                     if (valid) {
+                        if (this.form.companyPatha === '') {
+                            this.$message({
+                                showClose: true,
+                                message: '请上传资格证明附件',
+                                type: 'error'
+                            });
+                            return;
+                        }
+                        if (this.form.companyPathb === '') {
+                            this.$message({
+                                showClose: true,
+                                message: '请上传网络资格人授权证明',
+                                type: 'error'
+                            });
+                            return;
+                        }
                         if (this.$route.query.id) {
                             companyUpdate(this.form).then(res => {
                                 if (res.data.errno === 0) {

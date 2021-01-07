@@ -10,6 +10,7 @@
 </template>
 
 <script>
+    import {adminChart} from '../../api/api';
     import echarts from 'echarts';
     export default {
         name: 'home',
@@ -55,25 +56,42 @@
                         ref: 'myChartEquipment'
                     },
                     {
-                        id: 'chartPieGender',
-                        ref: ''
-                    },
-                    {
                         id: 'myChartEnterprise',
                         ref: 'myChartEnterprise'
                     }
-                ]
+                ],
+                deviceType: [], // 设备状态分布数据
+                age: [], // 年龄分布数据
+                companyDevice: [], // 企业设备分布数据
+                companyUser: [], // 查询企业用户分布数据
+                sex: [], // 性别分布数据
             };
         },
-        mounted() {
-            this.$nextTick(() => {
-                this.chartPieIllness(); // 疾病状态分布
-                this.chartPieSex(); // 性别分布
-                this.chartPieGender(); // 性别分布
-                this.myChartAge(); // 年龄分布
-                this.myChartEquipment(); // 企业设备分布
-                this.myChartEnterprise(); // 企业人员分布
-            });
+        created() {
+            adminChart().then(res => {
+                if (res.data.errno === 0) {
+                    this.deviceType = res.data.data.deviceType;
+                    this.age = res.data.data.age;
+                    this.companyDevice = res.data.data.companyDevice;
+                    this.companyUser = res.data.data.companyUser;
+                    this.sex = res.data.data.sex;
+                }
+            })
+        },
+        watch: {
+            companyDevice: {
+                immediate: true,
+                handler(val) {
+                    console.log(val,'差点撒旦阿萨=============');
+                    this.$nextTick(() => {
+                        this.chartPieIllness(); // 疾病状态分布
+                        this.chartPieSex(); // 性别分布
+                        this.myChartAge(); // 年龄分布
+                        this.myChartEquipment(); // 企业设备分布
+                        this.myChartEnterprise(); // 企业人员分布
+                    });
+                }
+            }
         },
         methods: {
             /**
@@ -97,26 +115,18 @@
              * 性别分布
              */
             chartPieSex() {
+                let sexList = [];
+                for (let i = 0; i < this.sex.length; i++) {
+                    sexList.push({value: this.sex[i].proportion * 100,name: !this.sex[i].user_sex ? '男' : '女'});
+                }
                 this.chartPie = echarts.init(document.getElementById('chartPieSex'));
-                this.chartPie.setOption(this.pieChart('性别分布',['男','女'],'性别',[
-                    {value: 33, name: '女'},
-                    {value: 67, name: '男'}
-                ]));
-            },
-            /**
-             * 性别分布
-             */
-            chartPieGender() {
-                this.chartPie = echarts.init(document.getElementById('chartPieGender'));
-                this.chartPie.setOption(this.pieChart('性别分布',['有效','无效'],'性别',[
-                    {value: 33, name: '有效'},
-                    {value: 67, name: '无效'}
-                ]));
+                this.chartPie.setOption(this.pieChart('性别分布',['男','女'],'性别',sexList));
             },
             /**
              * 企业设备分布
              */
             myChartEquipment() {
+                console.log(this.deviceType)
                 let myChart = echarts.init(document.getElementById('myChartEquipment'));
                 // 绘制图表
                 myChart.setOption(this.histogramOption('企业设备分布',['企业A', '企业B', '企业C', '企业D', '企业E', '企业F'],'设备数','企业',[19, 15, 12, 18, 13, 21]));

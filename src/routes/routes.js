@@ -42,11 +42,19 @@ import OperationLog from '../components/pages/system/operationLog';
 import CompanyList from '../components/pages/company/companyList';
 // 添加企业
 import AddCompany from '../components/pages/company/addCompany';
+// 企业入驻页 单独页面
+import CompanyEnter from '../components/pages/companyEnter';
 
 let routes = [
     {
         path: '/login',
         component: Login,
+        name: '',
+        hidden: true
+    },
+    {
+        path: '/companyEnter',
+        component: CompanyEnter,
         name: '',
         hidden: true
     },

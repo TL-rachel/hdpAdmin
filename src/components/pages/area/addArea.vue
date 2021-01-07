@@ -3,31 +3,28 @@
         <h4>新增区域</h4>
         <div class="form-save">
             <el-form :model="form" :rules="rules" ref="form" label-width="140px" class="demo-ruleForm">
-                <el-form-item label="区域编号" prop="username">
-                    <el-input class="w420" v-model="form.username" placeholder="请输入区域编号"></el-input>
+                <el-form-item label="区域名称" prop="regionName">
+                    <el-input class="w420" :disabled="$route.query.type?true:false" v-model="form.regionName" placeholder="请输入区域名称"></el-input>
                 </el-form-item>
-                <el-form-item label="区域名称" prop="username2">
-                    <el-input class="w420" v-model="form.username2" placeholder="请输入区域名称"></el-input>
+                <el-form-item label="区域位置" prop="regionPosition">
+                    <el-input class="w420" :disabled="$route.query.type?true:false" v-model="form.regionPosition" placeholder="请输入区域位置"></el-input>
                 </el-form-item>
-                <el-form-item label="区域位置" prop="tel">
-                    <el-input class="w420" v-model="form.tel" placeholder="请输入区域位置"></el-input>
+                <el-form-item label="区域负责人" prop="regionLead">
+                    <el-input class="w420" :disabled="$route.query.type?true:false" v-model="form.regionLead" placeholder="请输入区域负责人"></el-input>
                 </el-form-item>
-                <el-form-item label="区域负责人" prop="tel">
-                    <el-input class="w420" v-model="form.tel" placeholder="请输入区域负责人"></el-input>
+                <el-form-item label="负责人联系方式" prop="leadPhone">
+                    <el-input class="w420" :disabled="$route.query.type?true:false" v-model="form.leadPhone" placeholder="请输入负责人联系方式"></el-input>
                 </el-form-item>
-                <el-form-item label="负责人联系方式" prop="tel">
-                    <el-input class="w420" v-model="form.tel" placeholder="请输入负责人联系方式"></el-input>
+                <el-form-item label="区域操作人" prop="regionOperation">
+                    <el-input class="w420" :disabled="$route.query.type?true:false" v-model="form.regionOperation" placeholder="请输入区域操作人"></el-input>
                 </el-form-item>
-                <el-form-item label="区域操作人" prop="tel">
-                    <el-input class="w420" v-model="form.tel" placeholder="请输入区域操作人"></el-input>
-                </el-form-item>
-                <el-form-item label="归属企业" prop="roleId">
-                    <el-select class="w420" v-model="form.roleId" placeholder="请选择归属企业">
+                <el-form-item label="归属企业" prop="companyId">
+                    <el-select class="w420" :disabled="$route.query.type?true:false" v-model="form.companyId" placeholder="请选择归属企业">
                         <el-option v-for="(item,index) in companyList" :key="index" :label="item.companyName" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item class="operation-btn" label-width="0">
-                    <el-button type="primary" @click="submitForm()">保 存</el-button>
+                    <el-button type="primary" v-if="$route.query.type?false:true" @click="submitForm()">保 存</el-button>
                     <el-button @click="handleHistory">返 回</el-button>
                 </el-form-item>
             </el-form>
@@ -42,29 +39,32 @@
         data() {
             return {
                 form: {
-                    username: '', // 账号
-                    password: '', // 初始密码
-                    username2: '', // 姓名
-                    tel: '', // 手机号
-                    roleId: '', // 角色
-                    deleted: false, // 是否删除
+                    regionName: '', // 区域名称
+                    regionPosition: '', // 区域位置
+                    regionLead: '', // 区域负责人
+                    leadPhone: '', // 负责人联系方式
+                    regionOperation: '', // 区域操作人
+                    companyId: '', // 归属企业
                 },
                 // 必填校验
                 rules: {
-                    username: [
-                        { required: true, message: '请输入账号', trigger: 'blur' }
+                    regionName: [
+                        { required: true, message: '请输入区域名称', trigger: 'blur' }
                     ],
-                    password: [
-                        { required: true, message: '请输入密码', trigger: 'blur' }
+                    regionPosition: [
+                        { required: true, message: '请输入区域位置', trigger: 'blur' }
                     ],
-                    username2: [
-                        { required: true, message: '请输入姓名', trigger: 'blur' }
+                    regionLead: [
+                        { required: true, message: '请输入区域负责人', trigger: 'blur' }
                     ],
-                    tel: [
-                        { required: true, message: '请输入手机号', trigger: 'blur' }
+                    leadPhone: [
+                        { required: true, message: '请输入负责人联系方式', trigger: 'blur' }
                     ],
-                    roleId: [
-                        { required: true, message: '请选择角色', trigger: 'change' }
+                    regionOperation: [
+                        { required: true, message: '请输入区域操作人', trigger: 'blur' }
+                    ],
+                    companyId: [
+                        { required: true, message: '请选择归属企业', trigger: 'change' }
                     ]
                 },
                 // 归属企业
@@ -84,7 +84,7 @@
                             type: 'error'
                         });
                     }
-                })
+                });
             }
             // 获取归属企业列表
             hdCompanyList({page: 1,limit: 1000,sort: 'created_time',order: 'desc'}).then(res => {
@@ -97,7 +97,7 @@
                         type: 'error'
                     });
                 }
-            })
+            });
         },
         methods: {
             /**
@@ -116,7 +116,7 @@
                                         message: '更新成功',
                                         type: 'success'
                                     });
-                                    this.$router.push({path: '/equipmentList'});
+                                    this.$router.push({path: '/areaList'});
                                 } else {
                                     // 失败
                                     this.$message({
@@ -125,7 +125,7 @@
                                         type: 'error'
                                     });
                                 }
-                            })
+                            });
                         } else {
                             regionCreate(this.form).then(res => {
                                 if (res.data.errno === 0) {
@@ -135,7 +135,7 @@
                                         message: '添加成功',
                                         type: 'success'
                                     });
-                                    this.$router.push({path: '/equipmentList'});
+                                    this.$router.push({path: '/areaList'});
                                 } else {
                                     // 失败
                                     this.$message({
@@ -144,11 +144,12 @@
                                         type: 'error'
                                     });
                                 }
-                            })
+                            });
                         }
                     }
                 });
             },
+            // 返回上一页
             handleHistory() {
                 this.$router.back(-1);
             }

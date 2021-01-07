@@ -2,7 +2,7 @@
     <div class="equipmentList">
         <div class="query">
             <div>
-                <el-input class="query-input" type="text" placeholder="搜索区域" v-model="areaName"></el-input>
+                <el-input class="query-input" type="text" placeholder="搜索区域" @blur="getRegionList()" v-model="regionName"></el-input>
             </div>
             <div class="query-btn">
                 <router-link :to="{ path:'/addArea'}">
@@ -12,32 +12,32 @@
             </div>
         </div>
         <template v-for="(item,index) in areaList">
-            <div class="equipmentType clearfix" :key="index">
-                <h4>{{item.title}}</h4>
-                <template v-for="(t,i) in item.child">
+            <div class="equipmentType clearfix" v-if="item.regions.length" :key="index">
+                <h4>{{item.regionPosition}}</h4>
+                <template v-for="(t,i) in item.regions">
                     <div class="equipmentDetail" :key="i">
                         <el-checkbox-group class="module-checkbox" v-model="checkId">
                             <el-checkbox :label="t.id"></el-checkbox>
                         </el-checkbox-group>
                         <div class="equipmentTitle">
-                            <div class="equipment-name" style="font-size: 16px;">设备名称{{t.name}}</div>
+                            <div class="equipment-name" style="font-size: 16px;">{{t.regionName}}</div>
                         </div>
                         <div class="equipmentTitle areaTitle">
-                            <div>设备总数 <span class="sum">{{t.sum}}</span></div>
-                            <div>异常设备数 <span class="anomaly">{{t.anomaly}}</span></div>
+                            <div>设备总数 <span class="sum">{{t.totalDeviceNum}}</span></div>
+                            <div>异常设备数 <span class="anomaly">{{t.badDeviceNum}}</span></div>
                         </div>
                         <span class="wire"></span>
-                        <div class="rests">归属企业：{{t.enterprise}}</div>
-                        <div class="rests">负责人：{{t.principal}}</div>
-                        <div class="rests">设备区域：{{t.area}}</div>
-                        <div class="rests">添加时间：{{t.bigTime}}</div>
-                        <div class="rests">更新时间：{{t.renewalTime}}</div>
+                        <div class="rests">归属企业：{{t.companyName}}</div>
+                        <div class="rests">负责人：{{t.regionLead}}</div>
+                        <div class="rests">操作人：{{t.regionOperation}}</div>
+                        <div class="rests">添加时间：{{t.createdTime}}</div>
+                        <div class="rests">更新时间：{{t.updatedTime}}</div>
                         <span class="wire"></span>
                         <div class="button-btn">
-                            <router-link :to="{ path:'/addArea'}">
+                            <router-link :to="{ path:'/addArea',query: {id:t.id,type:1}}">
                                 <el-button>查看</el-button>
                             </router-link>
-                            <router-link :to="{ path:'/addArea'}">
+                            <router-link :to="{ path:'/addArea',query: {id:t.id}}">
                                 <el-button>编辑</el-button>
                             </router-link>
                             <el-button @click="regionDelete(t.id,1)">删除</el-button>
@@ -51,232 +51,24 @@
 </template>
 
 <script>
-    import {regionBatchDelete, regionDelete, regionList} from "../../../api/api";
+    import {regionBatchDelete, regionDelete, regionList} from '../../../api/api';
 
     export default {
         name: 'areaList',
         data() {
             return {
-                areaName: '',
-                areaList: [
-                    {
-                        title: '住院部一楼',
-                        child: [
-                            {
-                                id: '0',
-                                name: '住院部一楼大厅',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1',
-                                sum: '15',
-                                anomaly: '3'
-                            },
-                            {
-                                id: '1',
-                                name: '住院部一楼药房',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '0',
-                                sum: '15',
-                                anomaly: '3'
-                            },
-                            {
-                                id: '3',
-                                name: '住院部一楼急诊',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1',
-                                sum: '15',
-                                anomaly: '3'
-                            },
-                            {
-                                id: '0',
-                                name: '住院部一楼实验室',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1',
-                                sum: '15',
-                                anomaly: '3'
-                            }
-                        ]
-                    },
-                    {
-                        title: '住院部二楼',
-                        child: [
-                            {
-                                id: '0',
-                                name: '住院部骨科病房',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1',
-                                sum: '15',
-                                anomaly: '3'
-                            },
-                            {
-                                id: '1',
-                                name: 'X激光区',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '0',
-                                sum: '15',
-                                anomaly: '3'
-                            },
-                            {
-                                id: '3',
-                                name: '核磁共振区',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1',
-                                sum: '15',
-                                anomaly: '3'
-                            },
-                            {
-                                id: '0',
-                                name: '住院部二楼挂号缴费处',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1',
-                                sum: '15',
-                                anomaly: '3'
-                            },
-                            {
-                                id: '0',
-                                name: '住院部二楼大厅',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1',
-                                sum: '15',
-                                anomaly: '3'
-                            },
-                            {
-                                id: '0',
-                                name: '住院部二楼门诊',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1',
-                                sum: '15',
-                                anomaly: '3'
-                            }
-                        ]
-                    },
-                    {
-                        title: '住院部一楼',
-                        child: [
-                            {
-                                id: '0',
-                                name: '住院部骨科病房',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1',
-                                sum: '15',
-                                anomaly: '3'
-                            },
-                            {
-                                id: '1',
-                                name: 'X激光区',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '0',
-                                sum: '15',
-                                anomaly: '3'
-                            },
-                            {
-                                id: '3',
-                                name: '核磁共振区',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1',
-                                sum: '15',
-                                anomaly: '3'
-                            },
-                            {
-                                id: '0',
-                                name: '住院部二楼挂号缴费处',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1',
-                                sum: '15',
-                                anomaly: '3'
-                            },
-                            {
-                                id: '0',
-                                name: '住院部二楼大厅',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1',
-                                sum: '15',
-                                anomaly: '3'
-                            },
-                            {
-                                id: '0',
-                                name: '住院部二楼门诊',
-                                enterprise: '江苏省某某医药设备公司',
-                                principal: '张三三',
-                                area: '大厅',
-                                bigTime: '2020-09-01 13:00:00',
-                                renewalTime: '2020-12-05 11:30:22',
-                                status: '1',
-                                sum: '15',
-                                anomaly: '3'
-                            }
-                        ]
-                    }
-                ],
+                regionName: '',
+                areaList: [],
                 checkId: [],
             };
         },
         created() {
-            this.getRegionList(1,10);
+            this.getRegionList();
         },
         methods: {
             /**
              * 删除操作
-             * @param {Number} id 删除区域id
+             * @param {*} id 删除区域id
              * @param {Number} type 删除标记 1 单个  2  批量
              */
             regionDelete(id,type) {
@@ -293,7 +85,7 @@
                                     message: res.data.errmsg,
                                     type: 'success'
                                 });
-                                this.getRegionList(1, 10);
+                                this.getRegionList();
                             } else {
                                 this.$message({
                                     showClose: true,
@@ -303,14 +95,22 @@
                             }
                         });
                     } else {
-                        regionBatchDelete({ids: id}).then(res => {
+                        let ids = '';
+                        for (let i = 0; i < id.length; i++) {
+                            if (i < id.length - 1) {
+                                ids += id[i] + ',';
+                            } else {
+                                ids += id[i];
+                            }
+                        }
+                        regionBatchDelete({ids: ids}).then(res => {
                             if (res.data.errno === 0) {
                                 this.$message({
                                     showClose: true,
                                     message: res.data.errmsg,
                                     type: 'success'
                                 });
-                                this.getRegionList(1, 10);
+                                this.getRegionList();
                             } else {
                                 this.$message({
                                     showClose: true,
@@ -329,17 +129,11 @@
             },
             /**
              * 查询区域
-             * @param {Number} currentPage 第几页
-             * @param {Number} pageSize 多少条
              */
-            getRegionList(currentPage, pageSize) {
-                let para = {
-                    limit: pageSize,
-                    page: currentPage
-                };
-                regionList(para).then(res => {
+            getRegionList() {
+                regionList({regionName: this.regionName}).then(res => {
                     if (res.data.errno === 0) {
-                        this.equipmentList = res.data.data;
+                        this.areaList = res.data.data;
                     } else {
                         this.$message({
                             showClose: true,
@@ -347,7 +141,7 @@
                             type: 'error'
                         });
                     }
-                })
+                });
             }
         }
     };
@@ -368,5 +162,18 @@
     }
     .button-btn {
         text-align: right;
+    }
+    .module-checkbox {
+        .el-checkbox__inner {
+            width: 20px;
+            height: 20px;
+        }
+        .el-checkbox__inner:after {
+            height: 10px;
+            left: 7px;
+        }
+        .el-checkbox__label {
+            display: none;
+        }
     }
 </style>
