@@ -39,7 +39,7 @@
 </template>
 
 <script>
-    import {getLogin} from '../api/api';
+    import {getLogin,authInfo} from '../api/api';
 
     export default {
         data: function () {
@@ -98,6 +98,17 @@
                                     showClose: true,
                                     message: '登陆成功',
                                     type: 'success'
+                                });
+                                authInfo().then(res1 => {
+                                    if (res1.data.errno === 0) {
+                                        sessionStorage.setItem('userData', res1.data.data);
+                                    } else {
+                                        this.$message({
+                                            showClose: true,
+                                            message: res.data.errmsg,
+                                            type: 'error'
+                                        });
+                                    }
                                 });
                                 sessionStorage.setItem('token', res.data.data);
                                 this.$router.push('/');

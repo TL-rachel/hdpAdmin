@@ -1,8 +1,13 @@
 <template>
     <div class='demo'>
-        <div id="app-container">
-            <video ref="videoElement" :src="test" id="videoElement" controls autoplay muted width="600" height="450"></video>
-        </div>
+        <video id="videoElement" width="1000px" class="flvplayer-app"></video>
+
+        <button @click="play">
+            播放
+        </button>
+        <button @click="pause">
+            暂停
+        </button>
     </div>
 </template>
 
@@ -14,32 +19,42 @@
             return {
                 test: '',
                 player: '',
+                flvPlayer: null
             };
         },
-        methods: {
-            show() {
-                let video = this.$refs.videoElement; //定义播放路径
-                if (flvjs.isSupported()) {
-                    this.player = flvjs.createPlayer({
-                        type: result.type === 'flv',
-                        url: 'abc.flv'
-                    });
-                } else {
-                    this.$message.error('不支持的格式');
-                    return;
-                }
-                this.player.attachMediaElement(video);
-                this.player.load();
-                this.player.play();
-            },
-            cancelVideo() {
-                //销毁对象
-                if (this.player) {
-                    this.player.pause();
-                    this.player.destroy();
-                    this.player = null;
-                }
+        props: {
+            videoSrc: {
+                type: String,
+                default: 'https://flvopen.ys7.com:9188/openlive/bafac46e4b8d43e3ac055c8ff4ea7345.hd.flv'
             }
+        },
+        mounted() {
+            if (flvjs.isSupported()) {
+                let videoElement = document.getElementById('videoElement');
+                let videoSrc = this.videoSrc;
+                this.flvPlayer = flvjs.createPlayer({
+                    // url:"https://flvopen.ys7.com:9188/openlive/bafac46e4b8d43e3ac055c8ff4ea7345.hd.flv",
+                    url: videoSrc,
+                    type: 'flv',
+                });
+                this.flvPlayer.attachMediaElement(videoElement);
+                this.flvPlayer.load();
+            }
+        },
+        methods: {
+            play() {
+                this.flvPlayer.play();
+            },
+            pause() {
+                this.flvPlayer.pause();
+            }
+        },
+        destroyed() {
+            this.flvPlayer.pause();
+            this.flvPlayer.unload();
+            this.flvPlayer.detachMediaElement();
+            this.flvPlayer.destroy();
+            this.flvPlayer = null;
         }
     };
 </script>

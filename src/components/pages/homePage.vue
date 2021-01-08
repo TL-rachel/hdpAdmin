@@ -81,8 +81,7 @@
         watch: {
             companyDevice: {
                 immediate: true,
-                handler(val) {
-                    console.log(val,'差点撒旦阿萨=============');
+                handler() {
                     this.$nextTick(() => {
                         this.chartPieIllness(); // 疾病状态分布
                         this.chartPieSex(); // 性别分布
@@ -95,21 +94,15 @@
         },
         methods: {
             /**
-             * 疾病状态分布
+             * 设备状态分布
              */
             chartPieIllness() {
+                let xData = [];
+                for (let i = 0; i < this.deviceType.length; i++) {
+                    xData.push({value: this.deviceType[i].proportion * 100,name: !this.deviceType[i].del_flag === 1 ? '无效' : '有效'});
+                }
                 this.chartPie = echarts.init(document.getElementById('chartPieIllness'));
-                this.chartPie.setOption(this.pieChart('疾病状态分布',['疾病一', '疾病二', '疾病三', '疾病四', '疾病五', '疾病六', '疾病七', '疾病八', '疾病九'],'疾病状态',[
-                    {value: 24, name: '疾病一'},
-                    {value: 25, name: '疾病二'},
-                    {value: 16, name: '疾病三'},
-                    {value: 12, name: '疾病四'},
-                    {value: 7, name: '疾病五'},
-                    {value: 5, name: '疾病六'},
-                    {value: 6, name: '疾病七'},
-                    {value: 2, name: '疾病八'},
-                    {value: 3, name: '疾病九'}
-                ]));
+                this.chartPie.setOption(this.pieChart('设备状态分布',['有效','无效'],'设备状态',xData));
             },
             /**
              * 性别分布
@@ -126,26 +119,43 @@
              * 企业设备分布
              */
             myChartEquipment() {
-                console.log(this.deviceType)
+                let xName = [];
+                let xData = [];
+                for (let i = 0; i < this.companyDevice.length; i++) {
+                    xName.push(this.companyDevice[i].company_name);
+                    xData.push(this.companyDevice[i].cont);
+                }
                 let myChart = echarts.init(document.getElementById('myChartEquipment'));
                 // 绘制图表
-                myChart.setOption(this.histogramOption('企业设备分布',['企业A', '企业B', '企业C', '企业D', '企业E', '企业F'],'设备数','企业',[19, 15, 12, 18, 13, 21]));
+                myChart.setOption(this.histogramOption('企业设备分布',xName,'设备数','企业',xData));
             },
             /**
              * 企业人员分布
              */
             myChartEnterprise() {
+                let xName = [];
+                let xData = [];
+                for (let i = 0; i < this.companyUser.length; i++) {
+                    xName.push(this.companyUser[i].company_name);
+                    xData.push(this.companyUser[i].cont);
+                }
                 let myChart = echarts.init(document.getElementById('myChartEnterprise'));
                 // 绘制图表
-                myChart.setOption(this.histogramOption('企业人员分布',['企业A', '企业B', '企业C', '企业D', '企业E', '企业F'],'人数','企业',[187, 115, 60, 76, 132, 221]));
+                myChart.setOption(this.histogramOption('企业人员分布',xName,'人数','企业',xData));
             },
             /**
              * 年龄分布
              */
             myChartAge() {
+                let xName = [];
+                let xData = [];
+                for (let i = 0; i < this.age.length; i++) {
+                    xName.push(this.age[i].age_range + '岁');
+                    xData.push(this.age[i].cont);
+                }
                 let myChart = echarts.init(document.getElementById('myChartAge'));
                 // 绘制图表
-                myChart.setOption(this.histogramOption('年龄分布',['20岁及以下', '21-30岁', '31-40岁', '41-50岁', '51-60岁', '61-70岁以上'],'人数','年龄',[81, 69, 118, 109, 146, 92]));
+                myChart.setOption(this.histogramOption('年龄分布',xName,'人数','年龄',xData));
             },
             /**
              * 切换标签

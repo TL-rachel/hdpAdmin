@@ -6,18 +6,19 @@ import Cookie from 'js-cookie';
 let base = CAS_SERVER_URL;
 
 //转换数据格式
-var qs = require('qs');
 var instance = axios.create({
-    headers: {'content-type': 'application/json','X-Dts-Admin-Token': sessionStorage.getItem('token')}
+    headers: {'content-type': 'application/json'}
 });
 // 统一拦截器，需要对错误编码进行处理
 instance.interceptors.response.use(function (response) {
     // Do something with response data
-    Cookie.set('JSESSIONID',sessionStorage.getItem('token'));
+    if (!sessionStorage.getItem('token')) {
+        router.replace({path: '/login'});
+    }
     // 判断是否有返回错误编码
     if (!response.data) {
         //alert(response.data.errorCode);
-        if (9999 === response.data) {
+        if (501 === response.data.errno) {
             router.replace({path: '/login'});
         } else if (0 === response.data) {
 
@@ -34,6 +35,12 @@ instance.interceptors.response.use(function (response) {
 export const getLogin = params => {
     return instance.post(`${base}/admin/auth/login`, params);
 };
+
+// 登录人员信息
+export const authInfo = params => {
+    return instance.get(`${base}/admin/auth/info`, {params: params});
+};
+
 // 角色
 export const roleOptions = params => {
     return instance.post(`${base}/admin/role/options`, params);

@@ -75,7 +75,7 @@
 </template>
 
 <script>
-    import {companyCreate} from "../../api/api";
+    import {companyCreate} from '../../api/api';
 
     export default {
         name: 'companyEnter',
