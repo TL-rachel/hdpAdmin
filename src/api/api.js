@@ -9,12 +9,16 @@ let base = CAS_SERVER_URL;
 var instance = axios.create({
     headers: {'content-type': 'application/json'}
 });
+
 // 统一拦截器，需要对错误编码进行处理
-instance.interceptors.response.use(function (response) {
+instance.interceptors.response.use(response => {
     // Do something with response data
-    if (!sessionStorage.getItem('token')) {
-        router.replace({path: '/login'});
+    //判断是否存在token，如果存在将每个页面header都添加token
+    if(sessionStorage.getItem('token')){
+        response.headers.common['X-Dts-Admin-Token'] = sessionStorage.getItem('token');
+        Cookie.set('JSESSIONID',sessionStorage.getItem('token'));
     }
+
     // 判断是否有返回错误编码
     if (!response.data) {
         //alert(response.data.errorCode);
@@ -27,7 +31,7 @@ instance.interceptors.response.use(function (response) {
         }
     }
     return response;
-}, function (error) {
+}, error => {
     // Do something with response error
     return Promise.reject(error);
 });

@@ -1,8 +1,5 @@
 <template>
     <div class="home">
-        <div class="tag-top">
-            <el-tag v-for="(item,index) in tags" :key="index" :class="item.class" @click="cutTag(item.id)">{{item.name}}</el-tag>
-        </div>
         <div class="chart clearfix">
             <div v-for="(item,index) in myChart" :key="index" :id="item.id" :ref="item.ref" :style="{width: '555px', height: '352px',float: 'left','margin-right': '20px','margin-bottom': '40px'}"></div>
         </div>
@@ -16,28 +13,6 @@
         name: 'home',
         data() {
             return {
-                tags: [
-                    {
-                        id: '0',
-                        name: '首页',
-                        class: 'active'
-                    },
-                    {
-                        id: '1',
-                        name: '选项一',
-                        class: ''
-                    },
-                    {
-                        id: '2',
-                        name: '选项二',
-                        class: ''
-                    },
-                    {
-                        id: '3',
-                        name: '选项三',
-                        class: ''
-                    }
-                ],
                 myChart: [
                     {
                         id: 'myChartAge',
@@ -75,6 +50,12 @@
                     this.companyDevice = res.data.data.companyDevice;
                     this.companyUser = res.data.data.companyUser;
                     this.sex = res.data.data.sex;
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: res.data.errmsg,
+                        type: 'error'
+                    });
                 }
             })
         },

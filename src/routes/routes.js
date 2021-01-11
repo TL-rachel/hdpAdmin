@@ -81,119 +81,119 @@ let routes = [
                 path: '/equipmentList',
                 component: EquipmentList,
                 meta: {
-                    title: '设备列表',
+                    title: '设备管理/设备列表',
                 }
             },
             {
                 path: '/addEquipment',
                 component: AddEquipment,
                 meta: {
-                    title: '添加设备',
+                    title: '设备管理/设备列表/添加设备',
                 }
             },
             {
                 path: '/areaList',
                 component: AreaList,
                 meta: {
-                    title: '区域列表',
+                    title: '设备管理/区域列表',
                 }
             },
             {
                 path: '/userList',
                 component: UserList,
                 meta: {
-                    title: '用户列表',
+                    title: '用户管理/用户列表',
                 }
             },
             {
                 path: '/addUser',
                 component: AddUser,
                 meta: {
-                    title: '添加用户',
+                    title: '用户管理/用户列表/添加用户',
                 }
             },
             {
                 path: '/medicalHistory',
                 component: MedicalHistory,
                 meta: {
-                    title: '病史',
+                    title: '用户管理/健康数据/病史',
                 }
             },
             {
                 path: '/caseList',
                 component: CaseList,
                 meta: {
-                    title: '病例',
+                    title: '用户管理/健康数据/病例',
                 }
             },
             {
                 path: '/addCase',
                 component: AddCase,
                 meta: {
-                    title: '添加病例',
+                    title: '用户管理/健康数据/添加病例',
                 }
             },
             {
                 path: '/healthDataList',
                 component: HealthDataList,
                 meta: {
-                    title: '健康数据',
+                    title: '用户管理/健康数据',
                 }
             },
             {
                 path: '/liveStreaming',
                 component: LiveStreaming,
                 meta: {
-                    title: '直播',
+                    title: '设备管理/设备列表/直播',
                 }
             },
             {
                 path: '/administratorList',
                 component: AdministratorList,
                 meta: {
-                    title: '管理员',
+                    title: '系统管理/管理员',
                 }
             },
             {
                 path: '/addAdministrator',
                 component: AddAdministrator,
                 meta: {
-                    title: '添加管理员',
+                    title: '系统管理/管理员/添加管理员',
                 }
             },
             {
                 path: '/roleManagement',
                 component: RoleManagement,
                 meta: {
-                    title: '角色管理',
+                    title: '系统管理/角色管理',
                 }
             },
             {
                 path: '/operationLog',
                 component: OperationLog,
                 meta: {
-                    title: '操作日志',
+                    title: '系统管理/操作日志',
                 }
             },
             {
                 path: '/companyList',
                 component: CompanyList,
                 meta: {
-                    title: '企业管理列表',
+                    title: '企业管理/企业管理列表',
                 }
             },
             {
                 path: '/addCompany',
                 component: AddCompany,
                 meta: {
-                    title: '企业管理列表',
+                    title: '企业管理/企业管理列表/添加企业',
                 }
             },
             {
                 path: '/addArea',
                 component: AddArea,
                 meta: {
-                    title: '添加区域',
+                    title: '设备管理/区域管理/添加区域',
                 }
             },
         ]

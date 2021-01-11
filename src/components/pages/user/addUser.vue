@@ -148,9 +148,9 @@
                     userEducation: '', //学历
                     userEmail: '', //email
                     userHeight: '', //身高
-                    userImage1: 'http://hdposs.zerorui.cn/i5nyubzubju70h92hnej.jpg', //图片1的base64位编码
-                    userImage2: 'http://hdposs.zerorui.cn/i5nyubzubju70h92hnej.jpg', //图片2的base64位编码
-                    userImage3: 'http://hdposs.zerorui.cn/i5nyubzubju70h92hnej.jpg', //图片3的base64位编码
+                    userImage1: '', //图片1
+                    userImage2: '', //图片2
+                    userImage3: '', //图片3
                     userJob: '', //职业
                     userLevel: '0', //用户等级默认1
                     userName: '', //姓名

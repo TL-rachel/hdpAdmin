@@ -90,28 +90,28 @@
                         };
                         getLogin(para).then((res) => {
                             if (res.data.errno === 0) {
-                                if (this.param.remember) {
-                                    window.document.cookie = 'username=' + this.param.username;
-                                    window.document.cookie = 'password=' + this.param.password;
-                                }
-                                this.$message({
-                                    showClose: true,
-                                    message: '登陆成功',
-                                    type: 'success'
-                                });
                                 authInfo().then(res1 => {
                                     if (res1.data.errno === 0) {
+                                        if (this.param.remember) {
+                                            window.document.cookie = 'username=' + this.param.username;
+                                            window.document.cookie = 'password=' + this.param.password;
+                                        }
+                                        this.$message({
+                                            showClose: true,
+                                            message: '登陆成功',
+                                            type: 'success'
+                                        });
                                         sessionStorage.setItem('userData', res1.data.data);
+                                        sessionStorage.setItem('token', res.data.data);
+                                        this.$router.push('/');
                                     } else {
                                         this.$message({
                                             showClose: true,
-                                            message: res.data.errmsg,
+                                            message: res1.data.errmsg,
                                             type: 'error'
                                         });
                                     }
                                 });
-                                sessionStorage.setItem('token', res.data.data);
-                                this.$router.push('/');
                             } else {
                                 this.param.verifyCode = '';
                                 this.$message({

@@ -34,7 +34,7 @@
                                 v-else
                                 :index="subItem.index"
                                 :key="subItem.index"
-                            ><i class="iconfont menudian">&#xe63c;</i>{{ subItem.title }}</el-menu-item>
+                            >{{ subItem.title }}</el-menu-item>
                         </template>
                     </el-submenu>
                 </template>

@@ -7,8 +7,6 @@
   "scripts": {
     "dev": "node build/dev-server.js --env=dev",
     "start": "node build/dev-server.js --env=dev",
-    "sit": "node build/build.js --env=sit",
-    "pre": "node build/build.js --env=pre",
     "prd": "node build/build.js --env=prd"
   },
   "dependencies": {
