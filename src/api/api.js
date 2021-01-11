@@ -17,6 +17,8 @@ instance.interceptors.response.use(response => {
     if(sessionStorage.getItem('token')){
         response.headers.common['X-Dts-Admin-Token'] = sessionStorage.getItem('token');
         Cookie.set('JSESSIONID',sessionStorage.getItem('token'));
+    } else {
+        router.replace({path: '/login'});
     }
 
     // 判断是否有返回错误编码
