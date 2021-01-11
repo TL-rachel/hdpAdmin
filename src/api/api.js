@@ -10,14 +10,24 @@ var instance = axios.create({
     headers: {'content-type': 'application/json'}
 });
 
+instance.interceptors.request.use(config => {
+    // 在发送请求之前做些什么
+    //判断是否存在token，如果存在将每个页面header都添加token
+    if(sessionStorage.getItem('token')){
+        config.headers.common['X-Dts-Admin-Token']=sessionStorage.getItem('token')
+        Cookie.set('JSESSIONID',sessionStorage.getItem('token'));
+    }
+    return config;
+}, error => {
+    // 对请求错误做些什么
+    return Promise.reject(error);
+});
+
 // 统一拦截器，需要对错误编码进行处理
 instance.interceptors.response.use(response => {
     // Do something with response data
     //判断是否存在token，如果存在将每个页面header都添加token
-    if(sessionStorage.getItem('token')){
-        response.headers.common['X-Dts-Admin-Token'] = sessionStorage.getItem('token');
-        Cookie.set('JSESSIONID',sessionStorage.getItem('token'));
-    } else {
+    if(!sessionStorage.getItem('token')){
         router.replace({path: '/login'});
     }
 
