@@ -10,31 +10,34 @@
                         class="avatar-uploader"
                         :disabled="$route.query.type==1?true:false"
                         :action="actionUrl"
+                        :accept="imgType"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess1"
                         :before-upload="beforeAvatarUpload">
                     <img v-if="form.userImage1" :src="form.userImage1" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    <i v-else class="el-icon-plus avatar-uploader-icon user-image1"></i>
                 </el-upload>
                 <el-upload
                         class="avatar-uploader"
                         :disabled="$route.query.type==1?true:false"
                         :action="actionUrl"
+                        :accept="imgType"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess2"
                         :before-upload="beforeAvatarUpload">
                     <img v-if="form.userImage2" :src="form.userImage2" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    <i v-else class="el-icon-plus avatar-uploader-icon user-image2"></i>
                 </el-upload>
                 <el-upload
                         class="avatar-uploader"
                         :disabled="$route.query.type==1?true:false"
                         :action="actionUrl"
+                        :accept="imgType"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess3"
                         :before-upload="beforeAvatarUpload">
                     <img v-if="form.userImage3" :src="form.userImage3" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    <i v-else class="el-icon-plus avatar-uploader-icon user-image3"></i>
                 </el-upload>
 
                 <el-button>正面照</el-button>
@@ -383,5 +386,22 @@
     }
     .avatar-uploader .el-upload {
         z-index: 99;
+    }
+    .user-image1 {
+        background-image: url("../../../common/image/user-image1.png");
+        background-size: cover;
+    }
+    .user-image2 {
+        background-image: url("../../../common/image/user-image2.png");
+        background-size: cover;
+    }
+    .user-image3 {
+        background-image: url("../../../common/image/user-image3.png");
+        background-size: cover;
+    }
+    .el-icon-plus.user-image1:before,
+    .el-icon-plus.user-image2:before,
+    .el-icon-plus.user-image3:before {
+        opacity: 0;
     }
 </style>
