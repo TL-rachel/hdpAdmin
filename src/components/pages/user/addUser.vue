@@ -6,43 +6,45 @@
             </el-form-item>
 
             <el-form-item class="upload-img" label="上传图片" label-width="90px">
-                <el-upload
-                        class="avatar-uploader"
-                        :disabled="$route.query.type==1?true:false"
-                        :action="actionUrl"
-                        :accept="imgType"
-                        :show-file-list="false"
-                        :on-success="handleAvatarSuccess1"
-                        :before-upload="beforeAvatarUpload">
-                    <img v-if="form.userImage1" :src="form.userImage1" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon user-image1"></i>
-                </el-upload>
-                <el-upload
-                        class="avatar-uploader"
-                        :disabled="$route.query.type==1?true:false"
-                        :action="actionUrl"
-                        :accept="imgType"
-                        :show-file-list="false"
-                        :on-success="handleAvatarSuccess2"
-                        :before-upload="beforeAvatarUpload">
-                    <img v-if="form.userImage2" :src="form.userImage2" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon user-image2"></i>
-                </el-upload>
-                <el-upload
-                        class="avatar-uploader"
-                        :disabled="$route.query.type==1?true:false"
-                        :action="actionUrl"
-                        :accept="imgType"
-                        :show-file-list="false"
-                        :on-success="handleAvatarSuccess3"
-                        :before-upload="beforeAvatarUpload">
-                    <img v-if="form.userImage3" :src="form.userImage3" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon user-image3"></i>
-                </el-upload>
+                <div style="width: 500px;">
+                    <el-upload
+                            class="avatar-uploader"
+                            :disabled="$route.query.type==1?true:false"
+                            :action="actionUrl"
+                            :accept="imgType"
+                            :show-file-list="false"
+                            :on-success="handleAvatarSuccess1"
+                            :before-upload="beforeAvatarUpload">
+                        <img v-if="form.userImage1" :src="form.userImage1" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon user-image1"></i>
+                    </el-upload>
+                    <el-upload
+                            class="avatar-uploader"
+                            :disabled="$route.query.type==1?true:false"
+                            :action="actionUrl"
+                            :accept="imgType"
+                            :show-file-list="false"
+                            :on-success="handleAvatarSuccess2"
+                            :before-upload="beforeAvatarUpload">
+                        <img v-if="form.userImage2" :src="form.userImage2" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon user-image2"></i>
+                    </el-upload>
+                    <el-upload
+                            class="avatar-uploader"
+                            :disabled="$route.query.type==1?true:false"
+                            :action="actionUrl"
+                            :accept="imgType"
+                            :show-file-list="false"
+                            :on-success="handleAvatarSuccess3"
+                            :before-upload="beforeAvatarUpload">
+                        <img v-if="form.userImage3" :src="form.userImage3" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon user-image3"></i>
+                    </el-upload>
 
-                <el-button>正面照</el-button>
-                <el-button>侧面照</el-button>
-                <el-button>3/4侧面照</el-button>
+                    <el-button>正面照</el-button>
+                    <el-button>侧面照</el-button>
+                    <el-button>3/4侧面照</el-button>
+                </div>
             </el-form-item>
 
             <el-form-item label="用户姓名" class="whole100" label-width="90px" prop="userName">
