@@ -44,11 +44,25 @@ import CompanyList from '../components/pages/company/companyList';
 import AddCompany from '../components/pages/company/addCompany';
 // 企业入驻页 单独页面
 import CompanyEnter from '../components/pages/companyEnter';
+// 心率数据
+import HeartRateList from '../components/pages/healthData/heartRateList';
+// 疲劳数据
+import FatigueList from '../components/pages/healthData/fatigueList';
+// 情绪数据
+import EmotionList from '../components/pages/healthData/emotionList';
+// 修改密码
+import ChangePassword from '../components/changePassword';
 
 let routes = [
     {
         path: '/login',
         component: Login,
+        name: '',
+        hidden: true
+    },
+    {
+        path: '/changePassword',
+        component: ChangePassword,
         name: '',
         hidden: true
     },
@@ -117,6 +131,27 @@ let routes = [
                 component: MedicalHistory,
                 meta: {
                     title: '用户管理/健康数据/病史',
+                }
+            },
+            {
+                path: '/heartRateList',
+                component: HeartRateList,
+                meta: {
+                    title: '用户管理/健康数据/心率数据',
+                }
+            },
+            {
+                path: '/fatigueList',
+                component: FatigueList,
+                meta: {
+                    title: '用户管理/健康数据/疲劳数据',
+                }
+            },
+            {
+                path: '/emotionList',
+                component: EmotionList,
+                meta: {
+                    title: '用户管理/健康数据/情绪数据',
                 }
             },
             {

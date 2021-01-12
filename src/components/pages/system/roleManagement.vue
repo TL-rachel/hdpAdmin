@@ -1,13 +1,13 @@
 <template>
     <div class="equipmentList">
         <div class="query">
-            <div><el-input class="query-input user-input" type="text" placeholder="搜索角色名称" @blur="getRoleList(1,10,name)" v-model="name"></el-input></div>
+            <div><el-input class="query-input user-input" type="text" placeholder="搜索角色名称" @blur="getRoleList(1,10)" v-model="name"></el-input></div>
             <div class="query-btn">
                 <el-button @click="openUpdateRole(0,{})"><i class="icon-picture icon-picture-add"></i> 添加</el-button>
-                <el-button><i class="icon-picture icon-picture-to-lead"></i>批量导入</el-button>
+                <!--<el-button><i class="icon-picture icon-picture-to-lead"></i>批量导入</el-button>
                 <el-button><i class="icon-picture icon-picture-export"></i>批量导出</el-button>
-                <el-button><i class="icon-picture icon-picture-update"></i>一键更新faceId</el-button>
-                <el-button><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+                <el-button><i class="icon-picture icon-picture-update"></i>一键更新faceId</el-button>-->
+                <el-button @click="deleteRole(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             </div>
         </div>
         <div class="table-list">
@@ -24,7 +24,7 @@
                 <el-table-column prop="id" label="操作" width="180">
                     <template slot-scope="scope">
                         <a class="operation-table" @click="openUpdateRole(1,scope.row)">编辑</a>
-                        <a class="operation-table" @click="deleteRole(scope.row)">删除</a>
+                        <a class="operation-table" @click="deleteRole(scope.row,1)">删除</a>
                         <a class="operation-table" @click="openTree(scope.row)">授权</a>
                     </template>
                 </el-table-column>
@@ -76,7 +76,7 @@
 </template>
 
 <script>
-    import {roleList, roleCreate, roleUpdate, rolePermissions,roleUpdatePermissions} from '../../../api/api';
+    import {roleList, roleCreate, roleUpdate, rolePermissions,roleUpdatePermissions,roleBatchDelete} from '../../../api/api';
     export default {
         name: 'roleManagement',
         data() {
@@ -117,7 +117,7 @@
         },
         created() {
             // 获取列表
-            this.getRoleList(1,10,this.name);
+            this.getRoleList(1,10);
         },
         methods: {
             /* eslint-disable */
@@ -153,7 +153,6 @@
             },
             authorizationForm() {
                 let rolePermissionsList = this.$refs.tree.getCheckedKeys(true);
-                console.log(rolePermissionsList);
                 let para = {
                     roleId: this.roleId,
                     permissions: rolePermissionsList
@@ -177,38 +176,66 @@
             },
             /**
              * 删除角色
-             * @param {Object} obj 角色信息
+             * @param {*} obj 角色信息
+             * @param {Number} type 1 单个删除  2 批量删除
              */
-            deleteRole(obj) {
-                this.$confirm('此操作将永久删除该管理员, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    let para = obj;
-                    para.deleted = true;
-                    roleUpdate(para).then(res => {
-                        if (res.data.errno === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: '删除成功',
-                                type: 'success'
+            deleteRole(obj,type) {
+                if (obj) {
+                    this.$confirm('此操作将永久删除该管理员, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        if (type === 1) {
+                            let para = obj;
+                            para.deleted = true;
+                            roleUpdate(para).then(res => {
+                                if (res.data.errno === 0) {
+                                    this.$message({
+                                        showClose: true,
+                                        message: '删除成功',
+                                        type: 'success'
+                                    });
+                                    this.getRoleList(this.page, 10);
+                                } else {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
                             });
-                            this.getRoleList(this.page, 10,this.name);
                         } else {
-                            this.$message({
-                                showClose: true,
-                                message: res.data.errmsg,
-                                type: 'error'
-                            });
+                            roleBatchDelete({ids: obj}).then(res => {
+                                if (res.data.errno === 0) {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'success'
+                                    });
+                                    this.getRoleList(this.page, 10);
+                                } else {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
+                            })
                         }
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
                     });
-                }).catch(() => {
+                } else {
                     this.$message({
-                        type: 'info',
-                        message: '已取消删除'
+                        showClose: true,
+                        message: '请选择要删除的角色',
+                        type: 'error'
                     });
-                });
+                }
             },
             /**
              * 编辑角色  创建
@@ -233,7 +260,7 @@
             // 修改页数
             handleCurrentChange(val) {
                 this.page = val;
-                this.getRoleList((typeof val === 'number' ? val : 1), 10,this.name);
+                this.getRoleList((typeof val === 'number' ? val : 1), 10);
             },
             /**
              * 创建角色
@@ -253,7 +280,7 @@
                                         type: 'success'
                                     });
                                     this.dialogFormVisible = false;
-                                    this.getRoleList(this.page, 10,this.name);
+                                    this.getRoleList(this.page, 10);
                                 } else {
                                     this.$message({
                                         showClose: true,
@@ -272,7 +299,7 @@
                                         type: 'success'
                                     });
                                     this.dialogFormVisible = false;
-                                    this.getRoleList(this.page, 10,this.name);
+                                    this.getRoleList(this.page, 10);
                                 } else {
                                     this.$message({
                                         showClose: true,
@@ -289,19 +316,15 @@
              * 查询角色列表
              * @param {number} currentPage 当前页
              * @param {number} pageSize 一页多少条
-             * @param {String} name 查询姓名
              */
-            getRoleList(currentPage, pageSize,name) {
+            getRoleList(currentPage, pageSize) {
                 let para = {
                     limit: pageSize,
                     order: 'desc',
                     sort: 'add_time',
-                    page: currentPage
+                    page: currentPage,
+                    name: this.name
                 };
-                // 是否查询
-                if (name) {
-                    para.name = name;
-                }
                 roleList(para).then(res => {
                     if (res.data.errno === 0) {
                         this.tableData = res.data.data.items;
@@ -316,7 +339,14 @@
                 });
             },
             handleSelectionChange(val) {
-                this.multipleSelection = val;
+                this.multipleSelection = '';
+                for (let i = 0; i < val.length; i++) {
+                    if (i < val.length - 1) {
+                        this.multipleSelection += val[i].id + ',';
+                    } else {
+                        this.multipleSelection += val[i].id;
+                    }
+                }
             }
         }
     };

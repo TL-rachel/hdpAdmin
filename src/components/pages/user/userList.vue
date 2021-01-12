@@ -6,8 +6,8 @@
                 <router-link :to="{ path:'/addUser'}">
                     <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
                 </router-link>
-                <el-button><i class="icon-picture icon-picture-to-lead"></i>批量导入</el-button>
-                <el-button><i class="icon-picture icon-picture-export"></i>批量导出</el-button>
+                <!--<el-button><i class="icon-picture icon-picture-to-lead"></i>批量导入</el-button>
+                <el-button><i class="icon-picture icon-picture-export"></i>批量导出</el-button>-->
                 <el-button @click="batchFaceId()"><i class="icon-picture icon-picture-update"></i>一键更新faceId</el-button>
                 <el-button @click="userDelete(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             </div>
@@ -19,13 +19,13 @@
                     tooltip-effect="dark"
                     style="width: 100%"
                     @selection-change="handleSelectionChange">
-                <el-table-column type="selection" width="55"></el-table-column>
+                <el-table-column fixed type="selection" width="55"></el-table-column>
                 <el-table-column label="img" min-width="60">
                     <template slot-scope="scope">
                         <img v-if="scope.row.userImage1" class="head-portrait" :src="scope.row.userImage1" alt="">
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="姓名" min-width="80">
+                <el-table-column prop="name" label="姓名" min-width="180">
                     <template slot-scope="scope">
                         <span class="user-name">{{scope.row.userName}}</span>
                     </template>
@@ -37,7 +37,7 @@
                         <span v-if="scope.row.userSex == 1">女</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="companyName" label="归属企业" width="180"></el-table-column>
+                <el-table-column prop="companyName" label="归属企业" min-width="240"></el-table-column>
                 <el-table-column prop="userPhone" label="手机号" min-width="120"></el-table-column>
                 <el-table-column prop="delFlag" label="状态" min-width="60">
                     <template slot-scope="scope">
@@ -45,11 +45,11 @@
                         <span v-if="scope.row.delFlag == '1'">无效</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="createdUserName" label="添加人"> </el-table-column>
-                <el-table-column prop="createdTime" label="添加时间" min-width="150"> </el-table-column>
-                <el-table-column prop="updatedUserName" label="更新人"></el-table-column>
-                <el-table-column prop="updatedTime" label="更新时间" min-width="150"></el-table-column>
-                <el-table-column prop="id" label="操作" width="90">
+                <el-table-column prop="createdUserName" label="添加人" min-width="160"> </el-table-column>
+                <el-table-column prop="createdTime" label="添加时间" min-width="160"> </el-table-column>
+                <el-table-column prop="updatedUserName" label="更新人" min-width="160"></el-table-column>
+                <el-table-column prop="updatedTime" label="更新时间" min-width="160"></el-table-column>
+                <el-table-column prop="id" label="操作" fixed="right" width="90">
                     <template slot-scope="scope">
                         <router-link :to="{ path:'/addUser',query: {id:scope.row.id,type: 1}}">
                             <a>查看详情</a>
@@ -61,14 +61,14 @@
                                 </router-link>
                                 <a @click="userDelete(scope.row.id,1)">删除</a>
                             </p>
-                            <p>
+                            <!--<p>
                                 <router-link :to="{ path:'/caseList'}">
                                     <a>病例</a>
                                 </router-link>
                                 <router-link :to="{ path:'/medicalHistory'}">
                                     <a>病史</a>
                                 </router-link>
-                            </p>
+                            </p>-->
                             <div slot="reference" class="name-wrapper text-overflow-1">
                                 <a>更多操作</a>
                             </div>
@@ -135,52 +135,60 @@
              * @param {Number} type 删除标记 1 单个  2  批量
              */
             userDelete(id,type) {
-                this.$confirm('此操作将永久删除用户, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    if (type === 1) {
-                        userDelete(id).then(res => {
-                            if (res.data.errno === 0) {
-                                this.$message({
-                                    showClose: true,
-                                    message: res.data.errmsg,
-                                    type: 'success'
-                                });
-                                this.getUserList(1, 10);
-                            } else {
-                                this.$message({
-                                    showClose: true,
-                                    message: res.data.errmsg,
-                                    type: 'error'
-                                });
-                            }
+                if (id) {
+                    this.$confirm('此操作将永久删除用户, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        if (type === 1) {
+                            userDelete(id).then(res => {
+                                if (res.data.errno === 0) {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'success'
+                                    });
+                                    this.getUserList(1, 10);
+                                } else {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
+                            });
+                        } else {
+                            userBatchDelete({ids: id}).then(res => {
+                                if (res.data.errno === 0) {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'success'
+                                    });
+                                    this.getUserList(1, 10);
+                                } else {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
+                            });
+                        }
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
                         });
-                    } else {
-                        userBatchDelete({ids: id}).then(res => {
-                            if (res.data.errno === 0) {
-                                this.$message({
-                                    showClose: true,
-                                    message: res.data.errmsg,
-                                    type: 'success'
-                                });
-                                this.getUserList(1, 10);
-                            } else {
-                                this.$message({
-                                    showClose: true,
-                                    message: res.data.errmsg,
-                                    type: 'error'
-                                });
-                            }
-                        });
-                    }
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
                     });
-                });
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: '请选择要删除的用户',
+                        type: 'error'
+                    });
+                }
             },
             /**
              * 查询用户列表
@@ -252,5 +260,12 @@
         a {
             color: #009ce1;
         }
+    }
+    .el-table--scrollable-x .el-table__body-wrapper {
+        overflow-x: auto;
+    }
+
+    .el-table .cell {
+        white-space: pre-line;
     }
 </style>

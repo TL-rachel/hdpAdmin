@@ -11,12 +11,12 @@
                         <el-menu class="el-menu-demo" mode="horizontal">
                             <el-submenu index="1">
                                 <template slot="title">
-                                    {{sysUserName}}
-                                    <img class="header-img" src="http://hdposs.zerorui.cn/i5nyubzubju70h92hnej.jpg" alt="">
+                                    {{userData.name}}
+                                    <img class="header-img" :src="userData.avatar" alt="">
                                 </template>
                                 <el-menu-item @click="$router.push({path: '/'})">首页</el-menu-item>
-                                <el-menu-item>修改密码</el-menu-item>
-                                <el-menu-item>退出登陆</el-menu-item>
+                                <el-menu-item @click="updatePsw()">修改密码</el-menu-item>
+                                <el-menu-item @click="logout()">退出登陆</el-menu-item>
                             </el-submenu>
                         </el-menu>
                     </li>
@@ -27,21 +27,15 @@
     </div>
 </template>
 <script>
-import {} from '../../api/api';
 export default {
     data() {
         return {
-            sysUserName: '', // 用户名
+            userData: '', // 用户名
             headerTitle: ''
         };
     },
     created() {
-        let username = sessionStorage.getItem('user');
-        if (username) {
-            this.sysUserName = username;
-        } else {
-            this.sysUserName = '张三';
-        }
+        this.userData = JSON.parse(sessionStorage.getItem('userData'));
         // 设置标签
         this.setTags(this.$route);
     },
@@ -54,10 +48,18 @@ export default {
             this.headerTitle = route.meta.title;
         },
         /**
+         * 修改密码
+         */
+        updatePsw() {
+            this.$router.push('/changePassword');
+        },
+        /**
          * 退出登陆 返回登陆页
          */
         logout() {
-
+            sessionStorage.removeItem('userData');
+            sessionStorage.removeItem('token');
+            this.$router.push('/login');
         }
     },
     watch: {

@@ -1,15 +1,12 @@
 <template>
     <div class="equipmentList">
         <div class="query">
-            <div><el-input class="query-input user-input" type="text" placeholder="搜索管理员账号" @blur="getAdminList(1,10,userName)" v-model="userName"></el-input></div>
+            <div><el-input class="query-input user-input" type="text" placeholder="搜索管理员账号" @blur="getAdminList(1,10)" v-model="userName"></el-input></div>
             <div class="query-btn">
                 <router-link :to="{ path:'/addAdministrator'}">
                     <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
                 </router-link>
-                <el-button><i class="icon-picture icon-picture-to-lead"></i>批量导入</el-button>
-                <el-button><i class="icon-picture icon-picture-export"></i>批量导出</el-button>
-                <el-button><i class="icon-picture icon-picture-update"></i>一键更新faceId</el-button>
-                <el-button><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+                <el-button @click="deleteAdministrator(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             </div>
         </div>
         <div class="table-list">
@@ -30,7 +27,7 @@
                         <router-link :to="{ path:'/addAdministrator',query: {id:scope.row.id}}">
                             <a class="operation-table">编辑</a>
                         </router-link>
-                        <a class="operation-table" @click="deleteAdministrator(scope.row)">删除</a>
+                        <a class="operation-table" @click="deleteAdministrator(scope.row.id,1)">删除</a>
                     </template>
                 </el-table-column>
             </el-table>
@@ -51,7 +48,7 @@
 </template>
 
 <script>
-    import {adminList, roleOptions,adminUpdate} from '../../../api/api';
+    import {adminList, roleOptions,adminBatchDelete, adminDelete} from '../../../api/api';
     export default {
         name: 'administratorList',
         data() {
@@ -59,7 +56,7 @@
                 userName: '',
                 tableData: [],
                 options: [],
-                multipleSelection: [],
+                multipleSelection: '',
                 total: 0, // 条数
                 page: 1, // 页码
             };
@@ -70,33 +67,37 @@
                     this.options = res.data.data;
                 }
             });
-            this.getAdminList(1,10,this.userName);
+            this.getAdminList(1,10);
         },
         methods: {
             handleSelectionChange(val) {
-                this.multipleSelection = val;
+                this.multipleSelection = '';
+                for (let i = 0; i < val.length; i++) {
+                    if (i < val.length - 1) {
+                        this.multipleSelection += val[i].id + ',';
+                    } else {
+                        this.multipleSelection += val[i].id;
+                    }
+                }
             },
             // 修改页数
             handleCurrentChange(val) {
                 this.page = val;
-                this.getAdminList((typeof val === 'number' ? val : 1), 10,this.userName);
+                this.getAdminList((typeof val === 'number' ? val : 1), 10);
             },
             /**
              * 查询管理员列表
              * @param {number} currentPage 当前页
              * @param {number} pageSize 一页多少条
-             * @param {String} userName 查询姓名
              */
-            getAdminList(currentPage, pageSize,userName) {
+            getAdminList(currentPage, pageSize) {
                 let para = {
                     limit: pageSize,
                     order: 'desc',
                     sort: 'add_time',
-                    page: currentPage
+                    page: currentPage,
+                    username: this.userName
                 };
-                if (userName) {
-                    para.username = userName;
-                }
                 adminList(para).then(res => {
                     if (res.data.errno === 0) {
                         this.tableData = res.data.data.items;
@@ -112,38 +113,64 @@
             },
             /**
              * 删除管理员
-             * @param {Object} detail 管理员信息
+             * @param {*} id 管理员信息
+             * @param {*} type 1 删除单个  2  删除多个
              */
-            deleteAdministrator(detail) {
-                this.$confirm('此操作将永久删除该管理员, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    let para = detail;
-                    para.deleted = true;
-                    adminUpdate(para).then(res => {
-                        if (res.data.errno === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: res.data.errmsg,
-                                type: 'success'
+            deleteAdministrator(id,type) {
+                if (id) {
+                    this.$confirm('此操作将永久删除该管理员, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        if (type === 1) {
+                            adminDelete({id: id}).then(res => {
+                                if (res.data.errno === 0) {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'success'
+                                    });
+                                    this.getAdminList(this.page, 10);
+                                } else {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
                             });
-                            this.getAdminList(this.page, 10,this.userName);
                         } else {
-                            this.$message({
-                                showClose: true,
-                                message: res.data.errmsg,
-                                type: 'error'
+                            adminBatchDelete({ids: id}).then(res => {
+                                if (res.data.errno === 0) {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'success'
+                                    });
+                                    this.getAdminList(this.page, 10);
+                                } else {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
                             });
                         }
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
                     });
-                }).catch(() => {
+                } else {
                     this.$message({
-                        type: 'info',
-                        message: '已取消删除'
+                        showClose: true,
+                        message: '请选择要删除的管理员',
+                        type: 'error'
                     });
-                });
+                }
             }
         }
     };
@@ -167,7 +194,8 @@
     }
     .el-button.toolbar-go-btn.el-button--primary.el-button--mini {
         padding: 0;
-        margin: -5px 0 0 0;
+        height: 28px;
+        line-height: 28px;
     }
     .operation-table {
         cursor: pointer;
@@ -177,5 +205,13 @@
         padding: 0 10px;
         border-radius: 3px;
         background-color: rgba(242, 247, 250, 1);
+    }
+    .btn-prev {
+        border: 1px solid #f2f3f7!important;
+        border-right: 0!important;
+    }
+    .btn-next {
+        border: 1px solid #f2f3f7!important;
+        border-left: 0!important;
     }
 </style>

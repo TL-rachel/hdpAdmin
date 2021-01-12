@@ -11,7 +11,7 @@
                             class="avatar-uploader"
                             :disabled="$route.query.type==1?true:false"
                             :action="actionUrl"
-                            :accept="imgType"
+                            accept="image/jpg, image/png"
                             :show-file-list="false"
                             :on-success="handleAvatarSuccess1"
                             :before-upload="beforeAvatarUpload">
@@ -22,7 +22,7 @@
                             class="avatar-uploader"
                             :disabled="$route.query.type==1?true:false"
                             :action="actionUrl"
-                            :accept="imgType"
+                            accept="image/jpg, image/png"
                             :show-file-list="false"
                             :on-success="handleAvatarSuccess2"
                             :before-upload="beforeAvatarUpload">
@@ -33,7 +33,7 @@
                             class="avatar-uploader"
                             :disabled="$route.query.type==1?true:false"
                             :action="actionUrl"
-                            :accept="imgType"
+                            accept="image/jpg, image/png"
                             :show-file-list="false"
                             :on-success="handleAvatarSuccess3"
                             :before-upload="beforeAvatarUpload">

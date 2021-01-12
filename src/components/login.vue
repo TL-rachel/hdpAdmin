@@ -102,7 +102,7 @@
                                             message: '登陆成功',
                                             type: 'success'
                                         });
-                                        sessionStorage.setItem('userData', res1.data.data);
+                                        sessionStorage.setItem('userData', JSON.stringify(res1.data.data));
                                         this.$router.push('/');
                                     } else {
                                         this.$message({

@@ -253,4 +253,38 @@ export const adminChart = params => {
     return instance.get(`${base}/admin/admin/chart`,{params: params});
 };
 
+// 删除角色
+export const roleBatchDelete = params => {
+    return instance.get(`${base}/admin/role/batchDelete`, {params: params});
+};
+
+// 批量删除管理员
+export const adminBatchDelete = params => {
+    return instance.get(`${base}/admin/admin/batchDelete`, {params: params});
+};
+
+// 删除管理员
+export const adminDelete = params => {
+    return instance.post(`${base}/admin/admin/delete`, params);
+};
+
+// 所有用户的心率疲劳度列表
+export const userHealthDataList = params => {
+    return instance.get(`${base}/admin/user/healthDataList`,{params: params});
+};
+
+// 用户心率数据查询列表
+export const heartRateList = params => {
+    return instance.get(`${base}/admin/hd_heart_rate/list`,{params: params});
+};
+
+// 用户疲劳数据查询列表
+export const fatigueList = params => {
+    return instance.get(`${base}/admin/hd_fatigue/list`,{params: params});
+};
+
+// 修改密码
+export const updatePassword = params => {
+    return instance.post(`${base}/admin/admin/updatePassword`,params);
+};
 /* eslint-disable */

@@ -6,9 +6,6 @@
                 <router-link :to="{ path:'/addCompany'}">
                     <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
                 </router-link>
-                <el-button><i class="icon-picture icon-picture-to-lead"></i>批量导入</el-button>
-                <el-button><i class="icon-picture icon-picture-export"></i>批量导出</el-button>
-                <el-button><i class="icon-picture icon-picture-update"></i>一键更新faceId</el-button>
                 <el-button @click="deleteCompany(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             </div>
         </div>
@@ -128,52 +125,60 @@
              * @param {number} type 删除标记 1 单个   2 多个
              */
             deleteCompany(detail,type) {
-                this.$confirm('此操作将永久删除企业, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    if (type === 1) {
-                        companyDelete({id: detail.id}).then(res => {
-                            if (res.data.errno === 0) {
-                                this.$message({
-                                    showClose: true,
-                                    message: res.data.errmsg,
-                                    type: 'success'
-                                });
-                                this.getCompanyList(this.page, 10);
-                            } else {
-                                this.$message({
-                                    showClose: true,
-                                    message: res.data.errmsg,
-                                    type: 'error'
-                                });
-                            }
+                if (detail) {
+                    this.$confirm('此操作将永久删除企业, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        if (type === 1) {
+                            companyDelete({id: detail.id}).then(res => {
+                                if (res.data.errno === 0) {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'success'
+                                    });
+                                    this.getCompanyList(this.page, 10);
+                                } else {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
+                            });
+                        } else {
+                            companyBatchDelete({ids: detail}).then(res => {
+                                if (res.data.errno === 0) {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'success'
+                                    });
+                                    this.getCompanyList(this.page, 10);
+                                } else {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
+                            });
+                        }
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
                         });
-                    } else {
-                        companyBatchDelete({ids: detail}).then(res => {
-                            if (res.data.errno === 0) {
-                                this.$message({
-                                    showClose: true,
-                                    message: res.data.errmsg,
-                                    type: 'success'
-                                });
-                                this.getCompanyList(this.page, 10);
-                            } else {
-                                this.$message({
-                                    showClose: true,
-                                    message: res.data.errmsg,
-                                    type: 'error'
-                                });
-                            }
-                        });
-                    }
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
                     });
-                });
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: '请选择要删除的企业',
+                        type: 'error'
+                    });
+                }
             }
         }
     };
