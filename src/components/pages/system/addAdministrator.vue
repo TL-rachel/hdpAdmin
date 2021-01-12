@@ -16,7 +16,7 @@
                     <el-input class="w420" v-model="ruleForm.tel" placeholder="请输入手机号"></el-input>
                 </el-form-item>
                 <el-form-item label="角色" prop="roleId">
-                    <el-select class="w420" v-model="ruleForm.roleId" placeholder="请选择角色">
+                    <el-select class="w420" v-model="ruleForm.roleId" placeholder="请选择角色" @change="change()">
                         <el-option v-for="(item,index) in options" :label="item.label" :value="item.value" :key="index"></el-option>
                     </el-select>
                 </el-form-item>
@@ -78,8 +78,8 @@
                 adminRead({id: this.$route.query.id}).then(res => {
                     if (res.data.errno === 0) {
                         // 成功
-                        this.ruleForm = res.data.data;
-                        this.ruleForm.roleId = res.data.data.roleIds[0];
+                        this.ruleForm = JSON.parse(JSON.stringify(res.data.data));
+                        this.ruleForm.roleId = this.ruleForm.roleIds[0];
                     } else {
                         // 失败
                         this.$message({
@@ -92,6 +92,12 @@
             }
         },
         methods: {
+            /**
+             * element select 失效问题 强制渲染
+             */
+            change() {
+              this.$forceUpdate();
+            },
             /**
              * 提交数据
              */

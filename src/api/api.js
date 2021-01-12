@@ -13,8 +13,8 @@ var instance = axios.create({
 instance.interceptors.request.use(config => {
     // 在发送请求之前做些什么
     //判断是否存在token，如果存在将每个页面header都添加token
-    if(sessionStorage.getItem('token')){
-        config.headers.common['X-Dts-Admin-Token']=sessionStorage.getItem('token')
+    if (sessionStorage.getItem('token')) {
+        config.headers.common['X-Dts-Admin-Token']=sessionStorage.getItem('token');
         Cookie.set('JSESSIONID',sessionStorage.getItem('token'));
     }
     return config;

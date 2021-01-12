@@ -57,7 +57,7 @@
                         type: 'error'
                     });
                 }
-            })
+            });
         },
         watch: {
             companyDevice: {

@@ -90,6 +90,7 @@
                         };
                         getLogin(para).then((res) => {
                             if (res.data.errno === 0) {
+                                sessionStorage.setItem('token', res.data.data);
                                 authInfo().then(res1 => {
                                     if (res1.data.errno === 0) {
                                         if (this.param.remember) {
@@ -102,7 +103,6 @@
                                             type: 'success'
                                         });
                                         sessionStorage.setItem('userData', res1.data.data);
-                                        sessionStorage.setItem('token', res.data.data);
                                         this.$router.push('/');
                                     } else {
                                         this.$message({
