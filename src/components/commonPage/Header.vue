@@ -98,4 +98,11 @@ export default {
         width: 120px;
         min-width: 120px;
     }
+    .el-menu--horizontal .el-menu-item:not(.is-disabled):focus, .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
+        background-color: rgba(242, 247, 250, 1);
+        color: rgba(77, 124, 254, 100);
+    }
+    .el-menu--horizontal .el-menu .el-menu-item, .el-menu--horizontal .el-menu .el-submenu__title {
+        color: rgba(83, 89, 114, 100);
+    }
 </style>

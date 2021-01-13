@@ -193,6 +193,11 @@
             getRegionList() {
                 deviceList().then(res => {
                     if (res.data.errno === 0) {
+                        this.$message({
+                            showClose: true,
+                            message: res.data.errmsg,
+                            type: 'success'
+                        });
                         this.equipmentList = res.data.data;
                     } else {
                         this.$message({

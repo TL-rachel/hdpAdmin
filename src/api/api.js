@@ -187,6 +187,36 @@ export const regionList = params => {
     return instance.get(`${base}/admin/hd_region/list`,{params: params});
 };
 
+// 企业管理员列表
+export const qyAdminList = params => {
+    return instance.get(`${base}/admin/qy_admin/list`,{params: params});
+};
+
+// 企业管理员新增
+export const qyAdminCreate = params => {
+    return instance.post(`${base}/admin/qy_admin/create`,params);
+};
+
+// 企业管理员删除一个
+export const qyAdminDelete = params => {
+    return instance.get(`${base}/admin/qy_admin/delete`,{params: params});
+};
+
+// 企业管理员删除多个
+export const qyAdminBatchDelete = params => {
+    return instance.get(`${base}/admin/qy_admin/batch-delete`,{params: params});
+};
+
+// 企业管理员详情
+export const qyAdminRead = params => {
+    return instance.get(`${base}/admin/qy_admin/read`,{params: params});
+};
+
+// 企业管理员编辑
+export const qyAdminUpdate = params => {
+    return instance.post(`${base}/admin/qy_admin/update`,params);
+};
+
 // 新增区域
 export const regionCreate = params => {
     return instance.post(`${base}/admin/hd_region/create`,params);
@@ -287,4 +317,26 @@ export const fatigueList = params => {
 export const updatePassword = params => {
     return instance.post(`${base}/admin/admin/updatePassword`,params);
 };
+
+// 企业下拉框列表
+export const companyAllList = params => {
+    return instance.get(`${base}/admin/hd_company/allList`,{params: params});
+};
+
+// 所有区域
+export const allRegions = params => {
+    return instance.get(`${base}/admin/hd_region/allRegions`,{params: params});
+};
+
+// 所有设备
+export const allDevice = params => {
+    return instance.get(`${base}/admin/hd_device/queryDeviceByRegionId`,{params: params});
+};
+
+// 获取视屏
+export const queryVideos = params => {
+    return instance.get(`${base}/admin/hd_device/queryVideos`,{params: params});
+};
+
+
 /* eslint-disable */

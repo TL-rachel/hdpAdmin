@@ -79,10 +79,10 @@ export default {
                             index: 'liveStreaming',
                             title: '视频直播'
                         },
-                        {
+                       /* {
                             index: 'recordedBroadcast',
                             title: '视频录播'
-                        }
+                        }*/
                     ]
                 },
                 {
@@ -129,8 +129,12 @@ export default {
                             title: '企业列表'
                         },
                         {
-                            index: 'addCompany',
-                            title: '添加企业'
+                            index: 'companyAdministratorList',
+                            title: '企业管理员'
+                        },
+                        {
+                            index: 'companyAuditList',
+                            title: '企业准入审核'
                         }
                     ]
                 }

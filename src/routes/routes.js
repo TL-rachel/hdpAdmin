@@ -52,6 +52,12 @@ import FatigueList from '../components/pages/healthData/fatigueList';
 import EmotionList from '../components/pages/healthData/emotionList';
 // 修改密码
 import ChangePassword from '../components/changePassword';
+// 企业管理员
+import CompanyAdministratorList from '../components/pages/company/companyAdministratorList';
+// 企业管理员添加
+import AddCompanyAdministrator from '../components/pages/company/addCompanyAdministrator';
+// 企业准入审核列表
+import CompanyAuditList from '../components/pages/company/companyAuditList';
 
 let routes = [
     {
@@ -215,6 +221,27 @@ let routes = [
                 component: CompanyList,
                 meta: {
                     title: '企业管理/企业管理列表',
+                }
+            },
+            {
+                path: '/companyAdministratorList',
+                component: CompanyAdministratorList,
+                meta: {
+                    title: '企业管理/企业管理员列表',
+                }
+            },
+            {
+                path: '/companyAuditList',
+                component: CompanyAuditList,
+                meta: {
+                    title: '企业管理/企业准入审核',
+                }
+            },
+            {
+                path: '/addCompanyAdministrator',
+                component: AddCompanyAdministrator,
+                meta: {
+                    title: '企业管理/企业管理员列表/添加企业管理员',
                 }
             },
             {
