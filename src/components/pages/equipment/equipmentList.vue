@@ -43,8 +43,10 @@
                             <router-link :to="{ path:'/addEquipment',query: {id:t.id}}">
                                 <el-button>编辑</el-button>
                             </router-link>
-                            <el-button>直播</el-button>
-                            <el-button>录播</el-button>
+                            <router-link :to="{ path:'/liveStreaming',query: {id:t.id}}">
+                                <el-button>直播</el-button>
+                            </router-link>
+<!--                            <el-button>录播</el-button>-->
                             <el-button @click="regionDelete(t.id,1)">删除</el-button>
                         </div>
                     </div>
