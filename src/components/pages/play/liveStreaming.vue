@@ -25,7 +25,7 @@
         </div>
         <div class="video-play" @mouseover="videoFlag = true" @mouseout="videoFlag = false">
             <video id="videoElement" width="100%" height="100%" class="flvplayer-app"></video>
-            <div class="play-pause-img" v-show="videoFlag && this.videoUrl">
+            <div class="play-pause-img" v-show="videoFlag && this.videoUrl && this.videoUrl.indexOf('.flv') != -1">
                 <span class="play-img" @click="play()" v-show="playFlag"></span>
                 <span class="pause-img" @click="pause()" v-show="!playFlag"></span>
             </div>
@@ -100,7 +100,35 @@
                         type: 'error'
                     });
                 }
-            })
+            });
+            // 判断是否从区域进入
+            if (this.$route.query.obj) {
+                let obj = JSON.parse(this.$route.query.obj);
+                // 获取区域
+                if (obj.companyId) {
+                    this.form.companyId = obj.companyId;
+                    this.getAllRegions();
+                }
+                // 获取设备
+                if (obj.deviceRegionId) {
+                    this.form.regionId = obj.deviceRegionId;
+                    this.getAllDevice();
+                    this.form.deviceId = obj.id;
+                    // 获取视频链接
+                    queryVideos(this.form).then(res => {
+                        if (res.data.errno === 0) {
+                            this.videosList = res.data.data;
+                            this.videoUrl = res.data.data[0].devicePath;
+                        } else {
+                            this.$message({
+                                showClose: true,
+                                message: res.data.errmsg,
+                                type: 'error'
+                            });
+                        }
+                    });
+                }
+            }
         },
         methods: {
             /**
@@ -159,6 +187,10 @@
                     }
                 })
             },
+            /**
+             * 创建实例
+             * @param {String} url 播放链接
+             */
             goPlay(url) {
                 if (flvjs.isSupported()) {
                     let videoElement = document.getElementById('videoElement');
@@ -171,6 +203,9 @@
                     this.flvPlayer.load();
                 }
             },
+            /**
+             * 播放事件
+             */
             play() {
                 this.playFlag = false;
                 if (!this.flvPlayer) {
@@ -178,6 +213,9 @@
                 }
                 this.flvPlayer.play();
             },
+            /**
+             * 暂停事件  同时销毁实例  释放资源
+             */
             pause() {
                 this.playFlag = true;
                 this.flvPlayer.pause();
@@ -187,21 +225,33 @@
                 this.flvPlayer = null;
             }
         },
+        // 监听视频链接变化 及 校验 不是有效视频链接 不创建实例
         watch: {
             videoUrl: {
                 handler(newVal) {
-                    this.goPlay(newVal);
-                    this.play();
+                    if (newVal.indexOf('.flv') !== -1) {
+                        this.goPlay(newVal);
+                        this.play();
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: '视频链接不是有效链接',
+                            type: 'error'
+                        });
+                    }
                 },
                 deep: true
             }
         },
+        // 离开页面销毁实例  释放资源
         destroyed() {
-            this.flvPlayer.pause();
-            this.flvPlayer.unload();
-            this.flvPlayer.detachMediaElement();
-            this.flvPlayer.destroy();
-            this.flvPlayer = null;
+            if (this.videoUrl.indexOf('.flv') !== -1) {
+                this.flvPlayer.pause();
+                this.flvPlayer.unload();
+                this.flvPlayer.detachMediaElement();
+                this.flvPlayer.destroy();
+                this.flvPlayer = null;
+            }
         }
     };
 </script>

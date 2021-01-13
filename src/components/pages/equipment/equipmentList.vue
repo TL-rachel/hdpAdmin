@@ -11,7 +11,7 @@
            </div>
         </div>
         <div class="tag-top" style="margin-top: 20px;">
-            <el-tag v-for="(item,index) in tags" :key="index" :class="item.class" @click="cutTag(item.id)">{{item.name}}</el-tag>
+            <el-tag v-for="(item,index) in tags" :key="index" :class="item.class" @click="cutTag(item.name)">{{item.name}}</el-tag>
         </div>
         <template v-for="(item,index) in equipmentList">
             <div class="equipmentType clearfix" v-if="item.devices.length" :key="index">
@@ -43,7 +43,7 @@
                             <router-link :to="{ path:'/addEquipment',query: {id:t.id}}">
                                 <el-button>编辑</el-button>
                             </router-link>
-                            <router-link :to="{ path:'/liveStreaming',query: {id:t.id}}">
+                            <router-link :to="{ path:'/liveStreaming',query: {obj:JSON.stringify(t)}}">
                                 <el-button>直播</el-button>
                             </router-link>
 <!--                            <el-button>录播</el-button>-->
@@ -64,49 +64,9 @@
         data() {
             return {
                 equipmentName: '', // 查询的设备名称
-                tags: [
-                    {
-                        id: '0',
-                        name: '基础设施设备',
-                        class: 'active'
-                    },
-                    {
-                        id: '1',
-                        name: '病房护理设备',
-                        class: ''
-                    },
-                    {
-                        id: '2',
-                        name: '治疗设备',
-                        class: ''
-                    },
-                    {
-                        id: '3',
-                        name: '激光设备',
-                        class: ''
-                    },
-                    {
-                        id: '4',
-                        name: '急救设备',
-                        class: ''
-                    },
-                    {
-                        id: '5',
-                        name: '诊断设备',
-                        class: ''
-                    },
-                    {
-                        id: '6',
-                        name: '实验设备',
-                        class: ''
-                    },
-                    {
-                        id: '7',
-                        name: '其他设备',
-                        class: ''
-                    }
-                ],
+                tags: [],
                 equipmentList: [], // 设备列表
+                equipmentList1: [], // 设备列表
                 checkId: [], // 用于批量删除的设备id
             };
         },
@@ -116,12 +76,19 @@
         methods: {
             /**
              * 切换标签
-             * @param {String} id 标签id
+             * @param {String} name 标签id
              */
-            cutTag(id) {
+            cutTag(name) {
+                let para = JSON.parse(JSON.stringify(this.equipmentList1));
+                this.equipmentList = [];
+                for (let i = 0; i < para.length; i++) {
+                    if (name === para[i].regionName) {
+                        this.equipmentList.push(para[i]);
+                    }
+                }
                 for (let i = 0; i < this.tags.length; i++) {
                     this.tags[i].class = '';
-                    if (id === this.tags[i].id) {
+                    if (name === this.tags[i].name) {
                         this.tags[i].class = 'active';
                     }
                 }
@@ -198,7 +165,15 @@
                             message: res.data.errmsg,
                             type: 'success'
                         });
-                        this.equipmentList = res.data.data;
+                        this.equipmentList = JSON.parse(JSON.stringify(res.data.data));
+                        this.equipmentList1 = JSON.parse(JSON.stringify(res.data.data));
+                        this.tags = [];
+                        for (let i = 0; i < this.equipmentList.length; i++) {
+                            this.tags.push({
+                                name: this.equipmentList[i].regionName,
+                                class: ''
+                            });
+                        }
                     } else {
                         this.$message({
                             showClose: true,

@@ -1,39 +1,27 @@
 <template>
-    <div class="login-wrap clearfix">
-        <div class="left-login">
-            <div class="ms-login">
-                <div class="ms-title">登录</div>
-                <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
-                    <span class="hint">用户名</span>
-                    <el-form-item prop="username">
-                        <el-input v-model="param.username" class="login-input" placeholder="请输入您的用户名"></el-input>
-                    </el-form-item>
-                    <span class="hint">密码</span>
-                    <el-form-item prop="password">
-                        <el-input class="login-input"
-                                  type="password"
-                                  placeholder="请输入您的密码"
-                                  v-model="param.password"
-                                  @keyup.enter.native="submitForm()"
-                        >
-                        </el-input>
-                    </el-form-item>
-                    <div class="crypto-operation">
-                        <span class="remember-psw"><input type="checkbox" v-model="param.remember">记住密码</span>
-                        <!--<span class="forget-psw">忘记密码找回</span>-->
-                    </div>
-                    <div class="login-btn">
-                        <el-button type="primary" @click="submitForm()">登 &nbsp; 录</el-button>
-                    </div>
-                </el-form>
-                <span class="or">OR</span>
-            </div>
-            <div class="enroll">
-                Don’t have an account? <span>Sign up here</span>
-            </div>
-        </div>
-        <div class="right-img">
-
+    <div class="login-wrap">
+        <div class="ms-login">
+            <h4>智能健康管理系统</h4>
+            <div class="ms-title">登录</div>
+            <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
+                <span class="hint">用户名</span>
+                <el-form-item prop="username">
+                    <el-input v-model="param.username" class="login-input" placeholder="请输入您的用户名"></el-input>
+                </el-form-item>
+                <span class="hint">密码</span>
+                <el-form-item prop="password">
+                    <el-input class="login-input"
+                              type="password"
+                              placeholder="请输入您的密码"
+                              v-model="param.password"
+                              @keyup.enter.native="submitForm()"
+                    >
+                    </el-input>
+                </el-form-item>
+                <div class="login-btn">
+                    <el-button type="primary" @click="submitForm()">登 &nbsp; 录</el-button>
+                </div>
+            </el-form>
         </div>
     </div>
 </template>
@@ -133,8 +121,8 @@
         position: relative;
         width: 100%;
         height: 100%;
+        background-image: url("../common/image/Login-bg1.png");
         background-size: cover;
-        background-repeat: no-repeat;
     }
 
     .ms-title {
@@ -142,6 +130,7 @@
         line-height: 30px;
         font-size: 30px;
         color: #1B1E24;
+        text-align: center;
     }
 
     .left-login {
@@ -163,12 +152,19 @@
     }
 
     .ms-login {
-        width: 360px;
+        width: 555px;
         height: auto;
         margin: 0 auto;
-        position: relative;
+        position: absolute;
         top: 50%;
+        left: 50%;
+        margin-left: -180px;
         margin-top: -250px;
+        display: inline-block;
+        padding: 50px 100px;
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0px 2px 80px 0px rgba(37, 38, 49, 0.05);
         .hint {
             font-size: 14px;
             color: #252631;
@@ -203,16 +199,16 @@
             top: 10px;
             left: 40px;
         }
+        h4 {
+            color: rgba(255, 255, 255, 100);
+            font-size: 20px;
+            position: absolute;
+            top: -60px;
+            width: 100%;
+            text-align: center;
+            margin-left: -100px;
+        }
     }
-
-    .right-img {
-        width: 50%;
-        background-image: url("../common/image/login-bg.png");
-        background-size: cover;
-        height: 100%;
-        float: right;
-    }
-
     .ms-content {
         margin-top: 60px;
         .el-input__inner{
@@ -234,13 +230,15 @@
             line-height: 54px;
             width: 100%;
             padding: 0;
-            background: #4D7CFE;
+            background: #F8FAFB;
             border-radius: 4px;
-            border-color: #4D7CFE;
+            border-color: #F8FAFB;
+            color: #4D7CFE;
         }
         .el-button--primary:hover {
-            background: #4D7CFE;
-            border-color: #4D7CFE;
+            background: #F8FAFB;
+            border-color: #F8FAFB;
+            color: #4D7CFE;
         }
     }
 

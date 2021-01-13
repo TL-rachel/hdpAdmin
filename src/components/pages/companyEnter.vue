@@ -210,7 +210,8 @@
 
 <style lang="less">
     .company-enter {
-        background: #0e90d2;
+        background-image: url("../../common/image/Login-bg1.png");
+        background-size: cover;
         width: 100%;
         height: 100%;
         position: relative;
