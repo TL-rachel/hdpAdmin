@@ -1,7 +1,7 @@
 <template>
     <div class="equipmentList">
         <div class="query">
-            <div><el-input class="query-input user-input" type="text" placeholder="搜索角色名称" @blur="getRoleList(1,10)" v-model="name"></el-input></div>
+            <div><i class="icon-picture icon-picture-grabble icon-position"></i><el-input class="query-input user-input icon-position" type="text" placeholder="搜索角色名称" @blur="getRoleList(1,10)" v-model="name"></el-input></div>
             <div class="query-btn">
                 <el-button @click="openUpdateRole(0,{})"><i class="icon-picture icon-picture-add"></i> 添加</el-button>
                 <!--<el-button><i class="icon-picture icon-picture-to-lead"></i>批量导入</el-button>

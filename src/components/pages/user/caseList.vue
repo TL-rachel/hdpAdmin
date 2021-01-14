@@ -2,31 +2,31 @@
     <div class="equipmentList">
         <div class="user-data clearfix">
             <div class="user-property user-img">
-                <img style="width: 42px;height: 42px;border-radius: 20px" :src="userData.img" alt="">
+                <img style="width: 42px;height: 42px;border-radius: 20px" :src="userData.userImage1" alt="">
             </div>
             <div class="user-property">
-                <div class="user-name">{{userData.name}}</div>
-                <div class="user-custom">{{userData.age}} &nbsp; {{userData.sex}}</div>
+                <div class="user-name">{{userData.userName}}</div>
+                <div class="user-custom">{{userData.userAge}} &nbsp; {{userData.userSex === 0 ? '男' : '女'}}</div>
             </div>
             <div class="user-property">
                 <div class="user-custom">联系电话</div>
-                <div>{{userData.phoneNumber}}</div>
+                <div>{{userData.userPhone}}</div>
             </div>
             <div class="user-property">
                 <div class="user-custom">身高</div>
-                <div>{{userData.stature}} cm</div>
+                <div>{{userData.userHeight}}</div>
             </div>
             <div class="user-property">
                 <div class="user-custom">体重</div>
-                <div>{{userData.weight}} kg</div>
+                <div>{{userData.userWeight}}</div>
             </div>
             <div class="user-property">
                 <div class="user-custom">BMI</div>
-                <div>{{userData.BMI}}</div>
+                <div>{{userData.userBmi}}</div>
             </div>
         </div>
         <div class="table-list">
-            <router-link :to="{ path:'/addCase'}">
+            <router-link :to="{ path:'/addCase',query:{obj: JSON.stringify(userData)}}">
                 <el-button>添加</el-button>
             </router-link>
             <el-button>批量导入</el-button>
@@ -69,12 +69,10 @@
                 <el-table-column prop="operation" label="操作人"></el-table-column>
                 <el-table-column prop="id" label="操作">
                     <template slot-scope="scope">
-                        <router-link :to="{ path:'/caseList'}">
-                            <a>{{scope.row.id}}修改</a>
+                        <router-link :to="{ path:'/caseList',query: {id: scope.row.id,obj: JSON.stringify(userData)}}">
+                            <a>修改</a>
                         </router-link>
-                        <router-link :to="{ path:'/medicalHistory'}">
-                            <a>删除</a>
-                        </router-link>
+                        <a>删除</a>
                     </template>
                 </el-table-column>
             </el-table>
@@ -83,6 +81,8 @@
 </template>
 
 <script>
+    import {medicalRead} from "../../../api/api";
+
     export default {
         name: 'caseList',
         data() {
@@ -229,17 +229,18 @@
                         operation: '张三'
                     }
                 ],
-                userData: {
-                    img: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                    name: '刘亚芳',
-                    age: '56',
-                    sex: '女',
-                    phoneNumber: '15999999999',
-                    stature: '158',
-                    weight: '57',
-                    BMI: '21',
-                }
+                userData: {}
             };
+        },
+        created() {
+            // 获取用户信息
+            if (this.$route.query.obj) {
+                this.userData = JSON.parse(this.$route.query.obj);
+                // 获取用户病史
+                medicalRead(this.userData.id).then(res => {
+                    console.log(res)
+                })
+            }
         },
         methods: {
             handleSelectionChange(val) {

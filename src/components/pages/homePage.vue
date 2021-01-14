@@ -80,7 +80,7 @@
             chartPieIllness() {
                 let xData = [];
                 for (let i = 0; i < this.deviceType.length; i++) {
-                    xData.push({value: this.deviceType[i].proportion * 100,name: !this.deviceType[i].del_flag === 1 ? '无效' : '有效'});
+                    xData.push({value: this.deviceType[i].proportion * 100,name: (this.deviceType[i].del_flag === 0 ? '无效' : '有效')});
                 }
                 this.chartPie = echarts.init(document.getElementById('chartPieIllness'));
                 this.chartPie.setOption(this.pieChart('设备状态分布',['有效','无效'],'设备状态',xData));

@@ -6,7 +6,7 @@
             </el-form-item>
 
             <el-form-item label="设备编码" label-width="110px" prop="deviceCode">
-                <el-input class="w420" :disabled="$route.query.type==1?true:false" v-model="form.deviceCode" placeholder="请输入设备编码"></el-input>
+                <el-input class="w420" @blur="getCheckDevicePath()" :disabled="$route.query.type==1?true:false" v-model="form.deviceCode" placeholder="请输入设备编码"></el-input>
             </el-form-item>
 
             <el-form-item label="设备名称" label-width="110px" prop="deviceName">
@@ -59,9 +59,10 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="链接地址" label-width="110px" style="width: 100%;" prop="devicePath">
-                <el-input class="w420" :disabled="$route.query.type==1?true:false" v-model="form.devicePath" placeholder="请输入网络地址"></el-input>
-                <el-button class="test-btn">点击测试</el-button>
-                <span class="point"><span></span>网络正常</span>
+                <el-input class="w420" disabled v-model="form.devicePath" placeholder="请输入网络地址"></el-input>
+                <el-button @click="getCheckDevicePath()" class="test-btn">点击测试</el-button>
+                <span v-if="deviceFlag === true ? true : false" class="point"><span></span>网络正常</span>
+                <span v-if="deviceFlag === false ? true : false" class="point-abnormality"><span></span>网络不正常，请检查设备编码</span>
             </el-form-item>
 
             <el-form-item label="添加人" v-if="$route.query.id?true:false" label-width="110px" prop="createdUserId">
@@ -87,7 +88,7 @@
 </template>
 
 <script>
-    import {deviceCreate, deviceUpdate, deviceRead, regionAllRegions, hdCompanyList,getCommonValues} from '../../../api/api';
+    import {deviceCreate, deviceUpdate, deviceRead, regionAllRegions, hdCompanyList,getCommonValues,checkDevicePath} from '../../../api/api';
     export default {
         name: 'addEquipment',
         data() {
@@ -105,7 +106,8 @@
                     manufactorPeople: '', // 厂家联系人
                     manufactorPhone: '', // 厂家联系方式
                     companyId: '', // 归属企业
-                    devicePath: '', // 链接地址
+                    devicePath: '', // 直播链接地址
+                    deviceBackPath: '', // 录播链接地址
                     createdUserId: '', // 添加人
                     updatedUserId: '', // 更新人
                     createdTime: '', // 添加时间
@@ -168,6 +170,7 @@
                 companyList: [], // 企业列表
                 manufacturer: [], // 厂商列表
                 equipmentList: [], // 设备类型
+                deviceFlag: '', // 设备正常状态
             };
         },
         created() {
@@ -235,6 +238,32 @@
             }
         },
         methods: {
+            /**
+             * 获取设备 及 检查设备是否正常
+             */
+            getCheckDevicePath() {
+                checkDevicePath({deviceCode: this.form.deviceCode}).then(res => {
+                    if (res.data.errno === 0) {
+                        if (res.data.data.code === 200) {
+                            this.form.devicePath = res.data;
+                            this.deviceFlag = true;
+                        } else {
+                            this.deviceFlag = false;
+                            this.$message({
+                                showClose: true,
+                                message: res.data.data.msg,
+                                type: 'error'
+                            });
+                        }
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: res.data.errmsg,
+                            type: 'error'
+                        });
+                    }
+                });
+            },
             /**
              * 提交数据
              */
@@ -328,6 +357,18 @@
             height: 10px;
             border-radius: 10px;
             background: #0DD90E;
+            margin-right: 4px;
+        }
+        .point-abnormality {
+            color: #D90D0D;
+            margin-left: 24px;
+        }
+        .point-abnormality span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 10px;
+            background: #D90D0D;
             margin-right: 4px;
         }
         .operation-btn {

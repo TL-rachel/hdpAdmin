@@ -217,6 +217,11 @@ export const qyAdminUpdate = params => {
     return instance.post(`${base}/admin/qy_admin/update`,params);
 };
 
+// 设备获取播放地址
+export const checkDevicePath = params => {
+    return instance.get(`${base}/admin/hd_device/checkDevicePath`,{params: params});
+};
+
 // 新增区域
 export const regionCreate = params => {
     return instance.post(`${base}/admin/hd_region/create`,params);
@@ -338,5 +343,24 @@ export const queryVideos = params => {
     return instance.get(`${base}/admin/hd_device/queryVideos`,{params: params});
 };
 
+// 新增用户病史数据
+export const medicalCreate = params => {
+    return instance.post(`${base}/admin/hd_medical/create`,params);
+};
+
+// 新增用户病例数据
+export const medicalCaseCreate = params => {
+    return instance.post(`${base}/admin/hd_medical_case/create`,params);
+};
+
+// 新增用户病例列表
+export const medicalCaseList = params => {
+    return instance.get(`${base}/admin/hd_medical_case/list`,{params: params});
+};
+
+// 用户病史数据详情
+export const medicalRead = params => {
+    return instance.get(`${base}/admin/hd_medical/read/` + params);
+};
 
 /* eslint-disable */

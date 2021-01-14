@@ -30,6 +30,8 @@ import CaseList from '../components/pages/user/caseList';
 import AddCase from '../components/pages/user/addCase';
 // 直播
 import LiveStreaming from '../components/pages/play/liveStreaming';
+// 录播
+import RecordedBroadcast from '../components/pages/play/recordedBroadcast';
 // 管理员
 import AdministratorList from '../components/pages/system/administratorList';
 // 添加管理员
@@ -186,6 +188,13 @@ let routes = [
                 component: LiveStreaming,
                 meta: {
                     title: '设备管理/设备列表/直播',
+                }
+            },
+            {
+                path: '/recordedBroadcast',
+                component: RecordedBroadcast,
+                meta: {
+                    title: '设备管理/设备列表/录播',
                 }
             },
             {

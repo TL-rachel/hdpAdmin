@@ -67,6 +67,7 @@ export default {
         display: inline-block;
         background-size: cover;
         vertical-align: text-top;
+        cursor: pointer;
     }
     .icon-picture.icon-picture-add {
         background-image: url("../../common/image/page_icons_new.png");
@@ -84,9 +85,24 @@ export default {
         background-image: url("../../common/image/page_icons_delete.png");
     }
     .icon-picture.icon-picture-query {
-        background-image: url("../../common/image/page_icons_new.png");
+        background-image: url("../../common/image/query.png");
     }
     .icon-picture.icon-picture-detection {
         background-image: url("../../common/image/page_icons_new_maintain.png");
+    }
+    .icon-picture.icon-picture-grabble {
+        background-image: url("../../common/image/grabble.png");
+    }
+    .icon-picture.icon-position {
+        position: absolute;
+        z-index: 10;
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        top: 23px;
+        left: 24px;
+    }
+    .query .query-input.icon-position .el-input__inner {
+        padding-left: 30px;
     }
 </style>

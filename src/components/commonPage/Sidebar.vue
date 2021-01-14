@@ -79,10 +79,10 @@ export default {
                             index: 'liveStreaming',
                             title: '视频直播'
                         },
-                       /* {
+                        {
                             index: 'recordedBroadcast',
                             title: '视频录播'
-                        }*/
+                        }
                     ]
                 },
                 {

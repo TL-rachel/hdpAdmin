@@ -4,27 +4,31 @@
             <el-form :inline="true" ref="form" :model="form" :rules="rules" class="demo-form-inline query-btn">
                 <span class="choice-camera">选择摄像头</span>
                 <el-form-item label="" prop="companyId">
-                    <el-select :disabled="$route.query.obj?true:false" v-model="form.companyId" placeholder="请选择企业" @change="getAllRegions()">
+                    <el-select v-model="form.companyId" placeholder="请选择企业" @change="getAllRegions()">
                         <el-option v-for="(item,index) in companyList" :key="index" :label="item.companyName" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="" prop="regionId">
-                    <el-select :disabled="$route.query.obj?true:false" v-model="form.regionId" placeholder="请选择区域" @change="getAllDevice()">
+                    <el-select v-model="form.regionId" placeholder="请选择区域" @change="getAllDevice()">
                         <el-option v-for="(item,index) in regionList" :key="index" :label="item.regionName" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="" prop="deviceId">
-                    <el-select :disabled="$route.query.obj?true:false" v-model="form.deviceId" placeholder="请选择设备">
+                    <el-select v-model="form.deviceId" placeholder="请选择设备">
                         <el-option v-for="(item,index) in deviceList" :key="index" :label="item.deviceName" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button v-if="$route.query.obj?false:true" type="primary" @click="getLiveStreaming()"><i class="icon-picture icon-picture-query"></i>查询</el-button>
+                    <el-button type="primary" @click="getLiveStreaming()"><i class="icon-picture icon-picture-query"></i>查询</el-button>
                 </el-form-item>
             </el-form>
         </div>
-        <div class="video-play">
-            <div id="video-container"></div>
+        <div class="video-play" @mouseover="videoFlag = true" @mouseout="videoFlag = false">
+            <video id="videoElement" width="100%" height="100%" class="flvplayer-app"></video>
+            <div class="play-pause-img" v-show="videoFlag && this.videoUrl && this.videoUrl.indexOf('.flv') != -1">
+                <span class="play-img" @click="play()" v-show="playFlag"></span>
+                <span class="pause-img" @click="pause()" v-show="!playFlag"></span>
+            </div>
         </div>
         <div class="clearfix">
             <template v-for="(item,index) in videosList">
@@ -52,7 +56,7 @@
 </template>
 
 <script>
-    import EZUIKit from "ezuikit-js";
+    import flvjs from 'flv.js';
     import {companyAllList,allRegions,allDevice,queryVideos} from '../../../api/api';
     export default {
         name: 'liveStreaming',
@@ -74,11 +78,14 @@
                         { required: true, message: '请选择设备', trigger: 'change' }
                     ],
                 },
+                flvPlayer: null,
                 companyList: {}, // 企业列表
                 regionList: {}, // 区域列表
                 deviceList: {}, // 设备列表
                 videosList: {}, // 设备用户信息
                 videoUrl: '', // 视频播放地址
+                videoFlag: false,
+                playFlag: false,
             };
         },
         created() {
@@ -180,34 +187,71 @@
                     }
                 })
             },
+            /**
+             * 创建实例
+             * @param {String} url 播放链接
+             */
+            goPlay(url) {
+                if (flvjs.isSupported()) {
+                    let videoElement = document.getElementById('videoElement');
+                    this.flvPlayer = flvjs.createPlayer({
+                        url: url,
+                        type: 'flv',
+
+                    });
+                    this.flvPlayer.attachMediaElement(videoElement);
+                    this.flvPlayer.load();
+                }
+            },
+            /**
+             * 播放事件
+             */
+            play() {
+                this.playFlag = false;
+                if (!this.flvPlayer) {
+                    this.goPlay(this.videoUrl);
+                }
+                this.flvPlayer.play();
+            },
+            /**
+             * 暂停事件  同时销毁实例  释放资源
+             */
+            pause() {
+                this.playFlag = true;
+                this.flvPlayer.pause();
+                this.flvPlayer.unload();
+                this.flvPlayer.detachMediaElement();
+                this.flvPlayer.destroy();
+                this.flvPlayer = null;
+            }
         },
-        mounted: () => {
-            let player = new EZUIKit.EZUIKitPlayer({
-                autoplay: true,
-                id: "video-container",
-                accessToken: "at.0ausyc9n4kwj6fkt2o1dtxe509rqwa7v-4jml95kdof-1yd6qo4-bassrnzjb",
-                url: "ezopen://open.ys7.com/E99840550/1.live",
-                template: "standard", // simple - 极简版;standard-标准版;security - 安防版(预览回放);voice-语音版；
-                // 视频上方头部控件
-                // header: ["capturePicture", "save", "zoom"], // 如果templete参数不为simple,该字段将被覆盖
-                // plugin: ['talk'],                       // 加载插件，talk-对讲
-                // 视频下方底部控件
-                // footer: [/*"talk", "broadcast",*/ "hd", "fullScreen"], // 如果template参数不为simple,该字段将被覆盖
-                audio: 1, // 是否默认开启声音 0 - 关闭 1 - 开启
-                openSoundCallBack: data => console.log("开启声音回调", data),
-                closeSoundCallBack: data => console.log("关闭声音回调", data),
-                // startSaveCallBack: data => console.log("开始录像回调", data),
-                // stopSaveCallBack: data => console.log("录像回调", data),
-                // capturePictureCallBack: data => console.log("截图成功回调", data),
-                fullScreenCallBack: data => console.log("全屏回调", data),
-                getOSDTimeCallBack: data => console.log("获取OSDTime回调", data),
-                width: 1150,
-                height: 600
-            });
-            console.log("player",player);
-            // setTimeout(()=>{
-            //   player.stop(); // 方法调用示例，10秒后关闭视频
-            // },10000)
+        // 监听视频链接变化 及 校验 不是有效视频链接 不创建实例
+        watch: {
+            videoUrl: {
+                handler(newVal) {
+                    if (newVal.indexOf('.flv') !== -1) {
+                        this.goPlay(newVal);
+                        this.play();
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: '视频链接不是有效链接',
+                            type: 'error'
+                        });
+                    }
+                },
+                deep: true
+            }
+        },
+        // 离开页面销毁实例  释放资源
+        destroyed() {
+            if (this.videoUrl.indexOf('.flv') !== -1) {
+                this.flvPlayer.pause();
+                this.flvPlayer.unload();
+                this.flvPlayer.detachMediaElement();
+                this.flvPlayer.destroy();
+                this.flvPlayer = null;
+            }
         }
     };
 </script>
@@ -231,7 +275,6 @@
             margin-top: 20px;
             padding: 20px;
             position: relative;
-            text-align: center;
             .play-pause-img {
                 width: 97%;
                 height: 100%;
@@ -269,9 +312,9 @@
             }
         }
         .device-user {
-            width: 580px;
+            width: 600px;
             height: 100px;
-            margin: 20px 10px 20px 0;
+            margin: 20px 20px 20px 0;
             background-color: rgba(255, 255, 255, 1);
             box-shadow: 0px 2px 5px 0px rgba(188, 189, 190, 0.21);
             float: left;
@@ -279,7 +322,7 @@
                 padding: 20px 0;
                 li {
                     float: left;
-                    margin-left: 16px;
+                    margin-left: 20px;
                     img {
                         width: 64px;
                         height: 64px;

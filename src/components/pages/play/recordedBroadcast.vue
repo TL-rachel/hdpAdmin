@@ -18,35 +18,29 @@
                         <el-option v-for="(item,index) in deviceList" :key="index" :label="item.deviceName" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
+                <span class="choice-camera">选择时间</span>
+                <el-form-item label="" prop="deviceId">
+                    <el-date-picker
+                            v-model="form.data1"
+                            type="datetime"
+                            placeholder="选择开始日期时间">
+                    </el-date-picker>
+                </el-form-item>
+                -
+                <el-form-item label="" prop="deviceId">
+                    <el-date-picker
+                            v-model="form.data2"
+                            type="datetime"
+                            placeholder="选择结束日期时间">
+                    </el-date-picker>
+                </el-form-item>
                 <el-form-item>
-                    <el-button v-if="$route.query.obj?false:true" type="primary" @click="getLiveStreaming()"><i class="icon-picture icon-picture-query"></i>查询</el-button>
+                    <el-button style="margin-left: 20px" type="primary" @click="getLiveStreaming()"><i class="icon-picture icon-picture-query"></i>查询</el-button>
                 </el-form-item>
             </el-form>
         </div>
         <div class="video-play">
             <div id="video-container"></div>
-        </div>
-        <div class="clearfix">
-            <template v-for="(item,index) in videosList">
-                <div class="device-user" :key="index">
-                    <div class="user-detail">
-                        <ul class="clearfix">
-                            <li><img :src="item.userImage" alt=""></li>
-                            <li>
-                                <div class="user-name">{{item.userName}}</div>
-                                <div class="user-rests">FaceId：{{item.faceId}}</div>
-                            </li>
-                            <li>
-                                <div class="user-rests1">心率{{item.rate}}</div>
-                                <div class="user-rests">检测时间：{{item.checkTime}}</div>
-                            </li>
-                            <li>
-                                <div class="user-rests1">疲劳度{{item.fatigue == 0?'正常':'疲劳'}}</div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </template>
         </div>
     </div>
 </template>
@@ -55,7 +49,7 @@
     import EZUIKit from "ezuikit-js";
     import {companyAllList,allRegions,allDevice,queryVideos} from '../../../api/api';
     export default {
-        name: 'liveStreaming',
+        name: 'recordedBroadcast',
         data() {
             return {
                 form: {

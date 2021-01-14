@@ -1,7 +1,7 @@
 <template>
     <div class="equipmentList">
         <div class="query">
-            <div><el-input class="query-input user-input" type="text" placeholder="搜索管理员账号" @blur="getCompanyList(1,10)" v-model="userName"></el-input></div>
+            <div><i class="icon-picture icon-picture-grabble icon-position"></i><el-input class="query-input user-input icon-position" type="text" placeholder="搜索管理员账号" @blur="getCompanyList(1,10)" v-model="userName"></el-input></div>
             <div class="query-btn">
                 <router-link :to="{ path:'/addCompany'}">
                     <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>

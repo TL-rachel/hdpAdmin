@@ -2,7 +2,7 @@
     <div class="equipmentList">
         <div class="query">
             <div>
-                <el-input class="query-input" type="text" placeholder="搜索区域" @blur="getRegionList()" v-model="regionName"></el-input>
+                <i class="icon-picture icon-picture-grabble icon-position"></i><el-input class="query-input icon-position" type="text" placeholder="搜索区域" @blur="getRegionList()" v-model="regionName"></el-input>
             </div>
             <div class="query-btn">
                 <router-link :to="{ path:'/addArea'}">

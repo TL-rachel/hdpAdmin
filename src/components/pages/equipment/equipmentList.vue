@@ -1,12 +1,12 @@
 <template>
     <div class="equipmentList">
         <div class="query">
-            <div><el-input class="query-input" type="text" placeholder="搜索设备" v-model="equipmentName"></el-input></div>
+            <div><i class="icon-picture icon-picture-grabble icon-position"></i><el-input class="query-input icon-position" type="text" placeholder="搜索设备" v-model="equipmentName"></el-input></div>
            <div class="query-btn">
                <router-link :to="{ path:'/addEquipment'}">
                    <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
                </router-link>
-               <el-button @click="getRegionList()"><i class="icon-picture icon-picture-detection"></i>批量检测</el-button>
+               <el-button @click="getCheckDevicePath(checkId)"><i class="icon-picture icon-picture-detection"></i>批量检测</el-button>
                <el-button @click="regionDelete(checkId,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
            </div>
         </div>
@@ -46,7 +46,9 @@
                             <router-link :to="{ path:'/liveStreaming',query: {obj:JSON.stringify(t)}}">
                                 <el-button>直播</el-button>
                             </router-link>
-<!--                            <el-button>录播</el-button>-->
+                            <router-link :to="{ path:'/recordedBroadcast',query: {obj:JSON.stringify(t)}}">
+                                <el-button>录播</el-button>
+                            </router-link>
                             <el-button @click="regionDelete(t.id,1)">删除</el-button>
                         </div>
                     </div>
@@ -58,7 +60,7 @@
 </template>
 
 <script>
-    import {deviceList, deviceBatchDelete, deviceDelete} from '../../../api/api';
+    import {deviceList, deviceBatchDelete, deviceDelete,checkDevicePath} from '../../../api/api';
     export default {
         name: 'equipmentList',
         data() {
@@ -74,6 +76,27 @@
             this.getRegionList();
         },
         methods: {
+            getCheckDevicePath(id) {
+                let ids = '';
+                for (let i = 0; i < id.length; i++) {
+                    if (i < id.length - 1) {
+                        ids += id[i] + ',';
+                    } else {
+                        ids += id[i];
+                    }
+                }
+                checkDevicePath({deviceCodes: ids}).then(res => {
+                    if (res.data.errno === 0) {
+                        this.getRegionList();
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: res.data.errmsg,
+                            type: 'error'
+                        });
+                    }
+                });
+            },
             /**
              * 切换标签
              * @param {String} name 标签id

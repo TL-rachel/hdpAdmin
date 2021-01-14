@@ -1,7 +1,7 @@
 <template>
     <div class="equipmentList">
         <div class="query">
-            <div><el-input class="query-input user-input" type="text" placeholder="搜索用户"  @blur="getUserList(1,10)"  v-model="userName"></el-input></div>
+            <div><i class="icon-picture icon-picture-grabble icon-position"></i><el-input class="query-input user-input icon-position" type="text" placeholder="搜索用户"  @blur="getUserList(1,10)"  v-model="userName"></el-input></div>
             <div class="query-btn">
                 <router-link :to="{ path:'/addUser'}">
                     <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
@@ -61,14 +61,10 @@
                                 </router-link>
                                 <a @click="userDelete(scope.row.id,1)">删除</a>
                             </p>
-                            <!--<p>
-                                <router-link :to="{ path:'/caseList'}">
-                                    <a>病例</a>
-                                </router-link>
-                                <router-link :to="{ path:'/medicalHistory'}">
-                                    <a>病史</a>
-                                </router-link>
-                            </p>-->
+                            <p>
+<!--                                <a @click="goMedicalHistory(scope.row)">病例</a>-->
+                                <a @click="goMedicalHistory(scope.row)">病史</a>
+                            </p>
                             <div slot="reference" class="name-wrapper text-overflow-1">
                                 <a>更多操作</a>
                             </div>
@@ -109,6 +105,10 @@
             this.getUserList(1,10);
         },
         methods: {
+            goMedicalHistory(detail) {
+                sessionStorage.setItem('userDetail', JSON.stringify(detail));
+                this.$router.push({path: '/medicalHistory'});
+            },
             /**
              * 用户一键更新faceId
              */
