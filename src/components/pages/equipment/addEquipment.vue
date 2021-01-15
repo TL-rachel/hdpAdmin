@@ -244,8 +244,9 @@
             getCheckDevicePath() {
                 checkDevicePath({deviceCode: this.form.deviceCode}).then(res => {
                     if (res.data.errno === 0) {
-                        if (res.data.data.code === 200) {
-                            this.form.devicePath = res.data;
+                        if (Number(res.data.data.code) === 200) {
+                            this.form.devicePath = res.data.data.path2;
+                            this.form.deviceBackPath = res.data.data.path3;
                             this.deviceFlag = true;
                         } else {
                             this.deviceFlag = false;

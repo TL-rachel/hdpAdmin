@@ -278,6 +278,10 @@ export const getCommonValues = params => {
 export const deviceBatchDelete = params => {
     return instance.get(`${base}/admin/hd_device/batch-delete`,{params: params});
 };
+// 设备批量检测
+export const batchCheckDevicePath = params => {
+    return instance.get(`${base}/admin/hd_device/batchCheckDevicePath`,{params: params});
+};
 // 设备删除
 export const deviceDelete = params => {
     return instance.get(`${base}/admin/hd_device/delete`,{params: params});
@@ -338,9 +342,13 @@ export const allDevice = params => {
     return instance.get(`${base}/admin/hd_device/queryDeviceByRegionId`,{params: params});
 };
 
-// 获取视屏
+// 获取直播视频
 export const queryVideos = params => {
     return instance.get(`${base}/admin/hd_device/queryVideos`,{params: params});
+};
+// 获取录播视频
+export const queryBackVideos = params => {
+    return instance.get(`${base}/admin/hd_device/queryBackVideos`,{params: params});
 };
 
 // 新增用户病史数据

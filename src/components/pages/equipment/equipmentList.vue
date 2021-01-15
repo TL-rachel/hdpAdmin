@@ -6,7 +6,7 @@
                <router-link :to="{ path:'/addEquipment'}">
                    <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
                </router-link>
-               <el-button @click="getCheckDevicePath(checkId)"><i class="icon-picture icon-picture-detection"></i>批量检测</el-button>
+               <el-button @click="getCheckDevicePath()"><i class="icon-picture icon-picture-detection"></i>批量检测</el-button>
                <el-button @click="regionDelete(checkId,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
            </div>
         </div>
@@ -60,32 +60,34 @@
 </template>
 
 <script>
-    import {deviceList, deviceBatchDelete, deviceDelete,checkDevicePath} from '../../../api/api';
+    import {deviceList, deviceBatchDelete, deviceDelete,batchCheckDevicePath} from '../../../api/api';
     export default {
         name: 'equipmentList',
         data() {
             return {
                 equipmentName: '', // 查询的设备名称
                 tags: [],
-                equipmentList: [], // 设备列表
-                equipmentList1: [], // 设备列表
+                equipmentList: [], // 切换后的设备列表
+                equipmentList1: [], // 初始化所有设备列表
                 checkId: [], // 用于批量删除的设备id
+                initAllIds: ''// 用于批量检测的设备id
             };
         },
         created() {
             this.getRegionList();
         },
         methods: {
-            getCheckDevicePath(id) {
-                let ids = '';
+            // 批量检测功能
+            getCheckDevicePath() {
+              /*  let ids = '';
                 for (let i = 0; i < id.length; i++) {
                     if (i < id.length - 1) {
                         ids += id[i] + ',';
                     } else {
                         ids += id[i];
                     }
-                }
-                checkDevicePath({deviceCodes: ids}).then(res => {
+                }*/
+                batchCheckDevicePath().then(res => {
                     if (res.data.errno === 0) {
                         this.getRegionList();
                     } else {
@@ -178,7 +180,7 @@
                 });
             },
             /**
-             * 查询区域
+             * 初始化查询设备列表
              */
             getRegionList() {
                 deviceList().then(res => {
@@ -189,6 +191,7 @@
                             type: 'success'
                         });
                         this.equipmentList = JSON.parse(JSON.stringify(res.data.data));
+                        // 初始化所有的
                         this.equipmentList1 = JSON.parse(JSON.stringify(res.data.data));
                         this.tags = [];
                         for (let i = 0; i < this.equipmentList.length; i++) {
@@ -196,6 +199,15 @@
                                 name: this.equipmentList[i].regionName,
                                 class: ''
                             });
+                           /* for(let j){
+
+                            }*/
+                           /* if (i < id.length - 1) {
+                                ids += id[i] + ',';
+                            } else {
+                                ids += id[i];
+                            }*/
+                            // this.initAllIds += '';
                         }
                     } else {
                         this.$message({
