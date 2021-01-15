@@ -1,29 +1,21 @@
 <template>
     <div class='live-video'>
         <div class="query">
-            <el-form :inline="true" ref="recordForm" :model="recordForm" :rules="recordRules"
-                     class="demo-form-inline query-btn">
+            <el-form :inline="true" ref="recordForm" :model="recordForm" :rules="recordRules" class="demo-form-inline query-btn">
                 <span class="choice-camera">选择摄像头</span>
                 <el-form-item label="" prop="companyId">
-                    <el-select :disabled="$route.query.obj?true:false" v-model="recordForm.companyId"
-                               placeholder="请选择企业"
-                               @change="getAllRegions()">
-                        <el-option v-for="(item,index) in companyList" :key="index" :label="item.companyName"
-                                   :value="item.id"></el-option>
+                    <el-select :disabled="$route.query.obj?true:false" v-model="recordForm.companyId" placeholder="请选择企业" @change="getAllRegions()">
+                        <el-option v-for="(item,index) in companyList" :key="index" :label="item.companyName" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="" prop="regionId">
-                    <el-select :disabled="$route.query.obj?true:false" v-model="recordForm.regionId" placeholder="请选择区域"
-                               @change="getAllDevice()">
-                        <el-option v-for="(item,index) in regionList" :key="index" :label="item.regionName"
-                                   :value="item.id"></el-option>
+                    <el-select :disabled="$route.query.obj?true:false" v-model="recordForm.regionId" placeholder="请选择区域" @change="getAllDevice()">
+                        <el-option v-for="(item,index) in regionList" :key="index" :label="item.regionName" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="" prop="deviceId">
-                    <el-select :disabled="$route.query.obj?true:false" v-model="recordForm.deviceId"
-                               placeholder="请选择设备">
-                        <el-option v-for="(item,index) in deviceList" :key="index" :label="item.deviceName"
-                                   :value="item.id"></el-option>
+                    <el-select :disabled="$route.query.obj?true:false" v-model="recordForm.deviceId" placeholder="请选择设备">
+                        <el-option v-for="(item,index) in deviceList" :key="index" :label="item.deviceName" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <span class="choice-camera">选择时间</span>
@@ -43,9 +35,7 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item>
-                    <el-button style="margin-left: 20px" type="primary" @click="getLiveStreaming()"><i
-                            class="icon-picture icon-picture-query"></i>查询
-                    </el-button>
+                    <el-button v-if="$route.query.obj?false:true" style="margin-left: 20px" type="primary" @click="getLiveStreaming()"><i class="icon-picture icon-picture-query"></i>查询</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -172,7 +162,7 @@
                 allRegions({companyId: this.recordForm.companyId}).then(res => {
                     if (res.data.errno === 0) {
                         this.regionList = res.data.data;
-                        if (type === 1) {
+                        if (type === 1 && this.regionList.length > 0) {
                             this.recordForm.regionId = this.regionList[0].id;
                             this.getAllDevice(1);
                         }
@@ -194,7 +184,7 @@
                 allDevice({regionId: this.recordForm.regionId}).then(res => {
                     if (res.data.errno === 0) {
                         this.deviceList = res.data.data;
-                        if (type === 1) {
+                        if (type === 1 && this.deviceList.length > 0) {
                             this.recordForm.deviceId = this.deviceList[0].id;
                         }
                     } else {
@@ -220,6 +210,7 @@
                         };
                         // para.beginTime = '20210115100000';
                         // para.endTime = '20210115120000';
+                        /* eslint-disable */
                         queryBackVideos(para).then(res => {
                             if (res.data.errno === 0) {
                                 let player = new EZUIKit.EZUIKitPlayer({
@@ -256,6 +247,7 @@
                                 });
                             }
                         });
+                        /* eslint-disable */
                     }
                 });
             },
@@ -278,7 +270,6 @@
                         this.recordForm.deviceId = obj.id;
                        /* this.recordForm.beginTime = this.recordForm.begin.replace(/:/g, '').replace(/\s+/g, '');
                         this.recordForm.endTime = this.recordForm.end.replace(/:/g, '').replace(/\s+/g, '');*/
-                        this.recordForm.deviceId = obj.id;
                         // 获取视频链接
                         this.getLiveStreaming();
                         /*queryBackVideos(this.recordForm).then(res => {

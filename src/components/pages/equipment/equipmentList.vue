@@ -79,14 +79,6 @@
         methods: {
             // 批量检测功能
             getCheckDevicePath() {
-              /*  let ids = '';
-                for (let i = 0; i < id.length; i++) {
-                    if (i < id.length - 1) {
-                        ids += id[i] + ',';
-                    } else {
-                        ids += id[i];
-                    }
-                }*/
                 batchCheckDevicePath().then(res => {
                     if (res.data.errno === 0) {
                         this.getRegionList();
@@ -199,15 +191,6 @@
                                 name: this.equipmentList[i].regionName,
                                 class: ''
                             });
-                           /* for(let j){
-
-                            }*/
-                           /* if (i < id.length - 1) {
-                                ids += id[i] + ',';
-                            } else {
-                                ids += id[i];
-                            }*/
-                            // this.initAllIds += '';
                         }
                     } else {
                         this.$message({
