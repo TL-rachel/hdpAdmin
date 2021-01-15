@@ -129,7 +129,7 @@
 </template>
 
 <script>
-    import {medicalCaseCreate, medicalRead} from '../../../api/api';
+    import {medicalCaseCreate, userRead,medicalCaseUpdate,medicalCaseRead} from '../../../api/api';
     export default {
         name: 'addCase',
         data() {
@@ -159,12 +159,33 @@
         },
         created() {
             // 获取用户信息
-            if (this.$route.query.obj) {
-                this.userData = JSON.parse(this.$route.query.obj);
-                // 获取用户病史
-                medicalRead(this.userData.id).then(res => {
-                    console.log(res)
-                })
+            if (this.$route.query.userId) {
+                userRead(this.$route.query.userId).then(res => {
+                    if (res.data.errno === 0) {
+                        this.userData = res.data.data;
+                        this.form.userId = this.$route.query.userId;
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: res.data.errmsg,
+                            type: 'error'
+                        });
+                    }
+                });
+            }
+            if (this.$route.query.id) {
+                medicalCaseRead(this.$route.query.id).then(res => {
+                    if (res.data.errno === 0) {
+                        this.form = res.data.data;
+                        this.form.id = this.$route.query.id;
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: res.data.errmsg,
+                            type: 'error'
+                        });
+                    }
+                });
             }
         },
         methods: {
@@ -220,22 +241,41 @@
              * 提交数据
              */
             submitForm() {
-                medicalCaseCreate(this.form).then(res => {
-                    if (res.data.errno === 0) {
-                        this.$message({
-                            showClose: true,
-                            message: '修改成功',
-                            type: 'success'
-                        });
-                        this.$router.back(-1);
-                    } else {
-                        this.$message({
-                            showClose: true,
-                            message: res.data.errmsg,
-                            type: 'error'
-                        });
-                    }
-                });
+                if (this.$route.query.id) {
+                    medicalCaseUpdate(this.form).then(res => {
+                        if (res.data.errno === 0) {
+                            this.$message({
+                                showClose: true,
+                                message: '修改成功',
+                                type: 'success'
+                            });
+                            this.$router.back(-1);
+                        } else {
+                            this.$message({
+                                showClose: true,
+                                message: res.data.errmsg,
+                                type: 'error'
+                            });
+                        }
+                    })
+                } else {
+                    medicalCaseCreate(this.form).then(res => {
+                        if (res.data.errno === 0) {
+                            this.$message({
+                                showClose: true,
+                                message: '添加成功',
+                                type: 'success'
+                            });
+                            this.$router.back(-1);
+                        } else {
+                            this.$message({
+                                showClose: true,
+                                message: res.data.errmsg,
+                                type: 'error'
+                            });
+                        }
+                    });
+                }
             },
             handleHistory() {
                 this.$router.back(-1);

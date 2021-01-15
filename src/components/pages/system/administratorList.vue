@@ -13,6 +13,7 @@
             <el-table
                     ref="multipleTable"
                     :data="tableData"
+                    v-loading="loading"
                     tooltip-effect="dark"
                     style="width: 100%"
                     @selection-change="handleSelectionChange">
@@ -59,6 +60,7 @@
                 multipleSelection: '',
                 total: 0, // 条数
                 page: 1, // 页码
+                loading: false,
             };
         },
         created() {
@@ -98,7 +100,9 @@
                     page: currentPage,
                     username: this.userName
                 };
+                this.loading = true;
                 adminList(para).then(res => {
+                    this.loading = false;
                     if (res.data.errno === 0) {
                         this.tableData = res.data.data.items;
                         this.total = res.data.data.total;

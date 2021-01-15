@@ -15,6 +15,7 @@
                     ref="multipleTable"
                     :data="tableData"
                     tooltip-effect="dark"
+                    v-loading="loading"
                     style="width: 100%"
                     @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55"></el-table-column>
@@ -113,6 +114,7 @@
                 page: 1, // 页码
                 titleName: '添加角色', // 弹框title
                 roleId: '', // 授权使用角色id
+                loading: false,
             };
         },
         created() {
@@ -325,7 +327,9 @@
                     page: currentPage,
                     name: this.name
                 };
+                this.loading = true;
                 roleList(para).then(res => {
+                    this.loading = false;
                     if (res.data.errno === 0) {
                         this.tableData = res.data.data.items;
                         this.total = res.data.data.total;

@@ -26,225 +26,213 @@
             </div>
         </div>
         <div class="table-list">
-            <router-link :to="{ path:'/addCase',query:{obj: JSON.stringify(userData)}}">
-                <el-button>添加</el-button>
+            <router-link :to="{ path:'/addCase',query:{userId: $route.query.id}}">
+                <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
             </router-link>
-            <el-button>批量导入</el-button>
+            <el-button @click="medicalDelete(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             <el-table
                     ref="multipleTable"
                     :data="tableData"
                     tooltip-effect="dark"
+                    v-loading="loading"
                     border
                     style="width: 100%"
                     @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55"></el-table-column>
-                <el-table-column prop="examinationTime" label="体检时间"> </el-table-column>
+                <el-table-column prop="inspectTime" label="体检时间"> </el-table-column>
                 <el-table-column prop="heartRate" label="心率"></el-table-column>
-                <el-table-column prop="bloodPressure" label="血压"></el-table-column>
+                <el-table-column prop="bloodComfort" label="血压">
+                    <template slot-scope="scope">
+                        <span>{{scope.row.bloodComfort}}/{{scope.row.bloodContract}}</span>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="bloodOxygen" label="血氧"></el-table-column>
-                <el-table-column prop="difference" label="异常症状描述"></el-table-column>
-                <el-table-column prop="diagnosis" label="医生诊断"></el-table-column>
-                <el-table-column prop="case" label="病例报告">
+                <el-table-column prop="abnormalSymptomDesc" label="异常症状描述"></el-table-column>
+                <el-table-column prop="doctorDiagnosis" label="医生诊断"></el-table-column>
+                <el-table-column prop="medicalRecordAttachment" label="病例报告">
                     <template slot-scope="scope">
-                        <a :href="scope.row.case" target="_blank">{{scope.row.caseName}}</a>
+                        <a v-if="scope.row.medicalRecordAttachment" :href="scope.row.medicalRecordAttachment" target="_blank">病例报告</a>
+                        <span v-else>——</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="examinationReport" label="体检报告">
+                <el-table-column prop="medicalReport" label="体检报告">
                     <template slot-scope="scope">
-                        <a :href="scope.row.examinationReport" target="_blank">{{scope.row.examinationReportName}}</a>
+                        <a v-if="scope.row.medicalReport" :href="scope.row.medicalReport" target="_blank">体检报告</a>
+                        <span v-else>——</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="ECGData" label="心电数据">
+                <el-table-column prop="electrocardiogramData" label="心电数据">
                     <template slot-scope="scope">
-                        <a :href="scope.row.ECGData" target="_blank">{{scope.row.ECGDataName}}</a>
+                        <a v-if="scope.row.electrocardiogramData" :href="scope.row.electrocardiogramData" target="_blank">心电数据</a>
+                        <span v-else>——</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="ECGPicture" label="心电图">
+                <el-table-column prop="electrocardiogram" label="心电图">
                     <template slot-scope="scope">
-                        <a :href="scope.row.ECGPicture" target="_blank">{{scope.row.ECGPictureName}}</a>
+                        <a v-if="scope.row.electrocardiogram" :href="scope.row.electrocardiogram" target="_blank">心电图</a>
+                        <span v-else>——</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="measurementTime" label="测量时间"></el-table-column>
-                <el-table-column prop="equipmentNo" label="设备编号"></el-table-column>
+                <el-table-column prop="measuringTime" label="测量时间"></el-table-column>
+                <el-table-column prop="deviceCode" label="设备编号"></el-table-column>
                 <el-table-column prop="operation" label="操作人"></el-table-column>
-                <el-table-column prop="id" label="操作">
+                <el-table-column prop="id" label="操作" width="120px">
                     <template slot-scope="scope">
-                        <router-link :to="{ path:'/caseList',query: {id: scope.row.id,obj: JSON.stringify(userData)}}">
-                            <a>修改</a>
+                        <router-link :to="{ path:'/addCase',query: {userId: userData.id,id: scope.row.id}}">
+                            <a class="operation-table">修改</a>
                         </router-link>
-                        <a>删除</a>
+                        <a @click="medicalDelete(scope.row.id,1)" class="operation-table">删除</a>
                     </template>
                 </el-table-column>
-            </el-table>
+            </el-table><!--工具条-->
+            <!--引入页码 start-->
+            <el-col :span="24" class="toolbar" style="text-align: center;">
+                <div style="display:inline-block;text-align: center;">
+                    <el-button size="mini" type="primary" class="toolbar-go-btn">Go
+                    </el-button>
+                    <el-pagination layout="total,  prev, pager, next, jumper" @current-change="handleCurrentChange"
+                                   :page-size="10" :total="total" style="float:right;">
+                    </el-pagination>
+                </div>
+            </el-col>
         </div>
     </div>
 </template>
 
 <script>
-    import {medicalRead} from "../../../api/api";
-
+    import {userRead, medicalCaseList, medicalCaseDelete,medicalCaseBatchDelete} from '../../../api/api';
     export default {
         name: 'caseList',
         data() {
             return {
-                tableData: [
-                    {
-                        id: '1',
-                        examinationTime: '2020-11-11',
-                        heartRate: '105',
-                        bloodPressure: '100/96',
-                        bloodOxygen: '0',
-                        difference: '身体正常',
-                        diagnosis: '',
-                        case: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        caseName: '病例一',
-                        examinationReport: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        examinationReportName: '体检报告一',
-                        ECGData: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        ECGDataName: '心电数据一',
-                        ECGPicture: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        ECGPictureName: '心电图',
-                        measurementTime: '2020-11-15',
-                        equipmentNo: 'DK9372782',
-                        operation: '张三'
-                    },
-                    {
-                        id: '1',
-                        examinationTime: '2020-11-11',
-                        heartRate: '105',
-                        bloodPressure: '100/96',
-                        bloodOxygen: '0',
-                        difference: '身体正常',
-                        diagnosis: '',
-                        case: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        caseName: '病例一',
-                        examinationReport: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        examinationReportName: '体检报告一',
-                        ECGData: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        ECGDataName: '心电数据一',
-                        ECGPicture: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        ECGPictureName: '心电图',
-                        measurementTime: '2020-11-15',
-                        equipmentNo: 'DK9372782',
-                        operation: '张三'
-                    },
-                    {
-                        id: '1',
-                        examinationTime: '2020-11-11',
-                        heartRate: '105',
-                        bloodPressure: '100/96',
-                        bloodOxygen: '0',
-                        difference: '身体正常',
-                        diagnosis: '',
-                        case: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        caseName: '病例一',
-                        examinationReport: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        examinationReportName: '体检报告一',
-                        ECGData: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        ECGDataName: '心电数据一',
-                        ECGPicture: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        ECGPictureName: '心电图',
-                        measurementTime: '2020-11-15',
-                        equipmentNo: 'DK9372782',
-                        operation: '张三'
-                    },
-                    {
-                        id: '1',
-                        examinationTime: '2020-11-11',
-                        heartRate: '105',
-                        bloodPressure: '100/96',
-                        bloodOxygen: '0',
-                        difference: '身体正常',
-                        diagnosis: '',
-                        case: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        caseName: '病例一',
-                        examinationReport: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        examinationReportName: '体检报告一',
-                        ECGData: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        ECGDataName: '心电数据一',
-                        ECGPicture: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        ECGPictureName: '心电图',
-                        measurementTime: '2020-11-15',
-                        equipmentNo: 'DK9372782',
-                        operation: '张三'
-                    },
-                    {
-                        id: '1',
-                        examinationTime: '2020-11-11',
-                        heartRate: '105',
-                        bloodPressure: '100/96',
-                        bloodOxygen: '0',
-                        difference: '身体正常',
-                        diagnosis: '',
-                        case: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        caseName: '病例一',
-                        examinationReport: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        examinationReportName: '体检报告一',
-                        ECGData: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        ECGDataName: '心电数据一',
-                        ECGPicture: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        ECGPictureName: '心电图',
-                        measurementTime: '2020-11-15',
-                        equipmentNo: 'DK9372782',
-                        operation: '张三'
-                    },
-                    {
-                        id: '1',
-                        examinationTime: '2020-11-11',
-                        heartRate: '105',
-                        bloodPressure: '100/96',
-                        bloodOxygen: '0',
-                        difference: '身体正常',
-                        diagnosis: '',
-                        case: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        caseName: '病例一',
-                        examinationReport: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        examinationReportName: '体检报告一',
-                        ECGData: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        ECGDataName: '心电数据一',
-                        ECGPicture: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        ECGPictureName: '心电图',
-                        measurementTime: '2020-11-15',
-                        equipmentNo: 'DK9372782',
-                        operation: '张三'
-                    },
-                    {
-                        id: '1',
-                        examinationTime: '2020-11-11',
-                        heartRate: '105',
-                        bloodPressure: '100/96',
-                        bloodOxygen: '0',
-                        difference: '身体正常',
-                        diagnosis: '',
-                        case: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        caseName: '病例一',
-                        examinationReport: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        examinationReportName: '体检报告一',
-                        ECGData: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        ECGDataName: '心电数据一',
-                        ECGPicture: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608201676388&di=4e25e8a710762b98ff7d3a9b9f2a7807&imgtype=0&src=http%3A%2F%2Ffa1.cnlinfo.net%2Fup%2Fproduct1%2F17031114174615223356.jpg',
-                        ECGPictureName: '心电图',
-                        measurementTime: '2020-11-15',
-                        equipmentNo: 'DK9372782',
-                        operation: '张三'
-                    }
-                ],
-                userData: {}
+                tableData: [],
+                userData: {},
+                multipleSelection: '',
+                total: 0, // 条数
+                page: 1, // 页码
+                loading: false,
             };
         },
         created() {
             // 获取用户信息
-            if (this.$route.query.obj) {
-                this.userData = JSON.parse(this.$route.query.obj);
-                // 获取用户病史
-                medicalRead(this.userData.id).then(res => {
-                    console.log(res)
-                })
+            if (this.$route.query.id) {
+                userRead(this.$route.query.id).then(res => {
+                    if (res.data.errno === 0) {
+                        this.userData = res.data.data;
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: res.data.errmsg,
+                            type: 'error'
+                        });
+                    }
+                });
+                this.getMedicalCaseList(1,10);
             }
         },
         methods: {
+            medicalDelete(id,type) {
+                if (id) {
+                    this.$confirm('此操作将永久删除用户, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        if (type === 1) {
+                            medicalCaseDelete(id).then(res => {
+                                if (res.data.errno === 0) {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'success'
+                                    });
+                                    this.getMedicalCaseList(1, 10);
+                                } else {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
+                            });
+                        } else {
+                            medicalCaseBatchDelete({ids: id}).then(res => {
+                                if (res.data.errno === 0) {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'success'
+                                    });
+                                    this.getMedicalCaseList(1, 10);
+                                } else {
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
+                            });
+                        }
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: '请选择要删除的用户',
+                        type: 'error'
+                    });
+                }
+            },
+            /**
+             * 查询病例列表
+             * @param {number} currentPage 当前页
+             * @param {number} pageSize 一页多少条
+             */
+            getMedicalCaseList(currentPage, pageSize) {
+                let para = {
+                    userId: this.$route.query.id,
+                    limit: pageSize,
+                    order: 'desc',
+                    sort: 'created_time',
+                    page: currentPage
+                };
+                this.loading = true;
+                medicalCaseList(para).then(res => {
+                    this.loading = false;
+                    if (res.data.errno === 0) {
+                        this.tableData = res.data.data.items;
+                        this.total = res.data.data.total;
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: res.data.errmsg,
+                            type: 'error'
+                        });
+                    }
+                });
+            },
+            // 修改页数
+            handleCurrentChange(val) {
+                this.page = val;
+                this.getUserList((typeof val === 'number' ? val : 1), 10);
+            },
+            /**
+             * 获取选中事件 获取选中id
+             * @param {Object} val 值
+             */
             handleSelectionChange(val) {
-                this.multipleSelection = val;
+                this.multipleSelection = '';
+                for (let i = 0; i < val.length; i++) {
+                    if (i < val.length - 1) {
+                        this.multipleSelection += val[i].id + ',';
+                    } else {
+                        this.multipleSelection += val[i].id;
+                    }
+                }
             }
         }
     };

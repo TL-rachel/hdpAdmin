@@ -27,31 +27,31 @@
         </div>
         <span class="update-case">病史数据</span>
         <div>
-            <el-form ref="form" class="clearfix medical-history" :model="form" label-width="80px">
+            <el-form class="clearfix medical-history" :model="medicalForm" label-width="80px">
                 <el-form-item label="药物过敏史" class="whole100" label-width="150px">
-                    <el-checkbox-group v-model="form.medicalAllergy">
+                    <el-checkbox-group v-model="medicalForm.medicalAllergy">
                         <el-checkbox label="青霉素" name="type">青霉素</el-checkbox>
                         <el-checkbox label="磺胺" name="type">磺胺</el-checkbox>
                         <el-checkbox label="链霉素" name="type">链霉素</el-checkbox>
                         <el-checkbox label="其他" name="type">其他</el-checkbox>
-                        <el-input class="message" v-model="form.irritabilityMessage"
-                                  :disabled="form.medicalAllergy.indexOf('其他') == -1" placeholder="请输入"></el-input>
+                        <el-input class="message" v-model="medicalForm.irritabilityMessage"
+                                  :disabled="medicalForm.medicalAllergy.indexOf('其他') == -1" placeholder="请输入"></el-input>
                     </el-checkbox-group>
                 </el-form-item>
 
                 <el-form-item label="暴露史" class="whole100" label-width="150px">
-                    <el-checkbox-group v-model="form.medicalExpose">
+                    <el-checkbox-group v-model="medicalForm.medicalExpose">
                         <el-checkbox label="化学品" name="type">化学品</el-checkbox>
                         <el-checkbox label="毒物" name="type">毒物</el-checkbox>
                         <el-checkbox label="射线" name="type">射线</el-checkbox>
                         <el-checkbox label="其他" name="type">其他</el-checkbox>
-                        <el-input class="message" v-model="form.exposureMessage"
-                                  :disabled="form.medicalExpose.indexOf('其他') == -1" placeholder="请输入"></el-input>
+                        <el-input class="message" v-model="medicalForm.exposureMessage"
+                                  :disabled="medicalForm.medicalExpose.indexOf('其他') == -1" placeholder="请输入"></el-input>
                     </el-checkbox-group>
                 </el-form-item>
 
                 <el-form-item label="是否佩戴起搏器" class="whole100" label-width="150px">
-                    <el-radio-group v-model="form.isPacemaker">
+                    <el-radio-group v-model="medicalForm.isPacemaker">
                         <el-radio label="0">否</el-radio>
                         <el-radio label="1">是</el-radio>
                     </el-radio-group>
@@ -60,7 +60,7 @@
                 <el-form-item label="既往史" class="whole100 previous" label-width="150px">
                     <div class="previous-history">
                         <span>疾病</span>
-                        <el-checkbox-group v-model="form.pastDisease">
+                        <el-checkbox-group v-model="medicalForm.pastDisease">
                             <el-checkbox label="高血压" name="type">高血压</el-checkbox>
                             <el-checkbox label="糖尿病" name="type">糖尿病</el-checkbox>
                             <el-checkbox label="冠心病" name="type">冠心病</el-checkbox>
@@ -72,37 +72,37 @@
                             <el-checkbox label="重性精神疾病" name="type">重性精神疾病</el-checkbox>
                             <el-checkbox label="先天畸形" name="type">先天畸形</el-checkbox>
                             <el-checkbox label="恶性肿瘤" name="type">恶性肿瘤</el-checkbox>
-                            <el-input class="message w160" style="margin-right: 20px" v-model="form.previousHistoryMessage1"
-                                      :disabled="form.pastDisease.indexOf('恶性肿瘤') == -1" placeholder="请输入"></el-input>
+                            <el-input class="message w160" style="margin-right: 20px" v-model="medicalForm.previousHistoryMessage1"
+                                      :disabled="medicalForm.pastDisease.indexOf('恶性肿瘤') == -1" placeholder="请输入"></el-input>
                             <el-checkbox label="职业病" name="type">职业病</el-checkbox>
-                            <el-input class="message w160" style="margin-right: 20px" v-model="form.previousHistoryMessage2"
-                                      :disabled="form.pastDisease.indexOf('职业病') == -1" placeholder="请输入"></el-input>
+                            <el-input class="message w160" style="margin-right: 20px" v-model="medicalForm.previousHistoryMessage2"
+                                      :disabled="medicalForm.pastDisease.indexOf('职业病') == -1" placeholder="请输入"></el-input>
                             <el-checkbox label="其他" name="type">其他</el-checkbox>
-                            <el-input class="message w160" v-model="form.previousHistoryMessage3"
-                                      :disabled="form.pastDisease.indexOf('其他') == -1" placeholder="请输入"></el-input>
+                            <el-input class="message w160" v-model="medicalForm.previousHistoryMessage3"
+                                      :disabled="medicalForm.pastDisease.indexOf('其他') == -1" placeholder="请输入"></el-input>
                         </el-checkbox-group>
                     </div>
                     <div class="previous-history">
                         <div>手术</div>
-                        <el-radio-group v-model="form.operation">
+                        <el-radio-group v-model="medicalForm.operation">
                             <el-radio :label="1">有</el-radio>
                             <el-radio :label="0">无</el-radio>
                         </el-radio-group>
-                        <template v-for="(item,index) in form.dataOperation">
+                        <template v-for="(item,index) in medicalForm.dataOperation">
                             <el-form-item class="small-item" :key="index + '1'" label="手术名">
-                                <el-input :disabled="form.operation === 1 ? false : true" placeholder="请输入" class="w160" v-model="item.name"></el-input>
+                                <el-input :disabled="medicalForm.operation === 1 ? false : true" placeholder="请输入" class="w160" v-model="item.name"></el-input>
                             </el-form-item>
                             <el-form-item class="small-item" :key="index + '2'" label="手术时间">
-                                <el-date-picker :disabled="form.operation === 1 ? false : true" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" v-model="item.date" style="width: 160px;"></el-date-picker>
-                                <i @click="form.operation === 1 ? deletePastSurgery(index) : ''" class="icon-picture icon-picture-delete"></i>
+                                <el-date-picker :disabled="medicalForm.operation === 1 ? false : true" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" v-model="item.date" style="width: 160px;"></el-date-picker>
+                                <i @click="medicalForm.operation === 1 ? deletePastSurgery(index) : ''" class="icon-picture icon-picture-delete"></i>
                             </el-form-item>
                         </template>
-                        <button class="increased" :disabled="form.operation === 1 ? false : true" @click="addOperation1()">新增</button>
+                        <el-button type="button" class="increased" :disabled="medicalForm.operation === 1 ? false : true" @click="addHistoryData()">新增</el-button>
                     </div>
                 </el-form-item>
 
                 <el-form-item label="家族史" class="whole100" label-width="150px">
-                    <el-checkbox-group v-model="form.familyHis">
+                    <el-checkbox-group v-model="medicalForm.familyHis">
                         <el-checkbox label="高血压" name="type">高血压</el-checkbox>
                         <el-checkbox label="糖尿病" name="type">糖尿病</el-checkbox>
                         <el-checkbox label="冠心病" name="type">冠心病</el-checkbox>
@@ -114,37 +114,37 @@
                         <el-checkbox label="重性精神疾病" name="type">重性精神疾病</el-checkbox>
                         <el-checkbox label="先天畸形" name="type">先天畸形</el-checkbox>
                         <el-checkbox label="恶性肿瘤" name="type">恶性肿瘤</el-checkbox>
-                        <el-input class="message w160" style="margin-right: 20px" v-model="form.familyMessage1"
-                                  :disabled="form.familyHis.indexOf('恶性肿瘤') == -1" placeholder="请输入"></el-input>
+                        <el-input class="message w160" style="margin-right: 20px" v-model="medicalForm.familyMessage1"
+                                  :disabled="medicalForm.familyHis.indexOf('恶性肿瘤') == -1" placeholder="请输入"></el-input>
                         <el-checkbox label="其他" name="type">其他</el-checkbox>
-                        <el-input class="message w160" v-model="form.familyMessage2"
-                                  :disabled="form.familyHis.indexOf('其他') == -1" placeholder="请输入"></el-input>
+                        <el-input class="message w160" v-model="medicalForm.familyMessage2"
+                                  :disabled="medicalForm.familyHis.indexOf('其他') == -1" placeholder="请输入"></el-input>
                     </el-checkbox-group>
                 </el-form-item>
 
                 <el-form-item label="遗传病史" class="whole100" label-width="150px">
-                    <el-radio-group v-model="form.inheritance">
+                    <el-radio-group v-model="medicalForm.inheritance">
                         <el-radio :label="0">无</el-radio>
-                        <el-radio :abel="1">有</el-radio>
-                        <el-input class="message w160" v-model="form.geneticDiseaseMessage"
-                                  :disabled="form.inheritance === 1?false:true" placeholder="请输入"></el-input>
+                        <el-radio :label="1">有</el-radio>
                     </el-radio-group>
+                    <el-input style="margin-left: 20px" class="message w160" v-model="medicalForm.geneticDiseaseMessage"
+                              :disabled="medicalForm.inheritance === 1 ? false : true" placeholder="请输入"></el-input>
                 </el-form-item>
 
                 <el-form-item label="残疾情况" class="whole100" label-width="150px">
-                    <el-checkbox-group v-model="form.disability">
+                    <el-checkbox-group v-model="medicalForm.disability">
                         <el-checkbox label="视力残疾" name="type">视力残疾</el-checkbox>
                         <el-checkbox label="听力残疾" name="type">听力残疾</el-checkbox>
                         <el-checkbox label="肢体残疾" name="type">肢体残疾</el-checkbox>
                         <el-checkbox label="智力残疾" name="type">智力残疾</el-checkbox>
                         <el-checkbox label="其他" name="type">其他</el-checkbox>
-                        <el-input class="message" v-model="form.disabilityMessage"
-                                  :disabled="form.disability.indexOf('其他') == -1" placeholder="请输入"></el-input>
+                        <el-input class="message" v-model="medicalForm.disabilityMessage"
+                                  :disabled="medicalForm.disability.indexOf('其他') == -1" placeholder="请输入"></el-input>
                     </el-checkbox-group>
                 </el-form-item>
 
                 <el-form-item class="operation-btn" label-width="0">
-                    <el-button type="primary" @click="submitForm('form')">保 存</el-button>
+                    <el-button type="primary" @click="submitForm()">保 存</el-button>
                     <el-button @click="handleHistory">返 回</el-button>
                 </el-form-item>
             </el-form>
@@ -153,12 +153,12 @@
 </template>
 
 <script>
-    import {medicalCreate,medicalRead} from '../../../api/api';
+    import {medicalCreate, medicalRead, userRead,medicalUpdate} from '../../../api/api';
     export default {
         name: 'medicalHistory',
         data() {
             return {
-                form: {
+                medicalForm: {
                     medicalAllergy: [], // 药物过敏史
                     medicalExpose: [], // 暴露史
                     disability: [], // 残疾情况
@@ -185,125 +185,165 @@
                     ]
                 },
                 userData: {}, // 用户信息
+                userMedicalId: '', // 病历id
             };
         },
         created: function () {
-            // 获取用户信息
-            if (sessionStorage.getItem('userDetail')) {
-                this.userData = JSON.parse(sessionStorage.getItem('userDetail'));
-                // 获取用户病史
-                medicalRead(this.userData.id).then(res => {
+            if (this.$route.query.id) {
+                userRead(this.$route.query.id).then(res => {
                     if (res.data.errno === 0) {
-                        let para = JSON.parse(JSON.stringify(res.data.data));
-                        let pastList = para.pastSurgery.split(',');
-                        this.form.dataOperation = [];
-                        for (let i = 0; i < pastList.length; i++) {
-                            this.form.dataOperation.push({
-                                name: pastList[i].split(';')[0],
-                                date: pastList[i].split(';')[1],
-                            })
-                        }
-                        if (pastList.length > 0) {
-                            this.form.operation = 1;
-                        }
-                        this.form.inheritance = Number(para.inheritance);
-                        this.form.isPacemaker = para.isPacemaker;
-                        this.form.medicalAllergy = para.medicalAllergy.split(',');
-                        for (let i = 0; i < this.form.medicalAllergy.length; i++) {
-                            if (this.form.medicalAllergy[i] !== '青霉素' && this.form.medicalAllergy[i] !== '磺胺' && this.form.medicalAllergy[i] !== '链霉素') {
-                                this.form.irritabilityMessage = this.form.medicalAllergy[i];
-                                this.form.medicalAllergy.push('其他');
-                                this.form.medicalAllergy.splice(i, 1);
-                            }
-                        }
-                        this.form.medicalExpose = para.medicalExpose.split(',');
-                        for (let i = 0; i < this.form.medicalExpose.length; i++) {
-                            if (this.form.medicalExpose[i] !== '化学品' && this.form.medicalExpose[i] !== '毒物' && this.form.medicalExpose[i] !== '射线') {
-                                this.form.exposureMessage = this.form.medicalExpose[i];
-                                this.form.medicalExpose.push('其他');
-                                this.form.medicalExpose.splice(i, 1);
-                            }
-                        }
-                        this.form.disability = para.disability.split(',');
-                        for (let i = 0; i < this.form.disability.length; i++) {
-                            if (this.form.disability[i] !== '视力残疾' && this.form.disability[i] !== '听力残疾' && this.form.disability[i] !== '肢体残疾' && this.form.disability[i] !== '智力残疾') {
-                                this.form.disabilityMessage = this.form.disability[i];
-                                this.form.disability.push('其他');
-                                this.form.disability.splice(i, 1);
-                            }
-                        }
-                        this.form.familyHis = para.familyHis.split(',');
-                        for (let i = 0; i < this.form.familyHis.length; i++) {
-                            if (this.form.familyHis[i] !== '高血压' && this.form.familyHis[i] !== '糖尿病' && this.form.familyHis[i] !== '冠心病' &&
-                                this.form.familyHis[i] !== '慢性阻塞性肺疾病' && this.form.familyHis[i] !== '脑卒中' && this.form.familyHis[i] !== '结核病' &&
-                                this.form.familyHis[i] !== '肝炎' && this.form.familyHis[i] !== '其他法定传染病' && this.form.familyHis[i] !== '重性精神疾病' && this.form.familyHis[i] !== '先天畸形' && (this.form.pastDisease[i] + '').indexOf('恶性肿瘤') !== -1) {
-                                this.form.familyMessage2 = this.form.familyHis[i];
-                                this.form.familyHis.push('其他');
-                                this.form.familyHis.splice(i, 1);
-                            }
-                            if ((this.form.pastDisease[i] + '').indexOf('恶性肿瘤') !== -1) {
-                                this.form.familyHis.push(this.form.familyHis[i].split(':')[0]);
-                                this.form.familyMessage1 = this.form.familyHis[i].split(':')[1];
-                                this.form.familyHis.splice(i, 1);
-                            }
-                        }
-                        this.form.pastDisease = para.pastDisease.split(',');
-                        for (let i = 0; i < this.form.pastDisease.length; i++) {
-                            if (this.form.pastDisease[i] !== '高血压' && this.form.pastDisease[i] !== '糖尿病' && this.form.pastDisease[i] !== '冠心病' && this.form.pastDisease[i] !== '肝炎' &&
-                                this.form.pastDisease[i] !== '慢性阻塞性肺疾病' && this.form.pastDisease[i] !== '脑卒中' && this.form.pastDisease[i] !== '结核病' && (this.form.pastDisease[i] + '').indexOf('职业病') !== -1 &&
-                                this.form.pastDisease[i] !== '其他法定传染病' && this.form.pastDisease[i] !== '重性精神疾病' && this.form.pastDisease[i] !== '先天畸形' && (this.form.pastDisease[i] + '').indexOf('恶性肿瘤') !== -1) {
-                                this.form.previousHistoryMessage3 = this.form.pastDisease[i];
-                                this.form.pastDisease.push('其他');
-                                this.form.pastDisease.splice(i, 1);
-                            }
-                            if ((this.form.pastDisease[i] + '').indexOf('恶性肿瘤') !== -1) {
-                                this.form.pastDisease.push(this.form.pastDisease[i].split(':')[0]);
-                                this.form.previousHistoryMessage1 = this.form.pastDisease[i].split(':')[1];
-                                this.form.pastDisease.splice(i, 1);
-                            }
-                            if ((this.form.pastDisease[i] + '').indexOf('职业病') !== -1) {
-                                this.form.pastDisease.push(this.form.pastDisease[i].split(':')[0]);
-                                this.form.previousHistoryMessage2 = this.form.pastDisease[i].split(':')[1];
-                                this.form.pastDisease.splice(i, 1);
-                            }
-                        }
+                        this.userData = res.data.data;
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: res.data.errmsg,
+                            type: 'error'
+                        });
                     }
-                })
+                });
+                // 获取用户病史
+                medicalRead(this.$route.query.id).then(res => {
+                    if (res.data.errno === 0 && res.data.data) {
+                        let para = JSON.parse(JSON.stringify(res.data.data));
+                        // 手术信息
+                        if (para.pastSurgery) {
+                            let pastList = para.pastSurgery.split(',');
+                            this.medicalForm.dataOperation = [];
+                            for (let i = 0; i < pastList.length; i++) {
+                                this.medicalForm.dataOperation.push({
+                                    name: pastList[i].split(';')[0],
+                                    date: pastList[i].split(';')[1],
+                                })
+                            }
+                            if (pastList.length > 0) {
+                                this.medicalForm.operation = 1;
+                            }
+                        }
+                        // 是否佩戴起搏器
+                        this.medicalForm.isPacemaker = para.isPacemaker;
+                        // 药物过敏史 获取其他的信息
+                        this.medicalForm.medicalAllergy = para.medicalAllergy.split(',');
+                        for (let i = 0; i < this.medicalForm.medicalAllergy.length; i++) {
+                            if (this.medicalForm.medicalAllergy[i] !== '青霉素' && this.medicalForm.medicalAllergy[i] !== '磺胺' && this.medicalForm.medicalAllergy[i] !== '链霉素' && this.medicalForm.medicalAllergy[i] !== '') {
+                                this.medicalForm.irritabilityMessage = this.medicalForm.medicalAllergy[i];
+                                this.medicalForm.medicalAllergy.push('其他');
+                                this.medicalForm.medicalAllergy.splice(i, 1);
+                            }
+                        }
+                        // 暴露史 获取其他的信息
+                        this.medicalForm.medicalExpose = para.medicalExpose.split(',');
+                        for (let i = 0; i < this.medicalForm.medicalExpose.length; i++) {
+                            if (this.medicalForm.medicalExpose[i] !== '化学品' && this.medicalForm.medicalExpose[i] !== '毒物' && this.medicalForm.medicalExpose[i] !== '射线' && this.medicalForm.medicalExpose[i] !== '') {
+                                this.medicalForm.exposureMessage = this.medicalForm.medicalExpose[i];
+                                this.medicalForm.medicalExpose.push('其他');
+                                this.medicalForm.medicalExpose.splice(i, 1);
+                            }
+                        }
+                        // 残疾情况 获取其他的信息
+                        this.medicalForm.disability = para.disability.split(',');
+                        for (let i = 0; i < this.medicalForm.disability.length; i++) {
+                            if (this.medicalForm.disability[i] !== '视力残疾' && this.medicalForm.disability[i] !== '听力残疾' && this.medicalForm.disability[i] !== '肢体残疾' && this.medicalForm.disability[i] !== '智力残疾' && this.medicalForm.disability[i] !== '') {
+                                this.medicalForm.disabilityMessage = this.medicalForm.disability[i];
+                                this.medicalForm.disability.push('其他');
+                                this.medicalForm.disability.splice(i, 1);
+                            }
+                        }
+                        // 家族史 获取其他的信息
+                        this.medicalForm.familyHis = para.familyHis.split(',');
+                        for (let i = 0; i < this.medicalForm.familyHis.length; i++) {
+                            if (this.medicalForm.familyHis[i] !== '高血压' && this.medicalForm.familyHis[i] !== '糖尿病' && this.medicalForm.familyHis[i] !== '冠心病' && this.medicalForm.familyHis[i] !== '' &&
+                                this.medicalForm.familyHis[i] !== '慢性阻塞性肺疾病' && this.medicalForm.familyHis[i] !== '脑卒中' && this.medicalForm.familyHis[i] !== '结核病' &&
+                                this.medicalForm.familyHis[i] !== '肝炎' && this.medicalForm.familyHis[i] !== '其他法定传染病' && this.medicalForm.familyHis[i] !== '重性精神疾病' && this.medicalForm.familyHis[i] !== '先天畸形' && this.medicalForm.familyHis[i].toString().indexOf('恶性肿瘤') === -1) {
+                                this.medicalForm.familyMessage2 = this.medicalForm.familyHis[i];
+                                this.medicalForm.familyHis.push('其他');
+                                this.medicalForm.familyHis.splice(i, 1);
+                            }
+                        }
+                        // 家族史 获取恶性肿瘤的信息
+                        for (let i = 0; i < this.medicalForm.familyHis.length; i++) {
+                            if (this.medicalForm.familyHis[i].toString().indexOf('恶性肿瘤') === 0 && this.medicalForm.familyHis[i].length > 4) {
+                                this.medicalForm.familyMessage1 = this.medicalForm.familyHis[i].split(':')[1] + '';
+                                this.medicalForm.familyHis.push(this.medicalForm.familyHis[i].split(':')[0]);
+                                this.medicalForm.familyHis.splice(i, 1);
+                            }
+                        }
+                        // 既往史 获取其他的信息
+                        this.medicalForm.pastDisease = para.pastDisease.split(',');
+                        for (let i = 0; i < this.medicalForm.pastDisease.length; i++) {
+                            if (this.medicalForm.pastDisease[i] !== '高血压' && this.medicalForm.pastDisease[i] !== '糖尿病' && this.medicalForm.pastDisease[i] !== '冠心病' && this.medicalForm.pastDisease[i] !== '肝炎' && this.medicalForm.pastDisease[i] !== '' &&
+                                this.medicalForm.pastDisease[i] !== '慢性阻塞性肺疾病' && this.medicalForm.pastDisease[i] !== '脑卒中' && this.medicalForm.pastDisease[i] !== '结核病' && this.medicalForm.pastDisease[i].toString().indexOf('职业病') === -1 &&
+                                this.medicalForm.pastDisease[i] !== '其他法定传染病' && this.medicalForm.pastDisease[i] !== '重性精神疾病' && this.medicalForm.pastDisease[i] !== '先天畸形' && this.medicalForm.pastDisease[i].toString().indexOf('恶性肿瘤') === -1) {
+                                this.medicalForm.previousHistoryMessage3 = this.medicalForm.pastDisease[i];
+                                this.medicalForm.pastDisease.push('其他');
+                                this.medicalForm.pastDisease.splice(i, 1);
+                            }
+                        }
+                        // 既往史 获取恶性肿瘤的信息
+                        for (let i = 0; i < this.medicalForm.pastDisease.length; i++) {
+                            if (this.medicalForm.pastDisease[i].toString().indexOf('恶性肿瘤') === 0 && this.medicalForm.pastDisease[i].length > 4) {
+                                this.medicalForm.pastDisease.push(this.medicalForm.pastDisease[i].toString().split(':')[0]);
+                                this.medicalForm.previousHistoryMessage1 = this.medicalForm.pastDisease[i].toString().split(':')[1] + '';
+                                this.medicalForm.pastDisease.splice(i, 1);
+                            }
+                        }
+                        // 既往史 获取职业病的信息
+                        for (let i = 0; i < this.medicalForm.pastDisease.length; i++) {
+                            if (this.medicalForm.pastDisease[i].toString().indexOf('职业病') === 0 && this.medicalForm.pastDisease[i].length > 3) {
+                                this.medicalForm.pastDisease.push(this.medicalForm.pastDisease[i].toString().split(':')[0]);
+                                this.medicalForm.previousHistoryMessage2 = this.medicalForm.pastDisease[i].toString().split(':')[1] + '';
+                                this.medicalForm.pastDisease.splice(i, 1);
+                            }
+                        }
+                        // 遗传病史信息
+                        if (para.inheritance !== '') {
+                            this.medicalForm.inheritance = 1;
+                            this.medicalForm.geneticDiseaseMessage = para.inheritance;
+                        }
+                        // 病史id
+                        this.userMedicalId = para.id;
+                    }
+                });
             }
         },
         methods: {
             /**
              * 添加手术
              */
-            addOperation1() {
-                this.form.dataOperation.push({name: '',date: ''});
+            addHistoryData() {
+                this.medicalForm.dataOperation.push({name: '',date: ''});
             },
             /**
              * 删除手术
              * @param {Number} index 索引
              */
             deletePastSurgery(index) {
-                if (this.form.dataOperation.length === 1) {
+                if (this.medicalForm.dataOperation.length === 1) {
                     this.$message({
                         showClose: true,
                         message: '数据不能少于一个',
                         type: 'error'
                     });
                 } else {
-                    this.form.dataOperation.splice(index,1);
+                    this.medicalForm.dataOperation.splice(index,1);
                 }
             },
             /**
              * 提交数据
              */
             submitForm() {
-                let para = JSON.parse(JSON.stringify(this.form));
-                para.userId = this.userData.id;
+                let para = JSON.parse(JSON.stringify(this.medicalForm));
+                para.userId = this.$route.query.id;
+                if (this.userMedicalId) {
+                    para.id = this.userMedicalId;
+                }
                 para.medicalAllergy = this.getToStr(para.medicalAllergy,para.irritabilityMessage);
                 para.medicalExpose = this.getToStr(para.medicalExpose,para.exposureMessage);
                 para.pastDisease = this.getToStr(para.pastDisease,para.previousHistoryMessage3,para.previousHistoryMessage1,para.previousHistoryMessage2);
                 para.familyHis = this.getToStr(para.familyHis,para.familyMessage2,para.familyMessage1);
                 para.disability = this.getToStr(para.disability,para.disabilityMessage);
+                if (para.inheritance === 1) {
+                    para.inheritance = para.geneticDiseaseMessage;
+                }
                 para.pastSurgery = '';
                 if (para.operation === 1) {
                     for (let i = 0; i < para.dataOperation.length; i++) {
@@ -322,22 +362,41 @@
                         }
                     }
                 }
-                medicalCreate(para).then(res => {
-                    if (res.data.errno === 0) {
-                        this.$message({
-                            showClose: true,
-                            message: '修改成功',
-                            type: 'success'
-                        });
-                        this.$router.push({path: '/userList'});
-                    } else {
-                        this.$message({
-                            showClose: true,
-                            message: res.data.errmsg,
-                            type: 'error'
-                        });
-                    }
-                });
+                if (this.userMedicalId) {
+                    medicalUpdate(para).then(res => {
+                        if (res.data.errno === 0) {
+                            this.$message({
+                                showClose: true,
+                                message: '修改成功',
+                                type: 'success'
+                            });
+                            this.$router.push({path: '/userList'});
+                        } else {
+                            this.$message({
+                                showClose: true,
+                                message: res.data.errmsg,
+                                type: 'error'
+                            });
+                        }
+                    });
+                } else {
+                    medicalCreate(para).then(res => {
+                        if (res.data.errno === 0) {
+                            this.$message({
+                                showClose: true,
+                                message: '修改成功',
+                                type: 'success'
+                            });
+                            this.$router.push({path: '/userList'});
+                        } else {
+                            this.$message({
+                                showClose: true,
+                                message: res.data.errmsg,
+                                type: 'error'
+                            });
+                        }
+                    });
+                }
             },
             /**
              * 数据过滤 第三个参数是恶性肿瘤   第四个参数是职业病  没有恶性肿瘤 传空

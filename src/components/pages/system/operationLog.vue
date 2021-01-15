@@ -21,6 +21,7 @@
                     ref="multipleTable"
                     :data="tableData"
                     tooltip-effect="dark"
+                    v-loading="loading"
                     style="width: 100%">
                 <el-table-column prop="id" label="ID" min-width="60"></el-table-column>
                 <el-table-column prop="companyName" label="变更企业" min-width="80"></el-table-column>
@@ -58,6 +59,7 @@
                 selectByOptType: [], // 列表
                 total: 0, // 条数
                 page: 1, // 页码
+                loading: false,
             };
         },
         created() {
@@ -92,7 +94,9 @@
                     optType: this.form.optType,
                     optUserName: this.form.optUserName
                 };
+                this.loading = true;
                 operationLogList(para).then(res => {
+                    this.loading = false;
                     if (res.data.errno === 0) {
                         this.tableData = res.data.data.items;
                         this.total = res.data.data.total;

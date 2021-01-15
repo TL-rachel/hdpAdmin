@@ -50,6 +50,7 @@
 </template>
 
 <script>
+    import {rolePermissions} from '../../api/api';
 export default {
     data() {
         return {
@@ -141,16 +142,24 @@ export default {
             ],
             // 上一级路由
             oldValue: '',
-            sysUserName: ''
+            systemPermissions: [],
+            assignedPermissions: []
         };
     },
     created() {
-        let username = sessionStorage.getItem('user');
-        if (username) {
-            this.sysUserName = username;
-        } else {
-            this.sysUserName = '';
-        }
+        let userData = JSON.parse(sessionStorage.getItem('userData'));
+        rolePermissions({roleId: userData.roleIds[0]}).then(res => {
+            if (res.data.errno === 0) {
+                this.systemPermissions = res.data.data.systemPermissions;
+                this.assignedPermissions = res.data.data.assignedPermissions;
+            } else {
+                this.$message({
+                    showClose: true,
+                    message: '获取菜单列表失败',
+                    type: 'error'
+                });
+            }
+        })
     },
     computed: {
         /**
@@ -200,18 +209,18 @@ export default {
 .el-menu {
     border: 0;
 }
-.el-menu-item.is-active,
-.el-submenu.is-active .el-submenu__title {
-    border-left: 3px solid #4D7CFE;
-    padding-left: 14px!important;
-    background-color: #F2F7FA!important;
-    color: #4D7CFE!important;
-}
-.el-submenu .el-menu .el-menu-item.is-active {
-    border: 0;
-    padding-left: 40px!important;
-    background-color: transparent!important;
-}
+    .el-menu-item.is-active,
+    .el-submenu.is-active .el-submenu__title {
+        border-left: 3px solid #4D7CFE;
+        padding-left: 14px!important;
+        background-color: #F2F7FA!important;
+        color: #4D7CFE!important;
+    }
+    .el-submenu .el-menu .el-menu-item.is-active {
+        border: 0;
+        padding-left: 40px!important;
+        background-color: transparent!important;
+    }
     .menudian {
         font-size: 14px;
         margin-right: 5px;

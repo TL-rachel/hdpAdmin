@@ -353,9 +353,24 @@ export const medicalCaseCreate = params => {
     return instance.post(`${base}/admin/hd_medical_case/create`,params);
 };
 
-// 新增用户病例列表
+// 修改用户病史数据
+export const medicalUpdate = params => {
+    return instance.post(`${base}/admin/hd_medical/update`,params);
+};
+
+// 修改用户病例数据
+export const medicalCaseUpdate = params => {
+    return instance.post(`${base}/admin/hd_medical_case/update`,params);
+};
+
+// 新增用户病例
 export const medicalCaseList = params => {
     return instance.get(`${base}/admin/hd_medical_case/list`,{params: params});
+};
+
+// 用户病例详情
+export const medicalCaseRead = params => {
+    return instance.get(`${base}/admin/hd_medical_case/read/` + params,);
 };
 
 // 用户病史数据详情
@@ -363,4 +378,13 @@ export const medicalRead = params => {
     return instance.get(`${base}/admin/hd_medical/read/` + params);
 };
 
+// 删除用户病例
+export const medicalCaseDelete = params => {
+    return instance.post(`${base}/admin/hd_medical_case/delete/` + params);
+};
+
+// 批量删除用户病例
+export const medicalCaseBatchDelete = params => {
+    return instance.get(`${base}/admin/hd_medical_case/batch-delete`,{params: params});
+};
 /* eslint-disable */

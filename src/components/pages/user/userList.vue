@@ -18,6 +18,7 @@
                     :data="tableData"
                     tooltip-effect="dark"
                     style="width: 100%"
+                    v-loading="loading"
                     @selection-change="handleSelectionChange">
                 <el-table-column fixed type="selection" width="55"></el-table-column>
                 <el-table-column label="img" min-width="60">
@@ -62,8 +63,12 @@
                                 <a @click="userDelete(scope.row.id,1)">删除</a>
                             </p>
                             <p>
-<!--                                <a @click="goMedicalHistory(scope.row)">病例</a>-->
-                                <a @click="goMedicalHistory(scope.row)">病史</a>
+                                <router-link :to="{ path:'/caseList',query: {id:scope.row.id}}">
+                                    <a>病例</a>
+                                </router-link>
+                                <router-link :to="{ path:'/medicalHistory',query: {id:scope.row.id}}">
+                                    <a>病史</a>
+                                </router-link>
                             </p>
                             <div slot="reference" class="name-wrapper text-overflow-1">
                                 <a>更多操作</a>
@@ -99,16 +104,13 @@
                 multipleSelection: '',
                 total: 0, // 条数
                 page: 1, // 页码
+                loading: false,
             };
         },
         created() {
             this.getUserList(1,10);
         },
         methods: {
-            goMedicalHistory(detail) {
-                sessionStorage.setItem('userDetail', JSON.stringify(detail));
-                this.$router.push({path: '/medicalHistory'});
-            },
             /**
              * 用户一键更新faceId
              */
@@ -203,7 +205,9 @@
                     page: currentPage,
                     userName: this.userName
                 };
+                this.loading = true;
                 hdUserList(para).then(res => {
+                    this.loading = false;
                     if (res.data.errno === 0) {
                         this.tableData = res.data.data.items;
                         this.total = res.data.data.total;

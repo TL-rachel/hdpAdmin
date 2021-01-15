@@ -14,6 +14,7 @@
                     ref="multipleTable"
                     :data="tableData"
                     tooltip-effect="dark"
+                    v-loading="loading"
                     style="width: 100%"
                     @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55"></el-table-column>
@@ -69,6 +70,7 @@
                 multipleSelection: '',
                 total: 0, // 条数
                 page: 1, // 页码
+                loading: false,
             };
         },
         created() {
@@ -104,7 +106,9 @@
                     limit: pageSize,
                     page: currentPage
                 };
+                this.loading = true;
                 hdCompanyList(para).then(res => {
+                    this.loading = false;
                     if (res.data.errno === 0) {
                         this.tableData = res.data.data.items;
                         this.total = res.data.data.total;

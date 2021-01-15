@@ -29,6 +29,7 @@
                     ref="multipleTable"
                     :data="tableData"
                     tooltip-effect="dark"
+                    v-loading="loading"
                     style="width: 100%">
                 <el-table-column label="img" min-width="60">
                     <template slot-scope="scope">
@@ -74,7 +75,7 @@
                 </el-table-column>
                 <el-table-column prop="" label="情绪值" min-width="120"></el-table-column>
                 <el-table-column prop="rateCheckTime" label="检测时间" min-width="150"></el-table-column>
-                <!--<el-table-column prop="id" label="操作" min-width="90">
+                <el-table-column prop="id" label="操作" min-width="90">
                     <template slot-scope="scope">
                         <router-link :to="{ path:'/caseList',query: {id:scope.row.id}}">
                             <a class="operation-table">病例</a>
@@ -83,7 +84,7 @@
                             <a class="operation-table">病史</a>
                         </router-link>
                     </template>
-                </el-table-column>-->
+                </el-table-column>
             </el-table>
             <!--工具条-->
             <!--引入页码 start-->
@@ -112,6 +113,7 @@
                 tableData: [],
                 total: 0, // 条数
                 page: 1, // 页码
+                loading: false,
             };
         },
         created() {
@@ -137,7 +139,9 @@
                     userName: this.userName,
                     certificatesNum: this.certificatesNum
                 };
+                this.loading = true;
                 userHealthDataList(para).then(res => {
+                    this.loading = false;
                     if (res.data.errno === 0) {
                         this.tableData = res.data.data.items;
                         this.total = res.data.data.total;
