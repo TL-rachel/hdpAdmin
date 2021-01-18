@@ -9,6 +9,9 @@ let base = CAS_SERVER_URL;
 var instance = axios.create({
     headers: {'content-type': 'application/json'}
 });
+var instance1 = axios.create({
+    headers: {'content-type': 'application/json'}
+});
 
 instance.interceptors.request.use(config => {
     // 在发送请求之前做些什么
@@ -159,7 +162,7 @@ export const hdCompanyList = params => {
 
 // 新增企业列表
 export const companyCreate = params => {
-    return instance.post(`${base}/admin/hd_company/create`,params);
+    return instance1.post(`${base}/admin/hd_company/create`,params);
 };
 
 // 删除企业

@@ -102,7 +102,7 @@
                             type: 'error'
                         });
                     }
-                })
+                });
             },
             // 修改页数
             handleCurrentChange(val) {

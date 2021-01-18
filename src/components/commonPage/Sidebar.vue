@@ -14,7 +14,7 @@
                 <template v-if="item.subs">
                     <el-submenu :index="item.index" :key="item.index">
                         <template slot="title">
-                            <i class="iconfont" :class="item.icon"></i>
+                            <i class="icon-picture" :class="item.icon"></i>
                             <span slot="title">{{ item.title }}</span>
                         </template>
                         <template v-for="subItem in item.subs">
@@ -40,7 +40,7 @@
                 </template>
                 <template v-else>
                     <el-menu-item :index="item.index" :key="item.index">
-                        <i class="iconfont" :class="item.icon"></i>
+                        <i class="icon-picture" :class="item.icon"></i>
                         <span slot="title">{{ item.title }}</span>
                     </el-menu-item>
                 </template>
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-    import {rolePermissions} from '../../api/api';
+    // import {rolePermissions} from '../../api/api';
 export default {
     data() {
         return {
@@ -59,12 +59,12 @@ export default {
             // 菜单
             items: [
                 {
-                    icon: 'icon-icon_svg_houtai-10',
+                    icon: 'icon-picture-nav-home',
                     index: 'home',
                     title: '首页'
                 },
                 {
-                    icon: 'icon-icon_svg_houtai-9',
+                    icon: 'icon-picture-nav-equipment',
                     index: '/equipment',
                     title: '设备管理',
                     subs: [
@@ -87,7 +87,7 @@ export default {
                     ]
                 },
                 {
-                    icon: 'icon-icon_svg_houtai-9',
+                    icon: 'icon-picture-nav-people',
                     index: '/user',
                     title: '用户管理',
                     subs: [
@@ -102,7 +102,7 @@ export default {
                     ]
                 },
                 {
-                    icon: 'icon-icon_svg_houtai-10',
+                    icon: 'icon-picture-nav-system',
                     index: 'system',
                     title: '系统管理',
                     subs: [
@@ -121,7 +121,7 @@ export default {
                     ]
                 },
                 {
-                    icon: 'icon-icon_svg_houtai-10',
+                    icon: 'icon-picture-nav-enterprise',
                     index: 'enterprise',
                     title: '企业管理',
                     subs: [
@@ -143,15 +143,34 @@ export default {
             // 上一级路由
             oldValue: '',
             systemPermissions: [],
-            assignedPermissions: []
+            assignedPermissions: [],
         };
     },
+    methods: {
+    },
     created() {
-        let userData = JSON.parse(sessionStorage.getItem('userData'));
+        /*let userData = JSON.parse(sessionStorage.getItem('userData'));
         rolePermissions({roleId: userData.roleIds[0]}).then(res => {
             if (res.data.errno === 0) {
                 this.systemPermissions = res.data.data.systemPermissions;
                 this.assignedPermissions = res.data.data.assignedPermissions;
+                for (let i = 0; i < this.systemPermissions.length; i++) {
+                    if (this.systemPermissions[i].children) {
+                        for (let j = 0; j < this.systemPermissions[i].children.length; j++) {
+                            if (this.systemPermissions[i].children[j].children) {
+                                for (let k = 0; k < this.systemPermissions[i].children[j].children.length; k++) {
+                                    if (this.systemPermissions[i].children[j].children[k].id) {
+                                        for (let l = 0; l < this.assignedPermissions.length; l++) {
+                                            if (this.assignedPermissions[l] === this.systemPermissions[i].children[j].children[k].id) {
+                                                console.log(this.systemPermissions[i])
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             } else {
                 this.$message({
                     showClose: true,
@@ -159,7 +178,7 @@ export default {
                     type: 'error'
                 });
             }
-        })
+        });*/
     },
     computed: {
         /**

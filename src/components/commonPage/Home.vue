@@ -105,4 +105,50 @@ export default {
     .query .query-input.icon-position .el-input__inner {
         padding-left: 30px;
     }
+
+    .icon-picture.icon-picture-nav-home {
+        background-image: url("../../common/image/navi_home.png");
+    }
+    .icon-picture.icon-picture-nav-home-selected {
+        background-image: url("../../common/image/navi_home_selected.png");
+    }
+    .icon-picture.icon-picture-nav-enterprise {
+        background-image: url("../../common/image/navi_enterprise.png");
+    }
+    .icon-picture.icon-picture-nav-enterprise-selected {
+        background-image: url("../../common/image/navi_enterprise_selected.png");
+    }
+    .icon-picture.icon-picture-nav-equipment {
+        background-image: url("../../common/image/navi_equipment.png");
+    }
+    .icon-picture.icon-picture-nav-equipment-selected {
+        background-image: url("../../common/image/navi_navi_equipment_selected.png");
+    }
+    .icon-picture.icon-picture-nav-people {
+        background-image: url("../../common/image/navi_people.png");
+    }
+    .icon-picture.icon-picture-nav-people-selected {
+        background-image: url("../../common/image/navi_people_selected.png");
+    }
+    .icon-picture.icon-picture-nav-system {
+        background-image: url("../../common/image/navi_system.png");
+    }
+    .icon-picture.icon-picture-nav-system-selected {
+        background-image: url("../../common/image/navi_system_selected.png");
+    }
+    .is-active .icon-picture.icon-picture-nav-home {
+        background-image: url("../../common/image/navi_home_selected.png");
+    }
+    .is-active .icon-picture.icon-picture-nav-enterprise {
+        background-image: url("../../common/image/navi_enterprise_selected.png");
+    }
+    .is-active .icon-picture.icon-picture-nav-equipment {
+        background-image: url("../../common/image/navi_navi_equipment_selected.png");
+    }
+    .is-active .icon-picture.icon-picture-nav-people {
+        background-image: url("../../common/image/navi_people_selected.png");
+    }
+    .is-active .icon-picture.icon-picture-nav-system {
+        background-image: url("../../common/image/navi_system_selected.png");
+    }
 </style>

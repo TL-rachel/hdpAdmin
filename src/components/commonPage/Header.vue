@@ -6,7 +6,7 @@
         </div>
         <div class="header-right">
             <div class="header-bar-left">
-                {{headerTitle}}
+                <i class="icon-picture" :class="headerIcon"></i> {{headerTitle}}
             </div>
             <div class="header-bar-right">
                 <ul class="header-bar-right-menu">
@@ -34,7 +34,8 @@ export default {
     data() {
         return {
             userData: '', // 用户名
-            headerTitle: ''
+            headerTitle: '',
+            headerIcon: ''
         };
     },
     created() {
@@ -49,6 +50,7 @@ export default {
          */
         setTags(route) {
             this.headerTitle = route.meta.title;
+            this.headerIcon = route.meta.icon;
         },
         /**
          * 修改密码

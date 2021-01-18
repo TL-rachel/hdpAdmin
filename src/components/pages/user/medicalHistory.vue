@@ -213,7 +213,7 @@
                                 this.medicalForm.dataOperation.push({
                                     name: pastList[i].split(';')[0],
                                     date: pastList[i].split(';')[1],
-                                })
+                                });
                             }
                             if (pastList.length > 0) {
                                 this.medicalForm.operation = 1;

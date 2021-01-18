@@ -90,6 +90,8 @@ let routes = [
                 component: HomePage,
                 meta: {
                     title: '首页',
+                    icon: 'icon-picture-nav-home',
+                    flag: 1
                 }
             },
             {
@@ -97,174 +99,224 @@ let routes = [
                 component: HomePage,
                 meta: {
                     title: '首页',
+                    icon: 'icon-picture-nav-home',
+                    flag: 1
                 }
             },
             {
                 path: '/equipmentList',
                 component: EquipmentList,
                 meta: {
-                    title: '设备管理/设备列表',
+                    title: '设备管理 / 设备列表',
+                    icon: 'icon-picture-nav-equipment',
+                    flag: 1
                 }
             },
             {
                 path: '/addEquipment',
                 component: AddEquipment,
                 meta: {
-                    title: '设备管理/设备列表/添加设备',
+                    title: '设备管理 / 设备列表 / 添加设备',
+                    icon: 'icon-picture-nav-equipment',
+                    flag: 2
                 }
             },
             {
                 path: '/areaList',
                 component: AreaList,
                 meta: {
-                    title: '设备管理/区域列表',
+                    title: '设备管理 / 区域列表',
+                    icon: 'icon-picture-nav-equipment',
+                    flag: 1
                 }
             },
             {
                 path: '/userList',
                 component: UserList,
                 meta: {
-                    title: '用户管理/用户列表',
+                    title: '用户管理 / 用户列表',
+                    icon: 'icon-picture-nav-people',
+                    flag: 1
                 }
             },
             {
                 path: '/addUser',
                 component: AddUser,
                 meta: {
-                    title: '用户管理/用户列表/添加用户',
+                    title: '用户管理 / 用户列表 / 添加用户',
+                    icon: 'icon-picture-nav-people',
+                    flag: 2
                 }
             },
             {
                 path: '/medicalHistory',
                 component: MedicalHistory,
                 meta: {
-                    title: '用户管理/健康数据/病史',
+                    title: '用户管理 / 健康数据 / 病史',
+                    icon: 'icon-picture-nav-people',
+                    flag: 2
                 }
             },
             {
                 path: '/heartRateList',
                 component: HeartRateList,
                 meta: {
-                    title: '用户管理/健康数据/心率数据',
+                    title: '用户管理 / 健康数据 / 心率数据',
+                    icon: 'icon-picture-nav-people',
+                    flag: 2
                 }
             },
             {
                 path: '/fatigueList',
                 component: FatigueList,
                 meta: {
-                    title: '用户管理/健康数据/疲劳数据',
+                    title: '用户管理 / 健康数据 / 疲劳数据',
+                    icon: 'icon-picture-nav-people',
+                    flag: 2
                 }
             },
             {
                 path: '/emotionList',
                 component: EmotionList,
                 meta: {
-                    title: '用户管理/健康数据/情绪数据',
+                    title: '用户管理 / 健康数据 / 情绪数据',
+                    icon: 'icon-picture-nav-people',
+                    flag: 2
                 }
             },
             {
                 path: '/caseList',
                 component: CaseList,
                 meta: {
-                    title: '用户管理/健康数据/病例',
+                    title: '用户管理 / 健康数据 / 病例',
+                    icon: 'icon-picture-nav-people',
+                    flag: 2
                 }
             },
             {
                 path: '/addCase',
                 component: AddCase,
                 meta: {
-                    title: '用户管理/健康数据/添加病例',
+                    title: '用户管理 / 健康数据 / 添加病例',
+                    icon: 'icon-picture-nav-people',
+                    flag: 2
                 }
             },
             {
                 path: '/healthDataList',
                 component: HealthDataList,
                 meta: {
-                    title: '用户管理/健康数据',
+                    title: '用户管理 / 健康数据',
+                    icon: 'icon-picture-nav-people',
+                    flag: 1
                 }
             },
             {
                 path: '/liveStreaming',
                 component: LiveStreaming,
                 meta: {
-                    title: '设备管理/设备列表/直播',
+                    title: '设备管理 / 设备列表 / 直播',
+                    icon: 'icon-picture-nav-equipment',
+                    flag: 1
                 }
             },
             {
                 path: '/recordedBroadcast',
                 component: RecordedBroadcast,
                 meta: {
-                    title: '设备管理/设备列表/录播',
+                    title: '设备管理 / 设备列表 / 录播',
+                    icon: 'icon-picture-nav-equipment',
+                    flag: 1
                 }
             },
             {
                 path: '/administratorList',
                 component: AdministratorList,
                 meta: {
-                    title: '系统管理/管理员',
+                    title: '系统管理 / 管理员',
+                    icon: 'icon-picture-nav-system',
+                    flag: 1
                 }
             },
             {
                 path: '/addAdministrator',
                 component: AddAdministrator,
                 meta: {
-                    title: '系统管理/管理员/添加管理员',
+                    title: '系统管理 / 管理员 / 添加管理员',
+                    icon: 'icon-picture-nav-system',
+                    flag: 2
                 }
             },
             {
                 path: '/roleManagement',
                 component: RoleManagement,
                 meta: {
-                    title: '系统管理/角色管理',
+                    title: '系统管理 / 角色管理',
+                    icon: 'icon-picture-nav-system',
+                    flag: 1
                 }
             },
             {
                 path: '/operationLog',
                 component: OperationLog,
                 meta: {
-                    title: '系统管理/操作日志',
+                    title: '系统管理 / 操作日志',
+                    icon: 'icon-picture-nav-system',
+                    flag: 1
                 }
             },
             {
                 path: '/companyList',
                 component: CompanyList,
                 meta: {
-                    title: '企业管理/企业管理列表',
+                    title: '企业管理 / 企业管理列表',
+                    icon: 'icon-picture-nav-enterprise',
+                    flag: 1
                 }
             },
             {
                 path: '/companyAdministratorList',
                 component: CompanyAdministratorList,
                 meta: {
-                    title: '企业管理/企业管理员列表',
+                    title: '企业管理 / 企业管理员列表',
+                    icon: 'icon-picture-nav-enterprise',
+                    flag: 1
                 }
             },
             {
                 path: '/companyAuditList',
                 component: CompanyAuditList,
                 meta: {
-                    title: '企业管理/企业准入审核',
+                    title: '企业管理 / 企业准入审核',
+                    icon: 'icon-picture-nav-enterprise',
+                    flag: 1
                 }
             },
             {
                 path: '/addCompanyAdministrator',
                 component: AddCompanyAdministrator,
                 meta: {
-                    title: '企业管理/企业管理员列表/添加企业管理员',
+                    title: '企业管理 / 企业管理员列表 / 添加企业管理员',
+                    icon: 'icon-picture-nav-enterprise',
+                    flag: 2
                 }
             },
             {
                 path: '/addCompany',
                 component: AddCompany,
                 meta: {
-                    title: '企业管理/企业管理列表/添加企业',
+                    title: '企业管理 / 企业管理列表 / 添加企业',
+                    icon: 'icon-picture-nav-enterprise',
+                    flag: 2
                 }
             },
             {
                 path: '/addArea',
                 component: AddArea,
                 meta: {
-                    title: '设备管理/区域管理/添加区域',
+                    title: '设备管理 / 区域管理 / 添加区域',
+                    icon: 'icon-picture-nav-equipment',
+                    flag: 2
                 }
             },
         ]
