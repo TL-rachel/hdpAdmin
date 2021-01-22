@@ -3,11 +3,11 @@
         <div class="query">
             <div><i class="icon-picture icon-picture-grabble icon-position"></i><el-input class="query-input user-input icon-position" type="text" placeholder="搜索角色名称" @blur="getRoleList(1,10)" v-model="name"></el-input></div>
             <div class="query-btn">
-                <el-button @click="openUpdateRole(0,{})"><i class="icon-picture icon-picture-add"></i> 添加</el-button>
+                <el-button v-if="jurisdictionList.adDisabled" @click="openUpdateRole(0,{})"><i class="icon-picture icon-picture-add"></i> 添加</el-button>
                 <!--<el-button><i class="icon-picture icon-picture-to-lead"></i>批量导入</el-button>
                 <el-button><i class="icon-picture icon-picture-export"></i>批量导出</el-button>
                 <el-button><i class="icon-picture icon-picture-update"></i>一键更新faceId</el-button>-->
-                <el-button @click="deleteRole(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+                <el-button v-if="jurisdictionList.dbtDisabled" @click="deleteRole(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             </div>
         </div>
         <div class="table-list">
@@ -19,14 +19,14 @@
                     style="width: 100%"
                     @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55"></el-table-column>
-                <el-table-column prop="id" label="ID" min-width="60"></el-table-column>
+<!--                <el-table-column prop="id" label="ID" min-width="60"></el-table-column>-->
                 <el-table-column prop="name" label="角色名称" min-width="80"></el-table-column>
                 <el-table-column prop="desc" label="权限说明" min-width="60"></el-table-column>
                 <el-table-column prop="id" label="操作" width="180">
                     <template slot-scope="scope">
-                        <a class="operation-table" @click="openUpdateRole(1,scope.row)">编辑</a>
-                        <a class="operation-table" @click="deleteRole(scope.row,1)">删除</a>
-                        <a class="operation-table" @click="openTree(scope.row)">授权</a>
+                        <a v-if="jurisdictionList.upDisabled" class="operation-table" @click="openUpdateRole(1,scope.row)">编辑</a>
+                        <a v-if="jurisdictionList.dtDisabled" class="operation-table" @click="deleteRole(scope.row,1)">删除</a>
+                        <a v-if="jurisdictionList.otDisabled" class="operation-table" @click="openTree(scope.row)">授权</a>
                     </template>
                 </el-table-column>
             </el-table>
@@ -115,11 +115,33 @@
                 titleName: '添加角色', // 弹框title
                 roleId: '', // 授权使用角色id
                 loading: false,
+                jurisdictionList: {
+                    adDisabled: false,
+                    dtDisabled: false,
+                    dbtDisabled: false,
+                    otDisabled: false,
+                    upDisabled: false,
+                }
             };
         },
         created() {
             // 获取列表
             this.getRoleList(1,10);
+            // 权限
+            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+            for (let i = 0; i < assignedPermissions.length; i++) {
+                if (assignedPermissions[i] === 'admin:role:create') {
+                    this.jurisdictionList.adDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:role:delete') {
+                    this.jurisdictionList.dtDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:role:batchDelete') {
+                    this.jurisdictionList.dbtDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:role:update') {
+                    this.jurisdictionList.upDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:role:permission:update') {
+                    this.jurisdictionList.otDisabled = true;
+                }
+            }
         },
         methods: {
             /* eslint-disable */

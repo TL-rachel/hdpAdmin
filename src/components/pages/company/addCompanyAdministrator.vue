@@ -34,7 +34,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item class="operation-btn" label-width="0">
-                    <el-button type="primary" @click="submitForm()">保 存</el-button>
+                    <el-button v-if="jurisdictionList.adDisabled" type="primary" @click="submitForm()">保 存</el-button>
                     <el-button @click="handleHistory">返 回</el-button>
                 </el-form-item>
             </el-form>
@@ -87,6 +87,9 @@
                 companyList: [],
                 // 角色列表
                 options: [],
+                jurisdictionList: {
+                    adDisabled: false,
+                }
             };
         },
         created() {
@@ -122,6 +125,13 @@
                         });
                     }
                 });
+            }
+            // 权限
+            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+            for (let i = 0; i < assignedPermissions.length; i++) {
+                if (assignedPermissions[i] === 'admin:qyAdmin:create' || assignedPermissions[i] === 'admin:hdCompany:update') {
+                    this.jurisdictionList.adDisabled = true;
+                }
             }
         },
         methods: {

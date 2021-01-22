@@ -160,6 +160,11 @@ export const hdCompanyList = params => {
     return instance.get(`${base}/admin/hd_company/list`,{params: params});
 };
 
+// 所属企业审核列表
+export const hdCompanyAuditList = params => {
+    return instance.get(`${base}/admin/hd_companyAudit/list`,{params: params});
+};
+
 // 新增企业列表
 export const companyCreate = params => {
     return instance1.post(`${base}/admin/hd_company/create`,params);
@@ -170,9 +175,19 @@ export const companyDelete = params => {
     return instance.get(`${base}/admin/hd_company/delete`,{params: params});
 };
 
+// 删除审核企业
+export const companyAuditDelete = params => {
+    return instance.get(`${base}/admin/hd_companyAudit/delete`,{params: params});
+};
+
 // 批量删除企业
 export const companyBatchDelete = params => {
     return instance.get(`${base}/admin/hd_company/batch-delete`,{params: params});
+};
+
+// 批量删除审核企业
+export const companyAuditBatchDelete = params => {
+    return instance.get(`${base}/admin/hd_companyAudit/batch-delete`,{params: params});
 };
 
 // 企业详情
@@ -180,9 +195,19 @@ export const companyRead = params => {
     return instance.get(`${base}/admin/hd_company/read`,{params: params});
 };
 
+// 企业审核详情
+export const companyAuditRead = params => {
+    return instance.get(`${base}/admin/hd_companyAudit/read`,{params: params});
+};
+
 // 企业变更
 export const companyUpdate = params => {
     return instance.post(`${base}/admin/hd_company/update`,params);
+};
+
+// 企业审核
+export const companyAuditUpdate = params => {
+    return instance.post(`${base}/admin/hd_companyAudit/update`,params);
 };
 
 // 区域列表

@@ -25,14 +25,14 @@
                 <div>{{userData.userBmi}}</div>
             </div>
         </div>
-        <span class="update-case">修改病例</span>
+        <span class="update-case">{{$route.query.id?'修改病例':'新增病例'}}</span>
         <div class="form-save">
             <el-form ref="form" class="clearfix" :model="form" label-width="80px">
                 <el-form-item label="体检时间" label-width="90px">
                     <el-date-picker type="datetime" class="w420" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" v-model="form.inspectTime"></el-date-picker>
                 </el-form-item>
 
-                <el-form-item label="血压" label-width="90px" style="width: 20%;">
+                <el-form-item label="血压" label-width="90px" style="width: 21%;">
                     舒适压 <el-input class="w100" v-model="form.bloodComfort" placeholder="请输入舒适压"></el-input>
                 </el-form-item>
 
@@ -49,11 +49,11 @@
                 </el-form-item>
 
                 <el-form-item label="异常状况" class="whole100" label-width="90px">
-                    <el-input type="textarea" v-model="form.abnormalSymptomDesc" placeholder="请描述异常状况"></el-input>
+                    <el-input type="textarea" class="whole100Calc" v-model="form.abnormalSymptomDesc" placeholder="请描述异常状况"></el-input>
                 </el-form-item>
 
                 <el-form-item label="医生诊断" class="whole100" label-width="90px">
-                    <el-input type="textarea" v-model="form.doctorDiagnosis" placeholder="请描述异常状况"></el-input>
+                    <el-input type="textarea" class="whole100Calc" v-model="form.doctorDiagnosis" placeholder="请描述异常状况"></el-input>
                 </el-form-item>
 
                 <el-form-item label="测量时间" label-width="90px">
@@ -76,7 +76,7 @@
                                :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
                         <span v-if="!form.medicalRecordAttachment">未选择任何文件</span>
-                        <a v-else :href="form.medicalRecordAttachment" target="_blank">这是一个上传文件，点击查看</a>
+                        <a v-else :href="form.medicalRecordAttachment" target="_blank">查看</a>
                     </el-upload>
                 </el-form-item>
 
@@ -89,7 +89,7 @@
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
                         <span v-if="!form.medicalReport">未选择任何文件</span>
-                        <a v-else :href="form.medicalReport" target="_blank">这是一个上传文件，点击查看</a>
+                        <a v-else :href="form.medicalReport" target="_blank">查看</a>
                     </el-upload>
                 </el-form-item>
 
@@ -102,7 +102,7 @@
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
                         <span v-if="!form.electrocardiogramData">未选择任何文件</span>
-                        <a v-else :href="form.electrocardiogramData" target="_blank">这是一个上传文件，点击查看</a>
+                        <a v-else :href="form.electrocardiogramData" target="_blank">查看</a>
                     </el-upload>
                 </el-form-item>
 
@@ -115,12 +115,12 @@
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
                         <span v-if="!form.electrocardiogram">未选择任何文件</span>
-                        <a v-else :href="form.electrocardiogram" target="_blank">这是一个上传文件，点击查看</a>
+                        <a v-else :href="form.electrocardiogram" target="_blank">查看</a>
                     </el-upload>
                 </el-form-item>
 
                 <el-form-item class="operation-btn" label-width="0">
-                    <el-button type="primary" @click="submitForm('form')">保 存</el-button>
+                    <el-button v-if="jurisdictionList.adDisabled" type="primary" @click="submitForm('form')">保 存</el-button>
                     <el-button @click="handleHistory">返 回</el-button>
                 </el-form-item>
             </el-form>
@@ -154,7 +154,10 @@
                 /* eslint-disable */
                 actionUrl: CAS_SERVER_URL + '/admin/storage/create',
                 /* eslint-disable */
-                userData: {}
+                userData: {},
+                jurisdictionList: {
+                    adDisabled: false,
+                }
             };
         },
         created() {
@@ -167,7 +170,7 @@
                     } else {
                         this.$message({
                             showClose: true,
-                            message: res.data.errmsg,
+                            message: '用户信息' + res.data.errmsg,
                             type: 'error'
                         });
                     }
@@ -181,11 +184,18 @@
                     } else {
                         this.$message({
                             showClose: true,
-                            message: res.data.errmsg,
+                            message: '病例信息' + res.data.errmsg,
                             type: 'error'
                         });
                     }
                 });
+            }
+            // 权限
+            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+            for (let i = 0; i < assignedPermissions.length; i++) {
+                if (assignedPermissions[i] === 'admin:hdMedicalCase:create' || assignedPermissions[i] === 'admin:hdMedicalCase:update') {
+                    this.jurisdictionList.adDisabled = true;
+                }
             }
         },
         methods: {
@@ -314,5 +324,8 @@
     }
     .el-upload-list.el-upload-list--text {
         display: none;
+    }
+    .whole100Calc.el-textarea textarea{
+        width: e("calc( 50% + 464px)")!important;
     }
 </style>

@@ -2,7 +2,7 @@
     <div class="equipmentList">
         <div class="user-data clearfix">
             <div class="user-property user-img">
-                <img style="width: 42px;height: 42px;border-radius: 20px" :src="userData.img" alt="">
+                <img style="width: 42px;height: 42px;border-radius: 20px" v-if="userData.img" :src="userData.img" alt="">
             </div>
             <div class="user-property">
                 <div class="user-name">{{userData.name}}</div>
@@ -69,7 +69,7 @@
                 <el-table-column prop="operation" label="操作人"></el-table-column>
                 <el-table-column prop="id" label="操作">
                     <template slot-scope="scope">
-                        <router-link :to="{ path:'/caseList'}">
+                        <router-link :to="{ path:'/caseListUpdate'}">
                             <a>{{scope.row.id}}修改</a>
                         </router-link>
                         <router-link :to="{ path:'/medicalHistory'}">

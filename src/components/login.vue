@@ -43,6 +43,7 @@
                     username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
                     password: [{required: true, message: '请输入密码', trigger: 'blur'}],
                 },
+                loginFlag: true,
             };
         },
         created() {
@@ -76,39 +77,44 @@
                             username: this.param.username,
                             password: this.param.password
                         };
-                        getLogin(para).then((res) => {
-                            if (res.data.errno === 0) {
-                                sessionStorage.setItem('token', res.data.data);
-                                authInfo().then(res1 => {
-                                    if (res1.data.errno === 0) {
-                                        if (this.param.remember) {
-                                            window.document.cookie = 'username=' + this.param.username;
-                                            window.document.cookie = 'password=' + this.param.password;
+                        if (this.loginFlag) {
+                            this.loginFlag = false;
+                            getLogin(para).then((res) => {
+                                if (res.data.errno === 0) {
+                                    sessionStorage.setItem('token', res.data.data);
+                                    authInfo().then(res1 => {
+                                        if (res1.data.errno === 0) {
+                                            if (this.param.remember) {
+                                                window.document.cookie = 'username=' + this.param.username;
+                                                window.document.cookie = 'password=' + this.param.password;
+                                            }
+                                            this.$message({
+                                                showClose: true,
+                                                message: '登陆成功',
+                                                type: 'success'
+                                            });
+                                            sessionStorage.setItem('userData', JSON.stringify(res1.data.data));
+                                            this.$router.push('/');
+                                        } else {
+                                            this.loginFlag = true;
+                                            this.$message({
+                                                showClose: true,
+                                                message: res1.data.errmsg,
+                                                type: 'error'
+                                            });
                                         }
-                                        this.$message({
-                                            showClose: true,
-                                            message: '登陆成功',
-                                            type: 'success'
-                                        });
-                                        sessionStorage.setItem('userData', JSON.stringify(res1.data.data));
-                                        this.$router.push('/');
-                                    } else {
-                                        this.$message({
-                                            showClose: true,
-                                            message: res1.data.errmsg,
-                                            type: 'error'
-                                        });
-                                    }
-                                });
-                            } else {
-                                this.param.verifyCode = '';
-                                this.$message({
-                                    showClose: true,
-                                    message: res.data.errmsg,
-                                    type: 'error'
-                                });
-                            }
-                        });
+                                    });
+                                } else {
+                                    this.param.verifyCode = '';
+                                    this.loginFlag = true;
+                                    this.$message({
+                                        showClose: true,
+                                        message: res.data.errmsg,
+                                        type: 'error'
+                                    });
+                                }
+                            });
+                        }
                     }
                 });
             }
@@ -158,8 +164,8 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        margin-left: -180px;
-        margin-top: -250px;
+        margin-left: -275px;
+        margin-top: -223px;
         display: inline-block;
         padding: 50px 100px;
         background: #fff;
@@ -272,5 +278,8 @@
         bottom: 10px;
         text-align: center;
         color: #fff;
+    }
+    #app {
+        min-width: 144px;
     }
 </style>

@@ -14,15 +14,6 @@
                     </el-form-item>
                 </el-form>
             </div>
-            <!--<div class="query-btn">
-                <router-link :to="{ path:'/addUser'}">
-                    <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
-                </router-link>
-                <el-button><i class="icon-picture icon-picture-to-lead"></i>批量导入</el-button>
-                <el-button><i class="icon-picture icon-picture-export"></i>批量导出</el-button>
-                <el-button><i class="icon-picture icon-picture-update"></i>一键更新faceId</el-button>
-                <el-button><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
-            </div>-->
         </div>
         <div class="table-list">
             <el-table
@@ -33,7 +24,7 @@
                     style="width: 100%">
                 <el-table-column label="img" min-width="60">
                     <template slot-scope="scope">
-                        <img class="head-portrait" :src="scope.row.userImage1" alt="">
+                        <img class="head-portrait" v-if="scope.row.userImage1" :src="scope.row.userImage1" alt="">
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="姓名" min-width="80">
@@ -64,23 +55,23 @@
                         <router-link v-if="scope.row.faceId" :to="{ path:'/fatigueList',query: {obj: scope.row}}">
                             <span class="normality" v-if="scope.row.fatigue == 0">正常</span>
                             <span class="abnormality" v-else-if="scope.row.fatigue == 1">疲劳</span>
-                            <span v-else>{{scope.row.fatigue?scope.row.fatigue:'无'}}</span>
+                            <span v-else>{{scope.row.fatigue?scope.row.fatigue:'正常'}}</span>
                         </router-link>
                         <template v-else>
                             <span class="normality" v-if="scope.row.fatigue == 0">正常</span>
                             <span class="abnormality" v-else-if="scope.row.fatigue == 1">疲劳</span>
-                            <span v-else>{{scope.row.fatigue?scope.row.fatigue:'无'}}</span>
+                            <span v-else>{{scope.row.fatigue?scope.row.fatigue:'正常'}}</span>
                         </template>
                     </template>
                 </el-table-column>
                 <el-table-column prop="" label="情绪值" min-width="120"></el-table-column>
                 <el-table-column prop="rateCheckTime" label="检测时间" min-width="150"></el-table-column>
-                <el-table-column prop="id" label="操作" min-width="90">
+                <el-table-column prop="id" label="操作" min-width="150">
                     <template slot-scope="scope">
-                        <router-link :to="{ path:'/caseList',query: {id:scope.row.id}}">
+                        <router-link v-if="jurisdictionList.csDisabled" :to="{ path:'/caseList',query: {id:scope.row.id}}">
                             <a class="operation-table">病例</a>
                         </router-link>
-                        <router-link :to="{ path:'/medicalHistory',query: {id:scope.row.id}}">
+                        <router-link v-if="jurisdictionList.mcDisabled" :to="{ path:'/medicalHistoryDetail',query: {id:scope.row.id}}">
                             <a class="operation-table">病史</a>
                         </router-link>
                     </template>
@@ -114,10 +105,23 @@
                 total: 0, // 条数
                 page: 1, // 页码
                 loading: false,
+                jurisdictionList: {
+                    csDisabled: false,
+                    mcDisabled: false,
+                }
             };
         },
         created() {
             this.getHealthDataList(1,10);
+            // 权限
+            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+            for (let i = 0; i < assignedPermissions.length; i++) {
+                if (assignedPermissions[i] === 'admin:hdMedical:read') {
+                    this.jurisdictionList.mcDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:hdMedicalCase:list') {
+                    this.jurisdictionList.csDisabled = true;
+                }
+            }
         },
         methods: {
             // 修改页数

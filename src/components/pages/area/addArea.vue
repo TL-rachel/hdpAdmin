@@ -1,6 +1,5 @@
 <template>
     <div class="administrator equipmentList">
-        <h4>新增区域</h4>
         <div class="form-save">
             <el-form :model="form" :rules="rules" ref="form" label-width="140px" class="demo-ruleForm">
                 <el-form-item label="区域名称" prop="regionName">
@@ -12,7 +11,7 @@
                 <el-form-item label="区域负责人" prop="regionLead">
                     <el-input class="w420" :disabled="$route.query.type?true:false" v-model="form.regionLead" placeholder="请输入区域负责人"></el-input>
                 </el-form-item>
-                <el-form-item label="负责人联系方式" prop="leadPhone">
+                <el-form-item label="负责人联系方式">
                     <el-input class="w420" :disabled="$route.query.type?true:false" v-model="form.leadPhone" placeholder="请输入负责人联系方式"></el-input>
                 </el-form-item>
                 <el-form-item label="区域操作人" prop="regionOperation">
@@ -24,7 +23,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item class="operation-btn" label-width="0">
-                    <el-button type="primary" v-if="$route.query.type?false:true" @click="submitForm()">保 存</el-button>
+                    <el-button type="primary" v-if="jurisdictionList.adDisabled && $route.query.type?false:true" @click="submitForm()">保 存</el-button>
                     <el-button @click="handleHistory">返 回</el-button>
                 </el-form-item>
             </el-form>
@@ -69,6 +68,9 @@
                 },
                 // 归属企业
                 companyList: [],
+                jurisdictionList: {
+                    adDisabled: false,
+                }
             };
         },
         created() {
@@ -80,7 +82,7 @@
                     } else {
                         this.$message({
                             showClose: true,
-                            message: res.data.errmsg,
+                            message: '区域详情' + res.data.errmsg,
                             type: 'error'
                         });
                     }
@@ -93,11 +95,18 @@
                 } else {
                     this.$message({
                         showClose: true,
-                        message: res.data.errmsg,
+                        message: '归属企业列表' + res.data.errmsg,
                         type: 'error'
                     });
                 }
             });
+            // 权限
+            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+            for (let i = 0; i < assignedPermissions.length; i++) {
+                if (assignedPermissions[i] === 'admin:hdRegion:create' || assignedPermissions[i] === 'admin:hdRegion:update') {
+                    this.jurisdictionList.adDisabled = true;
+                }
+            }
         },
         methods: {
             /**
@@ -210,6 +219,10 @@
             }
             .el-button--primary {
                 margin-right: 46px;
+                &:hover{
+                    background: #4D7CFE;
+                    color:#fff ;
+                }
             }
         }
     }

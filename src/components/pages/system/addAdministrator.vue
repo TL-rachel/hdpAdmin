@@ -1,12 +1,12 @@
 <template>
     <div class="administrator equipmentList">
-        <h4>新增管理员</h4>
+<!--        <h4>{{$route.query.id?'编辑管理员':'新增管理员'}}</h4>-->
         <div class="form-save">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="账号" prop="username">
-                    <el-input class="w420" v-model="ruleForm.username" placeholder="包含6-12位英文字母"></el-input>
+                    <el-input class="w420" v-model="ruleForm.username" placeholder="包含英文字母"></el-input>
                 </el-form-item>
-                <el-form-item :label="$route.query.id?'新密码':'初始密码'" prop="password">
+                <el-form-item :label="$route.query.id?'密码':'初始密码'" prop="password">
                     <el-input class="w420" type="password" v-model="ruleForm.password" placeholder="请输入密码"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名" prop="username2">
@@ -21,7 +21,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item class="operation-btn" label-width="0">
-                    <el-button type="primary" @click="submitForm()">保 存</el-button>
+                    <el-button v-if="jurisdictionList.adDisabled" type="primary" @click="submitForm()">保 存</el-button>
                     <el-button @click="handleHistory">返 回</el-button>
                 </el-form-item>
             </el-form>
@@ -47,7 +47,7 @@
                 rules: {
                     username: [
                         { required: true, message: '请输入账号', trigger: 'blur' },
-                        { min: 6, max: 12, message: '长度在 6 到 12 位英文字母', trigger: 'blur' }
+                        { min: 1, max: 12, message: '长度小于等于12 位', trigger: 'blur' }
                     ],
                     password: [
                         { required: true, message: '请输入密码', trigger: 'blur' }
@@ -64,6 +64,9 @@
                 },
                 // 角色列表
                 options: [],
+                jurisdictionList: {
+                    adDisabled: false,
+                }
             };
         },
         created() {
@@ -71,6 +74,12 @@
             roleOptions().then(res => {
                 if (res.data.errno === 0) {
                     this.options = res.data.data;
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: '角色列表' + res.data.errmsg,
+                        type: 'error'
+                    });
                 }
             });
             // 获取管理员详情
@@ -89,6 +98,13 @@
                         });
                     }
                 });
+            }
+            // 权限
+            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+            for (let i = 0; i < assignedPermissions.length; i++) {
+                if (assignedPermissions[i] === 'admin:admin:create' || assignedPermissions[i] === 'admin:admin:update') {
+                    this.jurisdictionList.adDisabled = true;
+                }
             }
         },
         methods: {

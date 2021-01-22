@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <div class="chart clearfix">
+        <div v-if="myChart.length > 0" class="chart clearfix">
             <div v-for="(item,index) in myChart" :key="index" :id="item.id" :ref="item.ref" :style="{width: '555px', height: '352px',float: 'left','margin-right': '20px','margin-bottom': '40px'}"></div>
         </div>
     </div>
@@ -51,6 +51,7 @@
                     this.companyUser = res.data.data.companyUser;
                     this.sex = res.data.data.sex;
                 } else {
+                    this.myChart = [];
                     this.$message({
                         showClose: true,
                         message: res.data.errmsg,

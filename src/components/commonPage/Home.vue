@@ -30,6 +30,9 @@ export default {
 };
 </script>
 <style>
+    #app {
+        min-width: 1440px;
+    }
     .content-box {
         background: #f8fafb;
         height: calc(100% - 52px);

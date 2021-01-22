@@ -3,10 +3,10 @@
         <div class="query">
             <div><i class="icon-picture icon-picture-grabble icon-position"></i><el-input class="query-input user-input icon-position" type="text" placeholder="搜索管理员账号" @blur="getCompanyList(1,10)" v-model="userName"></el-input></div>
             <div class="query-btn">
-                <router-link :to="{ path:'/addCompany'}">
+                <router-link v-if="jurisdictionList.adDisabled" :to="{ path:'/addCompany'}">
                     <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
                 </router-link>
-                <el-button @click="deleteCompany(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+                <el-button v-if="jurisdictionList.dbtDisabled" @click="deleteCompany(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             </div>
         </div>
         <div class="table-list">
@@ -28,17 +28,29 @@
                 <el-table-column prop="updatedTime" label="更新时间" min-width="120"></el-table-column>
                 <el-table-column prop="companyStatus" label="审核状态" min-width="120">
                     <template slot-scope="scope">
-                        <span class="audit" v-if="scope.row.companyStatus==0">审核中</span>
-                        <span class="normality" v-if="scope.row.companyStatus==1">通过</span>
-                        <span class="abnormality" v-if="scope.row.companyStatus==2">驳回</span>
+                        <div class="audit whiteSpNo" v-if="scope.row.companyStatus==0">
+                            审核中
+                        </div>
+                        <div class="normality whiteSpNo" v-if="scope.row.companyStatus==1">
+                            通过
+                             <el-tooltip v-if="scope.row.examineContent" class="item" effect="dark" :content="scope.row.examineContent" placement="top">
+                                <i class="iconfont icon-wenhao"></i>
+                            </el-tooltip>
+                        </div>
+                        <div class="abnormality whiteSpNo" v-if="scope.row.companyStatus==2">
+                            驳回
+                            <el-tooltip v-if="scope.row.examineContent" class="item" effect="dark" :content="scope.row.examineContent" placement="top">
+                                <i class="iconfont icon-wenhao"></i>
+                            </el-tooltip>
+                        </div>
                     </template>
                 </el-table-column>
                 <el-table-column prop="id" label="操作" width="180">
                     <template slot-scope="scope">
-                        <router-link :to="{ path:'/addCompany',query: {id:scope.row.id,type:2}}">
+                        <router-link v-if="jurisdictionList.atDisabled" :to="{ path:'/addCompanyAudit',query: {id:scope.row.id,type:2}}">
                             <a v-if="scope.row.companyStatus == 0" class="operation-table">审核</a>
                         </router-link>
-                        <a class="operation-table" @click="deleteCompany(scope.row,1)">删除</a>
+                        <a v-if="jurisdictionList.dtDisabled" class="operation-table" @click="deleteCompany(scope.row,1)">删除</a>
                     </template>
                 </el-table-column>
             </el-table>
@@ -59,7 +71,7 @@
 </template>
 
 <script>
-    import {hdCompanyList,companyDelete,companyBatchDelete} from '../../../api/api';
+    import {hdCompanyAuditList,companyAuditDelete,companyAuditBatchDelete} from '../../../api/api';
     export default {
         name: 'companyAuditList',
         data() {
@@ -71,10 +83,29 @@
                 total: 0, // 条数
                 page: 1, // 页码
                 loading: false,
+                jurisdictionList: {
+                    adDisabled: false,
+                    dtDisabled: false,
+                    dbtDisabled: false,
+                    atDisabled: false,
+                }
             };
         },
         created() {
             this.getCompanyList(1,10);
+            // 权限
+            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+            for (let i = 0; i < assignedPermissions.length; i++) {
+                if (assignedPermissions[i] === 'admin:hdCompanyAudit:create') {
+                    this.jurisdictionList.adDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:hdCompanyAudit:delete') {
+                    this.jurisdictionList.dtDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:hdCompanyAudit:delete') {
+                    this.jurisdictionList.dbtDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:hdCompanyAudit:update') {
+                    this.jurisdictionList.atDisabled = true;
+                }
+            }
         },
         methods: {
             /**
@@ -104,10 +135,11 @@
             getCompanyList(currentPage, pageSize) {
                 let para = {
                     limit: pageSize,
-                    page: currentPage
+                    page: currentPage,
+                    companyName: this.userName
                 };
                 this.loading = true;
-                hdCompanyList(para).then(res => {
+                hdCompanyAuditList(para).then(res => {
                     this.loading = false;
                     if (res.data.errno === 0) {
                         this.tableData = res.data.data.items;
@@ -134,7 +166,7 @@
                         type: 'warning'
                     }).then(() => {
                         if (type === 1) {
-                            companyDelete({id: detail.id}).then(res => {
+                            companyAuditDelete({id: detail.id}).then(res => {
                                 if (res.data.errno === 0) {
                                     this.$message({
                                         showClose: true,
@@ -151,7 +183,7 @@
                                 }
                             });
                         } else {
-                            companyBatchDelete({ids: detail}).then(res => {
+                            companyAuditBatchDelete({ids: detail}).then(res => {
                                 if (res.data.errno === 0) {
                                     this.$message({
                                         showClose: true,
@@ -190,4 +222,7 @@
 .audit {
     color: #FFA430;
 }
+    .whiteSpNo{
+        white-space: normal;
+    }
 </style>

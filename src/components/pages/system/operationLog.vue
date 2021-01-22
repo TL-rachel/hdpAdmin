@@ -23,7 +23,7 @@
                     tooltip-effect="dark"
                     v-loading="loading"
                     style="width: 100%">
-                <el-table-column prop="id" label="ID" min-width="60"></el-table-column>
+<!--                <el-table-column prop="id" label="ID" min-width="60"></el-table-column>-->
                 <el-table-column prop="companyName" label="变更企业" min-width="80"></el-table-column>
                 <el-table-column prop="optUserName" label="操作人" min-width="60"></el-table-column>
                 <el-table-column prop="optType" label="操作类型" min-width="60"></el-table-column>

@@ -26,10 +26,10 @@
             </div>
         </div>
         <div class="table-list">
-            <router-link :to="{ path:'/addCase',query:{userId: $route.query.id}}">
+            <router-link v-if="jurisdictionList.adDisabled" :to="{ path:'/addCase',query:{userId: $route.query.id}}">
                 <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
             </router-link>
-            <el-button @click="medicalDelete(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+            <el-button v-if="jurisdictionList.dbtDisabled" @click="medicalDelete(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             <el-table
                     ref="multipleTable"
                     :data="tableData"
@@ -78,10 +78,10 @@
                 <el-table-column prop="operation" label="操作人"></el-table-column>
                 <el-table-column prop="id" label="操作" width="120px">
                     <template slot-scope="scope">
-                        <router-link :to="{ path:'/addCase',query: {userId: userData.id,id: scope.row.id}}">
+                        <router-link v-if="jurisdictionList.upDisabled" :to="{ path:'/addCaseUpdate',query: {userId: userData.id,id: scope.row.id}}">
                             <a class="operation-table">修改</a>
                         </router-link>
-                        <a @click="medicalDelete(scope.row.id,1)" class="operation-table">删除</a>
+                        <a v-if="jurisdictionList.dtDisabled" @click="medicalDelete(scope.row.id,1)" class="operation-table">删除</a>
                     </template>
                 </el-table-column>
             </el-table><!--工具条-->
@@ -111,6 +111,12 @@
                 total: 0, // 条数
                 page: 1, // 页码
                 loading: false,
+                jurisdictionList: {
+                    adDisabled: false,
+                    dtDisabled: false,
+                    dbtDisabled: false,
+                    upDisabled: false,
+                }
             };
         },
         created() {
@@ -128,6 +134,19 @@
                     }
                 });
                 this.getMedicalCaseList(1,10);
+            }
+            // 权限
+            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+            for (let i = 0; i < assignedPermissions.length; i++) {
+                if (assignedPermissions[i] === 'admin:hdMedicalCase:create') {
+                    this.jurisdictionList.adDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:hdMedicalCase:delete') {
+                    this.jurisdictionList.dtDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:hdMedicalCase:batch-delete') {
+                    this.jurisdictionList.dbtDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:hdMedicalCase:update') {
+                    this.jurisdictionList.upDisabled = true;
+                }
             }
         },
         methods: {

@@ -34,7 +34,7 @@
             </el-form-item>
 
             <el-form-item label="设备状态" label-width="110px" prop="deviceStatus">
-                <el-select class="w420" :disabled="$route.query.type==1?true:false" v-model="form.deviceStatus" placeholder="请选择设备状态">
+                <el-select class="w420" disabled v-model="form.deviceStatus" placeholder="请选择设备状态">
                     <el-option label="正常" :value="0"></el-option>
                     <el-option label="断开" :value="1"></el-option>
                 </el-select>
@@ -46,10 +46,10 @@
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="厂家联系人" label-width="110px" style="width: 280px;" prop="manufactorPeople">
+            <el-form-item label="厂家联系人" label-width="110px" style="width: 280px;" >
                 <el-input class="w140" :disabled="$route.query.type==1?true:false" v-model="form.manufactorPeople" placeholder="请输入人名"></el-input>
             </el-form-item>
-            <el-form-item label="厂家联系方式" label-width="110px" style="width: 310px" prop="manufactorPhone">
+            <el-form-item label="厂家联系方式" label-width="110px" style="width: 310px" >
                 <el-input class="w140" :disabled="$route.query.type==1?true:false" v-model="form.manufactorPhone" placeholder="请输入手机号"></el-input>
             </el-form-item>
 
@@ -65,11 +65,11 @@
                 <span v-if="deviceFlag === false ? true : false" class="point-abnormality"><span></span>网络不正常，请检查设备编码</span>
             </el-form-item>
 
-            <el-form-item label="添加人" v-if="$route.query.id?true:false" label-width="110px" prop="createdUserId">
-                <el-input class="w420" :disabled="$route.query.type==1?true:false" v-model="form.createdUserId" placeholder="请输入人名"></el-input>
+            <el-form-item label="添加人" v-if="$route.query.id?true:false" :disabled="$route.query.id?true:false" label-width="110px" prop="createdUserName">
+                <el-input class="w420" :disabled="$route.query.type==1?true:false" v-model="form.createdUserName" placeholder="请输入人名"></el-input>
             </el-form-item>
-            <el-form-item label="更新人" v-if="$route.query.id?true:false" label-width="110px" prop="updatedUserId">
-                <el-input class="w420" :disabled="$route.query.type==1?true:false" v-model="form.updatedUserId" placeholder="请输入人名"></el-input>
+            <el-form-item label="更新人" v-if="$route.query.id?true:false" :disabled="$route.query.id?true:false" label-width="110px" prop="updatedUserName">
+                <el-input class="w420" :disabled="$route.query.type==1?true:false" v-model="form.updatedUserName" placeholder="请输入人名"></el-input>
             </el-form-item>
 
             <el-form-item label="添加时间" v-if="$route.query.id?true:false" label-width="110px" prop="createdTime">
@@ -80,7 +80,7 @@
                 <el-date-picker class="w420" :disabled="$route.query.type==1?true:false" type="datetime" placeholder="选择日期" v-model="form.updatedTime"></el-date-picker>
             </el-form-item>
             <el-form-item class="operation-btn" label-width="0">
-                <el-button type="primary" @click="submitForm()">保 存</el-button>
+                <el-button v-if="jurisdictionList.adDisabled && $route.query.type==1?false:true" type="primary" @click="submitForm()">保 存</el-button>
                 <el-button @click="handleHistory">返 回</el-button>
             </el-form-item>
         </el-form>
@@ -97,7 +97,7 @@
                     id: '', // 设备ID
                     deviceCode: '', // 设备编码
                     deviceName: '', // 设备名称
-                    deviceType: '', // 设备类型
+                    deviceType: 1, // 设备类型
                     deviceLead: '', // 设备负责人
                     leadPhone: '', // 联系方式
                     deviceRegionId: '', // 设备区域
@@ -108,8 +108,8 @@
                     companyId: '', // 归属企业
                     devicePath: '', // 直播链接地址
                     deviceBackPath: '', // 录播链接地址
-                    createdUserId: '', // 添加人
-                    updatedUserId: '', // 更新人
+                    createdUserName: '', // 添加人
+                    updatedUserName: '', // 更新人
                     createdTime: '', // 添加时间
                     updatedTime: '', // 更新时间
                 },
@@ -135,10 +135,10 @@
                     deviceRegionId: [
                         { required: true, message: '请选择设备区域', trigger: 'change' }
                     ],
-                    updatedUserId: [
+                    updatedUserName: [
                         { required: true, message: '请输入更新人', trigger: 'blur' }
                     ],
-                    createdUserId: [
+                    createdUserName: [
                         { required: true, message: '请输入添加人', trigger: 'blur' }
                     ],
                     devicePath: [
@@ -171,6 +171,9 @@
                 manufacturer: [], // 厂商列表
                 equipmentList: [], // 设备类型
                 deviceFlag: '', // 设备正常状态
+                jurisdictionList: {
+                    adDisabled: false,
+                }
             };
         },
         created() {
@@ -181,7 +184,7 @@
                 } else {
                     this.$message({
                         showClose: true,
-                        message: res.data.errmsg,
+                        message: '区域列表' + res.data.errmsg,
                         type: 'error'
                     });
                 }
@@ -193,7 +196,7 @@
                 } else {
                     this.$message({
                         showClose: true,
-                        message: res.data.errmsg,
+                        message: '归属企业列表' + res.data.errmsg,
                         type: 'error'
                     });
                 }
@@ -205,7 +208,7 @@
                 } else {
                     this.$message({
                         showClose: true,
-                        message: res.data.errmsg,
+                        message: '设备类型' + res.data.errmsg,
                         type: 'error'
                     });
                 }
@@ -217,7 +220,7 @@
                 } else {
                     this.$message({
                         showClose: true,
-                        message: res.data.errmsg,
+                        message: '厂商' + res.data.errmsg,
                         type: 'error'
                     });
                 }
@@ -230,11 +233,18 @@
                     } else {
                         this.$message({
                             showClose: true,
-                            message: res.data.errmsg,
+                            message: '设备详情' + res.data.errmsg,
                             type: 'error'
                         });
                     }
                 });
+            }
+            // 权限
+            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+            for (let i = 0; i < assignedPermissions.length; i++) {
+                if (assignedPermissions[i] === 'admin:hdDevice:update' || assignedPermissions[i] === 'admin:hdDevice:create') {
+                    this.jurisdictionList.adDisabled = true;
+                }
             }
         },
         methods: {
@@ -247,9 +257,11 @@
                         if (Number(res.data.data.code) === 200) {
                             this.form.devicePath = res.data.data.path2;
                             this.form.deviceBackPath = res.data.data.path3;
+                            this.form.deviceStatus = 0;
                             this.deviceFlag = true;
                         } else {
                             this.deviceFlag = false;
+                            this.form.deviceStatus = 1;
                             this.$message({
                                 showClose: true,
                                 message: res.data.data.msg,
@@ -387,6 +399,10 @@
             }
             .el-button--primary {
                 margin-right: 46px;
+                &:hover{
+                    background: #4D7CFE;
+                    color:#fff ;
+                }
             }
         }
     }

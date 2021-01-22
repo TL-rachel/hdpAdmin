@@ -66,11 +66,11 @@
                 <el-input class="w420" v-model="form.userPhone" :disabled="$route.query.type==1?true:false" placeholder="请输入号码"></el-input>
             </el-form-item>
 
-            <el-form-item label="邮箱地址" label-width="90px" prop="userEmail">
+            <el-form-item label="邮箱地址" label-width="90px">
                 <el-input class="w420" v-model="form.userEmail" :disabled="$route.query.type==1?true:false" placeholder="请输入邮箱地址"></el-input>
             </el-form-item>
 
-            <el-form-item label="证件类型" label-width="90px" style="width: 20%;" prop="userCertificatesType">
+            <el-form-item label="证件类型" label-width="90px" style="width: 20%;">
                 <el-select class="w140" v-model="form.userCertificatesType" :disabled="$route.query.type==1?true:false" placeholder="请选择证件类型">
                     <el-option label="身份证" :value="0"></el-option>
                     <el-option label="驾照" :value="1"></el-option>
@@ -78,56 +78,54 @@
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="证件号码" label-width="100px" style="width: 25%;" prop="certificatesNum">
+            <el-form-item label="证件号码" label-width="100px" style="width: 25%;">
                 <el-input class="w190" v-model="form.certificatesNum" :disabled="$route.query.type==1?true:false" placeholder="请输入证件号码"></el-input>
             </el-form-item>
 
-            <el-form-item label="血型" label-width="90px" prop="userBlood">
+            <el-form-item label="血型" label-width="90px">
                 <el-input class="w420" v-model="form.userBlood" :disabled="$route.query.type==1?true:false" placeholder="请输入血型"></el-input>
             </el-form-item>
 
-            <el-form-item label="职业" label-width="90px" prop="userJob">
+            <el-form-item label="职业" label-width="90px">
                 <el-input class="w420" v-model="form.userJob" :disabled="$route.query.type==1?true:false" placeholder="请输入职业"></el-input>
             </el-form-item>
 
-            <el-form-item label="学历" label-width="90px" prop="userEducation">
+            <el-form-item label="学历" label-width="90px">
                 <el-input class="w420" v-model="form.userEducation" :disabled="$route.query.type==1?true:false" placeholder="请输入学历"></el-input>
             </el-form-item>
 
-            <el-form-item label="归属企业" label-width="90px" prop="companyId">
+            <el-form-item label="归属企业" label-width="90px">
                 <el-select class="w420" v-model="form.companyId" :disabled="$route.query.type==1?true:false" placeholder="请选择归属企业">
                     <el-option v-for="(item,index) in companyList" :key="index" :label="item.companyName" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="民族" label-width="90px" prop="userNation">
-                <el-select class="w420" v-model="form.userNation" :disabled="$route.query.type==1?true:false" placeholder="请选择民族">
-                    <el-option v-for="(item,index) in userNationList" :key="index" :label="item.name" :value="item.id"></el-option>
-                </el-select>
+            <el-form-item label="民族" label-width="90px">
+                <el-input class="w420" v-model="form.userNation" :disabled="$route.query.type==1?true:false" placeholder="请输入民族"></el-input>
             </el-form-item>
 
-            <el-form-item label="用户等级" label-width="90px" style="width: 21%;" prop="userLevel">
+            <el-form-item label="用户等级" label-width="90px" style="width: 21%;">
                 <el-select class="w140" v-model="form.userLevel" :disabled="$route.query.type==1?true:false" placeholder="请选择用户等级">
                     <el-option label="一级" :value="0"></el-option>
                     <el-option label="二级" :value="1"></el-option>
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="等级变更方式" label-width="110px" style="width: 20%;" prop="levelChangeType">
+            <el-form-item label="等级变更方式" label-width="110px" style="width: 20%;">
                 <el-select class="w140" v-model="form.levelChangeType" :disabled="$route.query.type==1?true:false" placeholder="请选择等级变更方式">
                     <el-option label="系统" :value="0"></el-option>
                     <el-option label="人工" :value="1"></el-option>
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="身高" label-width="90px" prop="userHeight">
+            <el-form-item label="身高" label-width="90px">
                 <el-input class="w420" v-model="form.userHeight" :disabled="$route.query.type==1?true:false" placeholder="请输入身高"></el-input>
             </el-form-item>
-            <el-form-item label="体重" label-width="90px" prop="userWeight">
+            <el-form-item label="体重" label-width="90px">
                 <el-input class="w420" v-model="form.userWeight" :disabled="$route.query.type==1?true:false" placeholder="请输入体重"></el-input>
             </el-form-item>
             <el-form-item class="operation-btn" label-width="0">
-                <el-button type="primary" @click="submitForm()">保 存</el-button>
+                <el-button v-if="jurisdictionList.adDisabled && $route.query.type==1?false:true" type="primary" @click="submitForm()">保 存</el-button>
                 <el-button @click="handleHistory">返 回</el-button>
             </el-form-item>
         </el-form>
@@ -145,10 +143,10 @@
                     certificatesNum: '', //证件号码
                     companyId: '', //所属企业ID
                     delFlag: false, //默认false
-                    levelChangeType: '0', //等级变更方式(0系统；1人工；默认0)
+                    levelChangeType: 0, //等级变更方式(0系统；1人工；默认0)
                     userAge: '', //年龄
                     userBlood: '', //血型
-                    userCertificatesType: '0', //证件类型(0-身份证；1-驾照；2-护照）
+                    userCertificatesType: 0, //证件类型(0-身份证；1-驾照；2-护照）
                     userEducation: '', //学历
                     userEmail: '', //email
                     userHeight: '', //身高
@@ -156,7 +154,7 @@
                     userImage2: '', //图片2
                     userImage3: '', //图片3
                     userJob: '', //职业
-                    userLevel: '0', //用户等级默认1
+                    userLevel: 0, //用户等级默认1
                     userName: '', //姓名
                     userNation: '', //民族
                     userPhone: '', //手机号码
@@ -211,244 +209,21 @@
                         { required: true, message: '请选择用户等级', trigger: 'change' }
                     ],
                     userNation: [
-                        { required: true, message: '请选择民族', trigger: 'change' }
+                        { required: true, message: '请输入民族', trigger: 'blur' }
                     ],
                     userSex: [
                         { required: true, message: '请选择性别', trigger: 'change' }
                     ]
                 },
-                userNationList: [
-                    {
-                        name: '汉族',
-                        id: 0
-                    },
-                    {
-                        name: '阿昌族',
-                        id: 1
-                    },
-                    {
-                        name: '鄂温克族',
-                        id: 2
-                    },
-                    {
-                        name: '傈僳族',
-                        id: 3
-                    },
-                    {
-                        name: '水族',
-                        id: 4
-                    },
-                    {
-                        name: '白族',
-                        id: 5
-                    },
-                    {
-                        name: '高山族',
-                        id: 6
-                    },
-                    {
-                        name: '珞巴族',
-                        id: 7
-                    },
-                    {
-                        name: '塔吉克bai族',
-                        id: 8
-                    },
-                    {
-                        name: '保安族',
-                        id: 9
-                    },
-                    {
-                        name: '仡佬族',
-                        id: 10
-                    },
-                    {
-                        name: '满族',
-                        id: 11
-                    },
-                    {
-                        name: '塔塔尔族',
-                        id: 12
-                    },
-                    {
-                        name: '布朗族',
-                        id: 13
-                    },
-                    {
-                        name: '哈尼族',
-                        id: 14
-                    },
-                    {
-                        name: '毛南族',
-                        id: 15
-                    },
-                    {
-                        name: '土家族',
-                        id: 16
-                    },
-                    {
-                        name: '布依族',
-                        id: 17
-                    },
-                    {
-                        name: '哈萨克族',
-                        id: 18
-                    },
-                    {
-                        name: '门巴族',
-                        id: 19
-                    },
-                    {
-                        name: '土族',
-                        id: 20
-                    },
-                    {
-                        name: '朝鲜族',
-                        id: 21
-                    },
-                    {
-                        name: '蒙古族',
-                        id: 22
-                    },
-                    {
-                        name: '佤族',
-                        id: 23
-                    },
-                    {
-                        name: '达斡尔族',
-                        id: 24
-                    },
-                    {
-                        name: '赫哲族',
-                        id: 25
-                    },
-                    {
-                        name: '苗族',
-                        id: 26
-                    },
-                    {
-                        name: '维吾尔族',
-                        id: 27
-                    },
-                    {
-                        name: '傣族',
-                        id: 28
-                    },
-                    {
-                        name: '回族',
-                        id: 29
-                    },
-                    {
-                        name: '仫佬族',
-                        id: 30
-                    },
-                    {
-                        name: '乌孜别克族',
-                        id: 31
-                    },
-                    {
-                        name: '德昂族',
-                        id: 32
-                    },
-                    {
-                        name: '基诺族',
-                        id: 33
-                    },
-                    {
-                        name: '纳西族',
-                        id: 34
-                    },
-                    {
-                        name: '锡伯族',
-                        id: 35
-                    },
-                    {
-                        name: '东乡族',
-                        id: 36
-                    },
-                    {
-                        name: '京族',
-                        id: 37
-                    },
-                    {
-                        name: '怒族',
-                        id: 38
-                    },
-                    {
-                        name: '瑶族',
-                        id: 39
-                    },
-                    {
-                        name: '侗族',
-                        id: 40
-                    },
-                    {
-                        name: '景颇族',
-                        id: 41
-                    },
-                    {
-                        name: '普米族',
-                        id: 42
-                    },
-                    {
-                        name: '彝族',
-                        id: 43
-                    },
-                    {
-                        name: '独龙族',
-                        id: 44
-                    },
-                    {
-                        name: '柯尔克孜族',
-                        id: 45
-                    },
-                    {
-                        name: '羌族',
-                        id: 46
-                    },
-                    {
-                        name: '裕固族',
-                        id: 47
-                    },
-                    {
-                        name: '俄罗斯族',
-                        id: 48
-                    },
-                    {
-                        name: '拉祜族',
-                        id: 49
-                    },
-                    {
-                        name: '撒拉族',
-                        id: 50
-                    },
-                    {
-                        name: '藏族',
-                        id: 51
-                    },
-                    {
-                        name: '鄂伦春族',
-                        id: 52
-                    },
-                    {
-                        name: '黎族',
-                        id: 53
-                    },
-                    {
-                        name: '畲族',
-                        id: 54
-                    },
-                    {
-                        name: '壮族',
-                        id: 55
-                    }
-                ],
                 // 所属企业列表
                 companyList: [],
                 imgType: ['image/jpg', 'image/png'],
                 /* eslint-disable */
                 actionUrl: CAS_SERVER_URL + '/admin/storage/create',
                 /* eslint-disable */
+                jurisdictionList: {
+                    adDisabled: false
+                }
             };
         },
         created() {
@@ -459,11 +234,11 @@
                     } else {
                         this.$message({
                             showClose: true,
-                            message: res.data.errmsg,
+                            message: '获取详情' + res.data.errmsg,
                             type: 'error'
                         });
                     }
-                })
+                });
             }
             // 获取归属企业列表
             hdCompanyList({page: 1,limit: 1000,sort: 'created_time',order: 'desc'}).then(res => {
@@ -472,11 +247,18 @@
                 } else {
                     this.$message({
                         showClose: true,
-                        message: res.data.errmsg,
+                        message: '归属企业列表' + res.data.errmsg,
                         type: 'error'
                     });
                 }
-            })
+            });
+            // 权限
+            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+            for (let i = 0; i < assignedPermissions.length; i++) {
+                if (assignedPermissions[i] === 'admin:user:create' || assignedPermissions[i] === 'admin:hdUser:update') {
+                    this.jurisdictionList.adDisabled = true;
+                }
+            }
         },
         methods: {
             handleAvatarSuccess1(res, file) {

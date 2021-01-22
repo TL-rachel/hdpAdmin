@@ -5,28 +5,28 @@
                      class="demo-form-inline query-btn">
                 <span class="choice-camera">选择摄像头</span>
                 <el-form-item label="" prop="companyId">
-                    <el-select :disabled="$route.query.obj?true:false" v-model="recordForm.companyId"
+                    <el-select v-model="recordForm.companyId"
                                placeholder="请选择企业" @change="getAllRegions()">
                         <el-option v-for="(item,index) in companyList" :key="index" :label="item.companyName"
                                    :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="" prop="regionId">
-                    <el-select :disabled="$route.query.obj?true:false" v-model="recordForm.regionId" placeholder="请选择区域"
+                    <el-select v-model="recordForm.regionId" placeholder="请选择区域"
                                @change="getAllDevice()">
                         <el-option v-for="(item,index) in regionList" :key="index" :label="item.regionName"
                                    :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="" prop="deviceId">
-                    <el-select :disabled="$route.query.obj?true:false" v-model="recordForm.deviceId"
+                    <el-select v-model="recordForm.deviceId"
                                placeholder="请选择设备">
                         <el-option v-for="(item,index) in deviceList" :key="index" :label="item.deviceName"
                                    :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button v-if="$route.query.obj?false:true" type="primary" @click="getLiveStreaming()"><i
+                    <el-button type="primary" @click="getLiveStreaming()"><i
                             class="icon-picture icon-picture-query"></i>查询
                     </el-button>
                 </el-form-item>
@@ -175,9 +175,19 @@
                 allRegions({companyId: this.recordForm.companyId}).then(res => {
                     if (res.data.errno === 0) {
                         this.regionList = res.data.data;
-                        if (type === 1 && this.regionList.length > 0) {
-                            this.recordForm.regionId = this.regionList[0].id;
-                            this.getAllDevice(1);
+                        if (type === 1) {
+                            if ( this.regionList.length > 0) {
+                                this.recordForm.regionId = this.regionList[0].id;
+                                this.getAllDevice(1);
+                            } else if (type === 1 && this.regionList.length < 1) {
+                                this.recordForm.regionId = '';
+                                this.recordForm.deviceId = '';
+                            }
+                        } else if (type === 2) {
+                            //do something
+                        } else {
+                            this.recordForm.regionId = '';
+                            this.recordForm.deviceId = '';
                         }
                     } else {
                         this.$message({
@@ -197,8 +207,16 @@
                 allDevice({regionId: this.recordForm.regionId}).then(res => {
                     if (res.data.errno === 0) {
                         this.deviceList = res.data.data;
-                        if (type === 1 && this.deviceList.length > 0) {
-                            this.recordForm.deviceId = this.deviceList[0].id;
+                        if (type === 1) {
+                            if ( this.deviceList.length > 0 ) {
+                                this.recordForm.deviceId = this.deviceList[0].id;
+                            } else {
+                                this.recordForm.deviceId = '';
+                            }
+                        } else if ( type === 2) {
+                            // this.recordForm.deviceId = '' ;
+                        } else {
+                            this.recordForm.deviceId = '';
                         }
                     } else {
                         this.$message({
@@ -222,9 +240,9 @@
                                 let player = new EZUIKit.EZUIKitPlayer({
                                     autoplay: true,
                                     id: 'video-container',
-                                    accessToken: res.data.data.token,
+                                    accessToken: res.data.data[0].token,
                                     // url: 'ezopen://open.ys7.com/E99840550/1.live',
-                                    url: res.data.data.backPath,
+                                    url: res.data.data[0].devicePath,
                                     template: 'standard', // simple - 极简版;standard-标准版;security - 安防版(预览回放);voice-语音版；
                                     // 视频上方头部控件
                                     // header: ["capturePicture", "save", "zoom"], // 如果templete参数不为simple,该字段将被覆盖
@@ -243,7 +261,7 @@
                                     height: 600,
                                 });
                                 console.log('player', player);
-                                // this.videosList = res.data.data;
+                                this.videosList = res.data.data;
                                 // this.videoUrl = res.data.data[0].devicePath;
                             } else {
                                 this.$message({
@@ -273,6 +291,9 @@
                     if (obj.deviceRegionId) {
                         this.recordForm.regionId = obj.deviceRegionId;
                         this.getAllDevice(2);
+                    }
+
+                    if(obj.id){
                         this.recordForm.deviceId = obj.id;
                         // 获取视频链接
                         this.getLiveStreaming();

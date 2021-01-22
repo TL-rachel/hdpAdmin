@@ -24,6 +24,8 @@ import AddUser from '../components/pages/user/addUser';
 import HealthDataList from '../components/pages/healthData/healthDataList';
 // 病史
 import MedicalHistory from '../components/pages/user/medicalHistory';
+// 查看病史
+import MedicalHistoryDetail from '../components/pages/user/medicalHistoryDetail';
 // 病例
 import CaseList from '../components/pages/user/caseList';
 // 添加病例
@@ -122,6 +124,24 @@ let routes = [
                 }
             },
             {
+                path: '/addEquipmentDetail',
+                component: AddEquipment,
+                meta: {
+                    title: '设备管理 / 设备列表 / 查看设备',
+                    icon: 'icon-picture-nav-equipment',
+                    flag: 2
+                }
+            },
+            {
+                path: '/addEquipmentUpdate',
+                component: AddEquipment,
+                meta: {
+                    title: '设备管理 / 设备列表 / 编辑设备',
+                    icon: 'icon-picture-nav-equipment',
+                    flag: 2
+                }
+            },
+            {
                 path: '/areaList',
                 component: AreaList,
                 meta: {
@@ -149,10 +169,37 @@ let routes = [
                 }
             },
             {
+                path: '/addUserUpdate',
+                component: AddUser,
+                meta: {
+                    title: '用户管理 / 用户列表 / 编辑用户',
+                    icon: 'icon-picture-nav-people',
+                    flag: 2
+                }
+            },
+            {
+                path: '/addUserDetail',
+                component: AddUser,
+                meta: {
+                    title: '用户管理 / 用户列表 / 查看用户',
+                    icon: 'icon-picture-nav-people',
+                    flag: 2
+                }
+            },
+            {
                 path: '/medicalHistory',
                 component: MedicalHistory,
                 meta: {
-                    title: '用户管理 / 健康数据 / 病史',
+                    title: '用户管理 / 健康数据 / 编辑病史',
+                    icon: 'icon-picture-nav-people',
+                    flag: 2
+                }
+            },
+            {
+                path: '/medicalHistoryDetail',
+                component: MedicalHistoryDetail,
+                meta: {
+                    title: '用户管理 / 健康数据 / 查看病史',
                     icon: 'icon-picture-nav-people',
                     flag: 2
                 }
@@ -203,6 +250,15 @@ let routes = [
                 }
             },
             {
+                path: '/addCaseUpdate',
+                component: AddCase,
+                meta: {
+                    title: '用户管理 / 健康数据 / 编辑病例',
+                    icon: 'icon-picture-nav-people',
+                    flag: 2
+                }
+            },
+            {
                 path: '/healthDataList',
                 component: HealthDataList,
                 meta: {
@@ -215,7 +271,7 @@ let routes = [
                 path: '/liveStreaming',
                 component: LiveStreaming,
                 meta: {
-                    title: '设备管理 / 设备列表 / 直播',
+                    title: '设备管理 / 设备列表 / 视频直播',
                     icon: 'icon-picture-nav-equipment',
                     flag: 1
                 }
@@ -224,7 +280,7 @@ let routes = [
                 path: '/recordedBroadcast',
                 component: RecordedBroadcast,
                 meta: {
-                    title: '设备管理 / 设备列表 / 录播',
+                    title: '设备管理 / 设备列表 / 视频录播',
                     icon: 'icon-picture-nav-equipment',
                     flag: 1
                 }
@@ -243,6 +299,15 @@ let routes = [
                 component: AddAdministrator,
                 meta: {
                     title: '系统管理 / 管理员 / 添加管理员',
+                    icon: 'icon-picture-nav-system',
+                    flag: 2
+                }
+            },
+            {
+                path: '/addAdministratorUpdate',
+                component: AddAdministrator,
+                meta: {
+                    title: '系统管理 / 管理员 / 编辑管理员',
                     icon: 'icon-picture-nav-system',
                     flag: 2
                 }
@@ -302,6 +367,15 @@ let routes = [
                 }
             },
             {
+                path: '/addCompanyAdministratorUpdate',
+                component: AddCompanyAdministrator,
+                meta: {
+                    title: '企业管理 / 企业管理员列表 / 编辑企业管理员',
+                    icon: 'icon-picture-nav-enterprise',
+                    flag: 2
+                }
+            },
+            {
                 path: '/addCompany',
                 component: AddCompany,
                 meta: {
@@ -311,10 +385,64 @@ let routes = [
                 }
             },
             {
+                path: '/addCompanyAudit',
+                component: AddCompany,
+                meta: {
+                    title: '企业管理 / 企业管理列表 / 审核企业',
+                    icon: 'icon-picture-nav-enterprise',
+                    flag: 2
+                }
+            },
+            {
+                path: '/addCompanyUpdate',
+                component: AddCompany,
+                meta: {
+                    title: '企业管理 / 企业管理列表 / 编辑企业',
+                    icon: 'icon-picture-nav-enterprise',
+                    flag: 2
+                }
+            },
+            {
+                path: '/addCompanyDetail',
+                component: AddCompany,
+                meta: {
+                    title: '企业管理 / 企业管理列表 / 查看企业',
+                    icon: 'icon-picture-nav-enterprise',
+                    flag: 2
+                }
+            },
+            {
+                path: '/addCompanyDetail',
+                component: AddCompany,
+                meta: {
+                    title: '企业管理 / 企业管理列表 / 查看企业',
+                    icon: 'icon-picture-nav-enterprise',
+                    flag: 2
+                }
+            },
+            {
                 path: '/addArea',
                 component: AddArea,
                 meta: {
                     title: '设备管理 / 区域管理 / 添加区域',
+                    icon: 'icon-picture-nav-equipment',
+                    flag: 2
+                }
+            },
+            {
+                path: '/addAreaUpdate',
+                component: AddArea,
+                meta: {
+                    title: '设备管理 / 区域管理 / 修改区域',
+                    icon: 'icon-picture-nav-equipment',
+                    flag: 2
+                }
+            },
+            {
+                path: '/addAreaDetail',
+                component: AddArea,
+                meta: {
+                    title: '设备管理 / 区域管理 / 查看区域',
                     icon: 'icon-picture-nav-equipment',
                     flag: 2
                 }

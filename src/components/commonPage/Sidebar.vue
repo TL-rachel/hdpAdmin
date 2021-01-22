@@ -50,18 +50,20 @@
 </template>
 
 <script>
-    // import {rolePermissions} from '../../api/api';
+    import {rolePermissions} from '../../api/api';
 export default {
     data() {
         return {
             // 是否水平折叠收起菜单
             collapse: false,
             // 菜单
-            items: [
+            items: [],
+            itemList: [
                 {
                     icon: 'icon-picture-nav-home',
                     index: 'home',
-                    title: '首页'
+                    title: '首页',
+                    jurisdictionList: 'admin:admin:chart'
                 },
                 {
                     icon: 'icon-picture-nav-equipment',
@@ -70,19 +72,23 @@ export default {
                     subs: [
                         {
                             index: 'equipmentList',
-                            title: '设备列表'
+                            title: '设备列表',
+                            jurisdictionList: 'admin:hdDevice:list'
                         },
                         {
                             index: 'areaList',
-                            title: '区域列表'
+                            title: '区域列表',
+                            jurisdictionList: 'admin:hdRegion:list'
                         },
                         {
                             index: 'liveStreaming',
-                            title: '视频直播'
+                            title: '视频直播',
+                            jurisdictionList: 'admin:hdDevice:liveList'
                         },
                         {
                             index: 'recordedBroadcast',
-                            title: '视频录播'
+                            title: '视频录播',
+                            jurisdictionList: 'admin:hdDevice:liveBackList'
                         }
                     ]
                 },
@@ -93,11 +99,13 @@ export default {
                     subs: [
                         {
                             index: 'userList',
-                            title: '用户列表'
+                            title: '用户列表',
+                            jurisdictionList: 'admin:hdUser:list'
                         },
                         {
                             index: 'healthDataList',
-                            title: '健康数据'
+                            title: '健康数据',
+                            jurisdictionList: 'admin:hdUser:healthDataList'
                         }
                     ]
                 },
@@ -108,15 +116,18 @@ export default {
                     subs: [
                         {
                             index: 'administratorList',
-                            title: '管理员'
+                            title: '管理员',
+                            jurisdictionList: 'admin:admin:list'
                         },
                         {
                             index: 'roleManagement',
-                            title: '角色管理'
+                            title: '角色管理',
+                            jurisdictionList: 'admin:role:list'
                         },
                         {
                             index: 'operationLog',
-                            title: '操作日志'
+                            title: '操作日志',
+                            jurisdictionList: 'admin:hdOperationLog:list'
                         }
                     ]
                 },
@@ -127,15 +138,18 @@ export default {
                     subs: [
                         {
                             index: 'companyList',
-                            title: '企业列表'
+                            title: '企业列表',
+                            jurisdictionList: 'admin:hdCompany:list'
                         },
                         {
                             index: 'companyAdministratorList',
-                            title: '企业管理员'
+                            title: '企业管理员',
+                            jurisdictionList: 'admin:qyAdmin:list'
                         },
                         {
                             index: 'companyAuditList',
-                            title: '企业准入审核'
+                            title: '企业准入审核',
+                            jurisdictionList: 'admin:hdCompanyAudit:list'
                         }
                     ]
                 }
@@ -146,28 +160,33 @@ export default {
             assignedPermissions: [],
         };
     },
-    methods: {
-    },
     created() {
-        /*let userData = JSON.parse(sessionStorage.getItem('userData'));
+        let userData = JSON.parse(sessionStorage.getItem('userData'));
         rolePermissions({roleId: userData.roleIds[0]}).then(res => {
             if (res.data.errno === 0) {
-                this.systemPermissions = res.data.data.systemPermissions;
+                // 获取权限
                 this.assignedPermissions = res.data.data.assignedPermissions;
-                for (let i = 0; i < this.systemPermissions.length; i++) {
-                    if (this.systemPermissions[i].children) {
-                        for (let j = 0; j < this.systemPermissions[i].children.length; j++) {
-                            if (this.systemPermissions[i].children[j].children) {
-                                for (let k = 0; k < this.systemPermissions[i].children[j].children.length; k++) {
-                                    if (this.systemPermissions[i].children[j].children[k].id) {
-                                        for (let l = 0; l < this.assignedPermissions.length; l++) {
-                                            if (this.assignedPermissions[l] === this.systemPermissions[i].children[j].children[k].id) {
-                                                console.log(this.systemPermissions[i])
-                                            }
-                                        }
-                                    }
-                                }
+                // 将权限存入session 页面里面用
+                sessionStorage.setItem('assignedPermissions',JSON.stringify(res.data.data.assignedPermissions));
+                // 循环得到权限的菜单
+                for (let i = 0; i < this.itemList.length; i++) {
+                    if (this.assignedPermissions.indexOf(this.itemList[i].jurisdictionList) !== -1) {
+                        this.items.push(this.itemList[i]);
+                    }
+                    if (this.itemList[i].subs) {
+                        let subList = [];
+                        for (let j = 0; j < this.itemList[i].subs.length; j++) {
+                            if (this.assignedPermissions.indexOf(this.itemList[i].subs[j].jurisdictionList) !== -1) {
+                                subList.push(this.itemList[i].subs[j]);
                             }
+                        }
+                        if (subList.length > 0) {
+                            this.items.push({
+                                icon: this.itemList[i].icon,
+                                index: this.itemList[i].index,
+                                title: this.itemList[i].title,
+                                subs: subList,
+                            });
                         }
                     }
                 }
@@ -178,7 +197,9 @@ export default {
                     type: 'error'
                 });
             }
-        });*/
+        });
+    },
+    methods: {
     },
     computed: {
         /**

@@ -92,7 +92,7 @@
                             <el-form-item class="small-item" :key="index + '1'" label="手术名">
                                 <el-input :disabled="medicalForm.operation === 1 ? false : true" placeholder="请输入" class="w160" v-model="item.name"></el-input>
                             </el-form-item>
-                            <el-form-item class="small-item" :key="index + '2'" label="手术时间">
+                            <el-form-item class="small-item small-item-date" :key="index + '2'" label="手术时间">
                                 <el-date-picker :disabled="medicalForm.operation === 1 ? false : true" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" v-model="item.date" style="width: 160px;"></el-date-picker>
                                 <i @click="medicalForm.operation === 1 ? deletePastSurgery(index) : ''" class="icon-picture icon-picture-delete"></i>
                             </el-form-item>
@@ -144,7 +144,7 @@
                 </el-form-item>
 
                 <el-form-item class="operation-btn" label-width="0">
-                    <el-button type="primary" @click="submitForm()">保 存</el-button>
+                    <el-button v-if="jurisdictionList.upDisabled" type="primary" @click="submitForm()">保 存</el-button>
                     <el-button @click="handleHistory">返 回</el-button>
                 </el-form-item>
             </el-form>
@@ -186,6 +186,9 @@
                 },
                 userData: {}, // 用户信息
                 userMedicalId: '', // 病历id
+                jurisdictionList: {
+                    upDisabled: false,
+                }
             };
         },
         created: function () {
@@ -304,6 +307,13 @@
                     }
                 });
             }
+            // 权限
+            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+            for (let i = 0; i < assignedPermissions.length; i++) {
+                if (assignedPermissions[i] === 'admin:hdMedical:update' || assignedPermissions[i] === 'admin:hdMedical:create') {
+                    this.jurisdictionList.upDisabled = true;
+                }
+            }
         },
         methods: {
             /**
@@ -370,7 +380,7 @@
                                 message: '修改成功',
                                 type: 'success'
                             });
-                            this.$router.push({path: '/userList'});
+                            this.$router.back(-1);
                         } else {
                             this.$message({
                                 showClose: true,
@@ -387,7 +397,7 @@
                                 message: '修改成功',
                                 type: 'success'
                             });
-                            this.$router.push({path: '/userList'});
+                            this.$router.back(-1);
                         } else {
                             this.$message({
                                 showClose: true,
@@ -469,7 +479,7 @@
                         width: 100%;
                     }
                     .small-item {
-                        width: 49%;
+                        width: 47%;
                         float: left;
                         .el-form-item__label {
                             height: 30px!important;
@@ -486,6 +496,9 @@
                                 border-radius: 2px;
                             }
                         }
+                    }
+                    .small-item-date {
+                        width: 52%;
                     }
                     .increased {
                         width: 100px;

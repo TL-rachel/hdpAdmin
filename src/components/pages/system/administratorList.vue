@@ -3,10 +3,10 @@
         <div class="query">
             <div><i class="icon-picture icon-picture-grabble icon-position"></i><el-input class="query-input user-input icon-position" type="text" placeholder="搜索管理员账号" @blur="getAdminList(1,10)" v-model="userName"></el-input></div>
             <div class="query-btn">
-                <router-link :to="{ path:'/addAdministrator'}">
+                <router-link v-if="jurisdictionList.adDisabled" :to="{ path:'/addAdministrator'}">
                     <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
                 </router-link>
-                <el-button @click="deleteAdministrator(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+                <el-button v-if="jurisdictionList.dbtDisabled" @click="deleteAdministrator(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             </div>
         </div>
         <div class="table-list">
@@ -18,17 +18,17 @@
                     style="width: 100%"
                     @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55"></el-table-column>
-                <el-table-column prop="id" label="ID" min-width="60"></el-table-column>
+<!--                <el-table-column prop="id" label="ID" min-width="60"></el-table-column>-->
                 <el-table-column prop="username" label="账号" min-width="80"></el-table-column>
                 <el-table-column prop="username2" label="姓名" min-width="60"></el-table-column>
                 <el-table-column prop="roleName" label="管理员角色" min-width="60"></el-table-column>
                 <el-table-column prop="tel" label="手机号" min-width="120"></el-table-column>
                 <el-table-column prop="id" label="操作" width="120">
                     <template slot-scope="scope">
-                        <router-link :to="{ path:'/addAdministrator',query: {id:scope.row.id}}">
+                        <router-link v-if="jurisdictionList.upDisabled" :to="{ path:'/addAdministratorUpdate',query: {id:scope.row.id}}">
                             <a class="operation-table">编辑</a>
                         </router-link>
-                        <a class="operation-table" @click="deleteAdministrator(scope.row.id,1)">删除</a>
+                        <a v-if="jurisdictionList.dtDisabled" class="operation-table" @click="deleteAdministrator(scope.row.id,1)">删除</a>
                     </template>
                 </el-table-column>
             </el-table>
@@ -61,6 +61,12 @@
                 total: 0, // 条数
                 page: 1, // 页码
                 loading: false,
+                jurisdictionList: {
+                    adDisabled: false,
+                    dtDisabled: false,
+                    dbtDisabled: false,
+                    upDisabled: false,
+                }
             };
         },
         created() {
@@ -70,6 +76,19 @@
                 }
             });
             this.getAdminList(1,10);
+            // 权限
+            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+            for (let i = 0; i < assignedPermissions.length; i++) {
+                if (assignedPermissions[i] === 'admin:admin:create') {
+                    this.jurisdictionList.adDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:admin:delete') {
+                    this.jurisdictionList.dtDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:admin:batchDelete') {
+                    this.jurisdictionList.dbtDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:admin:update') {
+                    this.jurisdictionList.upDisabled = true;
+                }
+            }
         },
         methods: {
             handleSelectionChange(val) {

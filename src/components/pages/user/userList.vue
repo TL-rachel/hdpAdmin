@@ -3,13 +3,13 @@
         <div class="query">
             <div><i class="icon-picture icon-picture-grabble icon-position"></i><el-input class="query-input user-input icon-position" type="text" placeholder="搜索用户"  @blur="getUserList(1,10)"  v-model="userName"></el-input></div>
             <div class="query-btn">
-                <router-link :to="{ path:'/addUser'}">
+                <router-link v-if="jurisdictionList.adDisabled" :to="{ path:'/addUser'}">
                     <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
                 </router-link>
                 <!--<el-button><i class="icon-picture icon-picture-to-lead"></i>批量导入</el-button>
                 <el-button><i class="icon-picture icon-picture-export"></i>批量导出</el-button>-->
-                <el-button @click="batchFaceId()"><i class="icon-picture icon-picture-update"></i>一键更新faceId</el-button>
-                <el-button @click="userDelete(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+                <el-button v-if="jurisdictionList.bfDisabled" @click="batchFaceId()"><i class="icon-picture icon-picture-update"></i>一键更新faceId</el-button>
+                <el-button v-if="jurisdictionList.dbtDisabled" @click="userDelete(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             </div>
         </div>
         <div class="table-list">
@@ -52,25 +52,25 @@
                 <el-table-column prop="updatedTime" label="更新时间" min-width="160"></el-table-column>
                 <el-table-column prop="id" label="操作" fixed="right" width="90">
                     <template slot-scope="scope">
-                        <router-link :to="{ path:'/addUser',query: {id:scope.row.id,type: 1}}">
+                        <router-link v-if="jurisdictionList.rdDisabled" :to="{ path:'/addUserDetail',query: {id:scope.row.id,type: 1}}">
                             <a>查看详情</a>
                         </router-link>
                         <el-popover trigger="hover" placement="bottom">
                             <p>
-                                <router-link :to="{ path:'/addUser',query: {id:scope.row.id}}">
+                                <router-link v-if="jurisdictionList.upDisabled" :to="{ path:'/addUserUpdate',query: {id:scope.row.id}}">
                                     <a>编辑</a>
                                 </router-link>
-                                <a @click="userDelete(scope.row.id,1)">删除</a>
+                                <a v-if="jurisdictionList.dtDisabled" @click="userDelete(scope.row.id,1)">删除</a>
                             </p>
                             <p>
-                                <router-link :to="{ path:'/caseList',query: {id:scope.row.id}}">
+                                <router-link v-if="jurisdictionList.csDisabled" :to="{ path:'/caseList',query: {id:scope.row.id}}">
                                     <a>病例</a>
                                 </router-link>
-                                <router-link :to="{ path:'/medicalHistory',query: {id:scope.row.id}}">
+                                <router-link v-if="jurisdictionList.mcDisabled" :to="{ path:'/medicalHistoryDetail',query: {id:scope.row.id}}">
                                     <a>病史</a>
                                 </router-link>
                             </p>
-                            <div slot="reference" class="name-wrapper text-overflow-1">
+                            <div v-if="jurisdictionList.mcDisabled || jurisdictionList.csDisabled || jurisdictionList.dtDisabled || jurisdictionList.upDisabled" slot="reference" class="name-wrapper text-overflow-1">
                                 <a>更多操作</a>
                             </div>
                         </el-popover>
@@ -105,10 +105,41 @@
                 total: 0, // 条数
                 page: 1, // 页码
                 loading: false,
+                jurisdictionList: {
+                    adDisabled: false,
+                    dtDisabled: false,
+                    dbtDisabled: false,
+                    rdDisabled: false,
+                    bfDisabled: false,
+                    upDisabled: false,
+                    csDisabled: false,
+                    mcDisabled: false,
+                }
             };
         },
         created() {
             this.getUserList(1,10);
+            // 权限
+            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+            for (let i = 0; i < assignedPermissions.length; i++) {
+                if (assignedPermissions[i] === 'admin:user:create') {
+                    this.jurisdictionList.adDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:hdUser:delete') {
+                    this.jurisdictionList.dtDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:hdUser:batchDelete') {
+                    this.jurisdictionList.dbtDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:hdUser:read') {
+                    this.jurisdictionList.rdDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:hdUser:update') {
+                    this.jurisdictionList.upDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:hdUser:batchFaceId') {
+                    this.jurisdictionList.bfDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:hdMedical:read') {
+                    this.jurisdictionList.mcDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:hdMedicalCase:list') {
+                    this.jurisdictionList.csDisabled = true;
+                }
+            }
         },
         methods: {
             /**

@@ -3,10 +3,10 @@
         <div class="query">
             <div><i class="icon-picture icon-picture-grabble icon-position"></i><el-input class="query-input user-input icon-position" type="text" placeholder="搜索管理员账号" @blur="getCompanyList(1,10)" v-model="userName"></el-input></div>
             <div class="query-btn">
-                <router-link :to="{ path:'/addCompanyAdministrator'}">
+                <router-link v-if="jurisdictionList.adDisabled" :to="{ path:'/addCompanyAdministrator'}">
                     <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
                 </router-link>
-                <el-button @click="deleteCompany(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+                <el-button v-if="jurisdictionList.dbtDisabled" @click="deleteCompany(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             </div>
         </div>
         <div class="table-list">
@@ -26,10 +26,10 @@
                 <el-table-column prop="tel" label="联系方式" min-width="120"></el-table-column>
                 <el-table-column prop="id" label="操作" width="180">
                     <template slot-scope="scope">
-                        <router-link :to="{ path:'/addCompanyAdministrator',query: {id:scope.row.id}}">
+                        <router-link v-if="jurisdictionList.upDisabled" :to="{ path:'/addCompanyAdministratorUpdate',query: {id:scope.row.id}}">
                             <a class="operation-table">编辑</a>
                         </router-link>
-                        <a class="operation-table" @click="deleteCompany(scope.row.id,1)">删除</a>
+                        <a v-if="jurisdictionList.dtDisabled" class="operation-table" @click="deleteCompany(scope.row.id,1)">删除</a>
                     </template>
                 </el-table-column>
             </el-table>
@@ -62,10 +62,29 @@
                 total: 0, // 条数
                 page: 1, // 页码
                 loading: false,
+                jurisdictionList: {
+                    adDisabled: false,
+                    dtDisabled: false,
+                    dbtDisabled: false,
+                    upDisabled: false,
+                }
             };
         },
         created() {
             this.getCompanyList(1,10);
+            // 权限
+            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+            for (let i = 0; i < assignedPermissions.length; i++) {
+                if (assignedPermissions[i] === 'admin:qyAdmin:create') {
+                    this.jurisdictionList.adDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:qyAdmin:delete') {
+                    this.jurisdictionList.dtDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:qyAdmin:batchDelete') {
+                    this.jurisdictionList.dbtDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:hdCompany:update') {
+                    this.jurisdictionList.upDisabled = true;
+                }
+            }
         },
         methods: {
             /**
@@ -96,7 +115,7 @@
                 let para = {
                     limit: pageSize,
                     page: currentPage,
-                    username: this.userName
+                    companyName: this.userName
                 };
                 this.loading = true;
                 qyAdminList(para).then(res => {

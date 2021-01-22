@@ -4,38 +4,43 @@
             <el-form :inline="true" ref="recordForm" :model="recordForm" :rules="recordRules" class="demo-form-inline query-btn">
                 <span class="choice-camera">选择摄像头</span>
                 <el-form-item label="" prop="companyId">
-                    <el-select :disabled="$route.query.obj?true:false" v-model="recordForm.companyId" placeholder="请选择企业" @change="getAllRegions()">
+                    <el-select v-model="recordForm.companyId" placeholder="请选择企业" @change="getAllRegions()">
                         <el-option v-for="(item,index) in companyList" :key="index" :label="item.companyName" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="" prop="regionId">
-                    <el-select :disabled="$route.query.obj?true:false" v-model="recordForm.regionId" placeholder="请选择区域" @change="getAllDevice()">
+                    <el-select v-model="recordForm.regionId" placeholder="请选择区域" @change="getAllDevice()">
                         <el-option v-for="(item,index) in regionList" :key="index" :label="item.regionName" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="" prop="deviceId">
-                    <el-select :disabled="$route.query.obj?true:false" v-model="recordForm.deviceId" placeholder="请选择设备">
+                    <el-select v-model="recordForm.deviceId" placeholder="请选择设备">
                         <el-option v-for="(item,index) in deviceList" :key="index" :label="item.deviceName" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <span class="choice-camera">选择时间</span>
-                <el-form-item label="" prop="begin">
-                    <el-date-picker
-                            v-model="recordForm.begin"
-                            type="datetime"
-                            placeholder="选择开始日期时间">
-                    </el-date-picker>
-                </el-form-item>
-                -
-                <el-form-item label="" prop="end">
-                    <el-date-picker
-                            v-model="recordForm.end"
-                            type="datetime"
-                            placeholder="选择结束日期时间">
-                    </el-date-picker>
-                </el-form-item>
+                <div style="display:inline-block;">
+	                <span class="choice-camera">选择时间</span>
+	                <el-form-item label="" prop="begin" >
+	                    <el-date-picker
+	                            v-model="recordForm.begin"
+	                            type="datetime"
+	                            value-format="yyyy-MM-dd HH:mm:ss"
+	                            placeholder="选择开始日期时间">
+	                    </el-date-picker>
+	                </el-form-item>
+	                -
+	                <el-form-item label="" prop="end">
+	                    <el-date-picker
+	                            v-model="recordForm.end"
+	                            type="datetime"
+	                            format="yyyy-MM-dd HH:mm:ss"
+	                            value-format="yyyy-MM-dd HH:mm:ss"
+	                            placeholder="选择结束日期时间">
+	                    </el-date-picker>
+	                </el-form-item>
+                </div>
                 <el-form-item>
-                    <el-button v-if="$route.query.obj?false:true" style="margin-left: 20px" type="primary" @click="getLiveStreaming()"><i class="icon-picture icon-picture-query"></i>查询</el-button>
+                    <el-button style="margin-left: 20px" type="primary" @click="getLiveStreaming()"><i class="icon-picture icon-picture-query"></i>查询</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -58,7 +63,7 @@
                     regionId: '', // 区域
                     deviceId: '', // 设备
                     begin: '',
-                    end: new Date(),
+                    end: '',
                     beginTime: '',//传后台时间格式
                     endTime: '',//传后台时间格式
                 },
@@ -118,13 +123,23 @@
         },
         methods: {
             setTime() {
-                let endTimeY = new Date().getFullYear();
-                let endTimeM = new Date().getMonth() + 1;
-                let endTimeD = new Date().getDate();
-                let endTimeH = new Date().getHours();
-                let beginTimeH = new Date().getHours() - 2;
-                let endTimem = new Date().getMinutes();
-                let endTimeS = new Date().getSeconds();
+                let endNowTime = new Date();
+                let endTimeY = endNowTime.getFullYear();
+               /* let endTimeM = endNowTime.getMonth() + 1;
+                let endTimeD = endNowTime.getDate();
+                let endTimeH = endNowTime.getHours();
+                let beginTimeH = endNowTime.getHours() - 2;
+                let endTimem = endNowTime.getMinutes();
+                let endTimeS = endNowTime.getSeconds();*/
+
+                let endTimeM = (endNowTime.getMonth() + 1) < 10 ? '0' + (endNowTime.getMonth() + 1) : (endNowTime.getMonth() + 1);
+                let endTimeD = endNowTime.getDate() < 10 ? '0' + endNowTime.getDate() : endNowTime.getDate();
+                let endTimeH = endNowTime.getHours() < 10 ? '0' + endNowTime.getHours() : endNowTime.getHours();
+                let beginTimeH = endNowTime.getHours() - 2 < 10 ? '0' + (endNowTime.getHours() - 2) : (endNowTime.getHours() - 2);
+                let endTimem = endNowTime.getMinutes() < 10 ? '0' + endNowTime.getMinutes() : endNowTime.getMinutes();
+                let endTimeS = endNowTime.getSeconds() < 10 ? '0' + endNowTime.getSeconds() : endNowTime.getSeconds();
+                // let endTimeS = endNowTime.getSeconds();
+
                 this.recordForm.end = endTimeY + '-' + endTimeM + '-' + endTimeD + ' ' + endTimeH + ':' + endTimem + ':' + endTimeS;
                 this.recordForm.begin = endTimeY + '-' + endTimeM + '-' + endTimeD + ' ' + beginTimeH + ':' + endTimem + ':' + endTimeS;
             },
@@ -162,9 +177,19 @@
                 allRegions({companyId: this.recordForm.companyId}).then(res => {
                     if (res.data.errno === 0) {
                         this.regionList = res.data.data;
-                        if (type === 1 && this.regionList.length > 0) {
-                            this.recordForm.regionId = this.regionList[0].id;
-                            this.getAllDevice(1);
+                        if (type === 1) {
+                            if ( this.regionList.length > 0) {
+                                this.recordForm.regionId = this.regionList[0].id;
+                                this.getAllDevice(1);
+                            } else if (type === 1 && this.regionList.length < 1) {
+                                this.recordForm.regionId = '';
+                                this.recordForm.deviceId = '';
+                            }
+                        } else if (type === 2) {
+                            //do something
+                        } else {
+                            this.recordForm.regionId = '';
+                            this.recordForm.deviceId = '';
                         }
                     } else {
                         this.$message({
@@ -184,8 +209,16 @@
                 allDevice({regionId: this.recordForm.regionId}).then(res => {
                     if (res.data.errno === 0) {
                         this.deviceList = res.data.data;
-                        if (type === 1 && this.deviceList.length > 0) {
-                            this.recordForm.deviceId = this.deviceList[0].id;
+                        if (type === 1) {
+                            if ( this.deviceList.length > 0 ) {
+                                this.recordForm.deviceId = this.deviceList[0].id;
+                            } else {
+                                this.recordForm.deviceId = '';
+                            }
+                        } else if ( type === 2) {
+                            // this.recordForm.deviceId = '' ;
+                        } else {
+                            this.recordForm.deviceId = '';
                         }
                     } else {
                         this.$message({
@@ -205,8 +238,8 @@
                         document.getElementById('video-container').innerHTML = '';
                         let para = {
                             deviceId: this.recordForm.deviceId,
-                            beginTime: this.recordForm.begin.replace(/:/g, '').replace(/\s+/g, ''),
-                            endTime: this.recordForm.end.replace(/:/g, '').replace(/\s+/g, ''),
+                            beginTime: this.recordForm.begin.replace(/:/g, '').replace(/-/g,'').replace(/\s+/g, ''),
+                            endTime: this.recordForm.end.replace(/:/g, '').replace(/-/g,'').replace(/\s+/g, ''),
                         };
                         // para.beginTime = '20210115100000';
                         // para.endTime = '20210115120000';

@@ -48,7 +48,7 @@
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
                         <span v-if="!form.companyPatha">未选择任何文件</span>
-                        <a v-else :href="form.companyPatha" target="_blank">这是一个上传文件，点击查看</a>
+                        <a v-else :href="form.companyPatha" target="_blank">查看</a>
                     </el-upload>
                 </el-form-item>
 
@@ -62,7 +62,7 @@
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
                         <span v-if="!form.companyPathb">未选择任何文件</span>
-                        <a v-else :href="form.companyPathb" target="_blank">这是一个上传文件，点击查看</a>
+                        <a v-else :href="form.companyPathb" target="_blank">查看</a>
                     </el-upload>
                 </el-form-item>
                 <el-form-item class="operation-btn company-btn" label-width="0">

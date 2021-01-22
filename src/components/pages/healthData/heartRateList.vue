@@ -2,7 +2,7 @@
     <div class="equipmentList">
         <div class="user-data clearfix">
             <div class="user-property user-img">
-                <img style="width: 42px;height: 42px;border-radius: 20px" :src="userData.userImage1" alt="">
+                <img style="width: 42px;height: 42px;border-radius: 20px" v-if="userData.userImage1" :src="userData.userImage1" alt="">
             </div>
             <div class="user-property">
                 <div class="user-name">{{userData.userName}}</div>

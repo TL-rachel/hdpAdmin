@@ -3,10 +3,10 @@
         <div class="query">
             <div><i class="icon-picture icon-picture-grabble icon-position"></i><el-input class="query-input user-input icon-position" type="text" placeholder="搜索企业名称" @blur="getCompanyList(1,10)" v-model="userName"></el-input></div>
             <div class="query-btn">
-                <router-link :to="{ path:'/addCompany'}">
+                <router-link v-if="jurisdictionList.adDisabled" :to="{ path:'/addCompany'}">
                     <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
                 </router-link>
-                <el-button @click="deleteCompany(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+                <el-button v-if="jurisdictionList.dbtDisabled" @click="deleteCompany(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             </div>
         </div>
         <div class="table-list">
@@ -34,13 +34,13 @@
                 </el-table-column>
                 <el-table-column prop="id" label="操作" width="180">
                     <template slot-scope="scope">
-                        <router-link :to="{ path:'/addCompany',query: {id:scope.row.id,type:1}}">
+                        <router-link v-if="jurisdictionList.rdDisabled" :to="{ path:'/addCompanyDetail',query: {id:scope.row.id,type:1}}">
                             <a class="operation-table">查看</a>
                         </router-link>
-                        <router-link :to="{ path:'/addCompany',query: {id:scope.row.id}}">
+                        <router-link v-if="jurisdictionList.upDisabled" :to="{ path:'/addCompanyUpdate',query: {id:scope.row.id}}">
                             <a class="operation-table">编辑</a>
                         </router-link>
-                        <a class="operation-table" @click="deleteCompany(scope.row,1)">删除</a>
+                        <a v-if="jurisdictionList.dtDisabled" class="operation-table" @click="deleteCompany(scope.row,1)">删除</a>
                     </template>
                 </el-table-column>
             </el-table>
@@ -73,10 +73,32 @@
                 total: 0, // 条数
                 page: 1, // 页码
                 loading: false,
+                jurisdictionList: {
+                    adDisabled: false,
+                    dtDisabled: false,
+                    dbtDisabled: false,
+                    rdDisabled: false,
+                    upDisabled: false,
+                }
             };
         },
         created() {
             this.getCompanyList(1,10);
+            // 权限
+            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+            for (let i = 0; i < assignedPermissions.length; i++) {
+                if (assignedPermissions[i] === 'admin:hdCompany:create') {
+                    this.jurisdictionList.adDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:hdCompany:delete') {
+                    this.jurisdictionList.dtDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:hdCompany:batchDelete') {
+                    this.jurisdictionList.dbtDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:hdCompany:read') {
+                    this.jurisdictionList.rdDisabled = true;
+                } else if (assignedPermissions[i] === 'admin:hdCompany:update') {
+                    this.jurisdictionList.upDisabled = true;
+                }
+            }
         },
         methods: {
             /**
@@ -106,7 +128,8 @@
             getCompanyList(currentPage, pageSize) {
                 let para = {
                     limit: pageSize,
-                    page: currentPage
+                    page: currentPage,
+                    companyName: this.userName
                 };
                 this.loading = true;
                 hdCompanyList(para).then(res => {
