@@ -73,16 +73,18 @@
         created() {
             this.getCompanyList(1,10);
             // 权限
-            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
-            for (let i = 0; i < assignedPermissions.length; i++) {
-                if (assignedPermissions[i] === 'admin:qyAdmin:create') {
-                    this.jurisdictionList.adDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:qyAdmin:delete') {
-                    this.jurisdictionList.dtDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:qyAdmin:batchDelete') {
-                    this.jurisdictionList.dbtDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:hdCompany:update') {
-                    this.jurisdictionList.upDisabled = true;
+            if (sessionStorage.getItem('assignedPermissions')) {
+                let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+                for (let i = 0; i < assignedPermissions.length; i++) {
+                    if (assignedPermissions[i] === 'admin:qyAdmin:create') {
+                        this.jurisdictionList.adDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:qyAdmin:delete') {
+                        this.jurisdictionList.dtDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:qyAdmin:batchDelete') {
+                        this.jurisdictionList.dbtDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:hdCompany:update') {
+                        this.jurisdictionList.upDisabled = true;
+                    }
                 }
             }
         },

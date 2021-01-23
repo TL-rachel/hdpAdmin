@@ -127,10 +127,12 @@
                 });
             }
             // 权限
-            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
-            for (let i = 0; i < assignedPermissions.length; i++) {
-                if (assignedPermissions[i] === 'admin:qyAdmin:create' || assignedPermissions[i] === 'admin:hdCompany:update') {
-                    this.jurisdictionList.adDisabled = true;
+            if (sessionStorage.getItem('assignedPermissions')) {
+                let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+                for (let i = 0; i < assignedPermissions.length; i++) {
+                    if (assignedPermissions[i] === 'admin:qyAdmin:create' || assignedPermissions[i] === 'admin:hdCompany:update') {
+                        this.jurisdictionList.adDisabled = true;
+                    }
                 }
             }
         },

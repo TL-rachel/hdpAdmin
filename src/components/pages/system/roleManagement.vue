@@ -128,18 +128,20 @@
             // 获取列表
             this.getRoleList(1,10);
             // 权限
-            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
-            for (let i = 0; i < assignedPermissions.length; i++) {
-                if (assignedPermissions[i] === 'admin:role:create') {
-                    this.jurisdictionList.adDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:role:delete') {
-                    this.jurisdictionList.dtDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:role:batchDelete') {
-                    this.jurisdictionList.dbtDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:role:update') {
-                    this.jurisdictionList.upDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:role:permission:update') {
-                    this.jurisdictionList.otDisabled = true;
+            if (sessionStorage.getItem('assignedPermissions')) {
+                let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+                for (let i = 0; i < assignedPermissions.length; i++) {
+                    if (assignedPermissions[i] === 'admin:role:create') {
+                        this.jurisdictionList.adDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:role:delete') {
+                        this.jurisdictionList.dtDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:role:batchDelete') {
+                        this.jurisdictionList.dbtDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:role:update') {
+                        this.jurisdictionList.upDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:role:permission:update') {
+                        this.jurisdictionList.otDisabled = true;
+                    }
                 }
             }
         },
@@ -156,6 +158,10 @@
                 );
             },
             /* eslint-disable */
+            /**
+             * 获取授权列表
+             * @param {Object} obj 用户信息
+             */
             openTree(obj) {
                 this.dialogAuthorization = true;
                 // 获取权限列表
@@ -175,6 +181,9 @@
                     }
                 });
             },
+            /**
+             * 授权确认
+             */
             authorizationForm() {
                 let rolePermissionsList = this.$refs.tree.getCheckedKeys(true);
                 let para = {
@@ -364,6 +373,10 @@
                     }
                 });
             },
+            /**
+             * 获取选中事件 获取选中id
+             * @param {Object} val 值
+             */
             handleSelectionChange(val) {
                 this.multipleSelection = '';
                 for (let i = 0; i < val.length; i++) {

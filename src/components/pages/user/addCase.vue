@@ -2,7 +2,7 @@
     <div class="equipmentList">
         <div class="user-data clearfix">
             <div class="user-property user-img">
-                <img style="width: 42px;height: 42px;border-radius: 20px" :src="userData.userImage1" alt="">
+                <img style="width: 42px;height: 42px;border-radius: 20px" v-if="userData.userImage1" :src="userData.userImage1" alt="">
             </div>
             <div class="user-property">
                 <div class="user-name">{{userData.userName}}</div>
@@ -32,7 +32,7 @@
                     <el-date-picker type="datetime" class="w420" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" v-model="form.inspectTime"></el-date-picker>
                 </el-form-item>
 
-                <el-form-item label="血压" label-width="90px" style="width: 21%;">
+                <el-form-item label="血压" label-width="90px" style="width: 20%;">
                     舒适压 <el-input class="w100" v-model="form.bloodComfort" placeholder="请输入舒适压"></el-input>
                 </el-form-item>
 
@@ -71,6 +71,7 @@
                     <el-upload
                                class="upload-demo"
                                :action="actionUrl"
+                               ref="upload"
                                multiple
                                :on-success="handleAvatarSuccess1"
                                :limit="1">
@@ -84,6 +85,7 @@
                     <el-upload
                             class="upload-demo"
                             :action="actionUrl"
+                            ref="upload"
                             multiple
                             :on-success="handleAvatarSuccess2"
                             :limit="1">
@@ -97,6 +99,7 @@
                     <el-upload
                             class="upload-demo"
                             :action="actionUrl"
+                            ref="upload"
                             multiple
                             :on-success="handleAvatarSuccess3"
                             :limit="1">
@@ -110,6 +113,7 @@
                     <el-upload
                             class="upload-demo"
                             :action="actionUrl"
+                            ref="upload"
                             multiple
                             :on-success="handleAvatarSuccess4"
                             :limit="1">
@@ -191,10 +195,12 @@
                 });
             }
             // 权限
-            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
-            for (let i = 0; i < assignedPermissions.length; i++) {
-                if (assignedPermissions[i] === 'admin:hdMedicalCase:create' || assignedPermissions[i] === 'admin:hdMedicalCase:update') {
-                    this.jurisdictionList.adDisabled = true;
+            if (sessionStorage.getItem('assignedPermissions')) {
+                let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+                for (let i = 0; i < assignedPermissions.length; i++) {
+                    if (assignedPermissions[i] === 'admin:hdMedicalCase:create' || assignedPermissions[i] === 'admin:hdMedicalCase:update') {
+                        this.jurisdictionList.adDisabled = true;
+                    }
                 }
             }
         },
@@ -203,6 +209,7 @@
             handleAvatarSuccess1(res, file) {
                 if (file.response.data.url) {
                     this.form.medicalRecordAttachment = file.response.data.url;
+                    this.$refs.upload.clearFiles();
                 } else {
                     this.$message({
                         showClose: true,
@@ -215,6 +222,7 @@
             handleAvatarSuccess2(res, file) {
                 if (file.response.data.url) {
                     this.form.medicalReport = file.response.data.url;
+                    this.$refs.upload.clearFiles();
                 } else {
                     this.$message({
                         showClose: true,
@@ -227,6 +235,7 @@
             handleAvatarSuccess3(res, file) {
                 if (file.response.data.url) {
                     this.form.electrocardiogramData = file.response.data.url;
+                    this.$refs.upload.clearFiles();
                 } else {
                     this.$message({
                         showClose: true,
@@ -239,6 +248,7 @@
             handleAvatarSuccess4(res, file) {
                 if (file.response.data.url) {
                     this.form.electrocardiogram = file.response.data.url;
+                    this.$refs.upload.clearFiles();
                 } else {
                     this.$message({
                         showClose: true,

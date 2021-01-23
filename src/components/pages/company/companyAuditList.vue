@@ -94,16 +94,18 @@
         created() {
             this.getCompanyList(1,10);
             // 权限
-            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
-            for (let i = 0; i < assignedPermissions.length; i++) {
-                if (assignedPermissions[i] === 'admin:hdCompanyAudit:create') {
-                    this.jurisdictionList.adDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:hdCompanyAudit:delete') {
-                    this.jurisdictionList.dtDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:hdCompanyAudit:delete') {
-                    this.jurisdictionList.dbtDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:hdCompanyAudit:update') {
-                    this.jurisdictionList.atDisabled = true;
+            if (sessionStorage.getItem('assignedPermissions')) {
+                let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+                for (let i = 0; i < assignedPermissions.length; i++) {
+                    if (assignedPermissions[i] === 'admin:hdCompanyAudit:create') {
+                        this.jurisdictionList.adDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:hdCompanyAudit:delete') {
+                        this.jurisdictionList.dtDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:hdCompanyAudit:delete') {
+                        this.jurisdictionList.dbtDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:hdCompanyAudit:update') {
+                        this.jurisdictionList.atDisabled = true;
+                    }
                 }
             }
         },

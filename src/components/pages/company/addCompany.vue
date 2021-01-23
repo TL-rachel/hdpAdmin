@@ -258,10 +258,12 @@
                 }
             }
             // 权限
-            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
-            for (let i = 0; i < assignedPermissions.length; i++) {
-                if (assignedPermissions[i] === 'admin:hdCompany:create' || assignedPermissions[i] === 'admin:hdCompany:update' || assignedPermissions[i] === 'admin:hdCompanyAudit:update') {
-                    this.jurisdictionList.adDisabled = true;
+            if (sessionStorage.getItem('assignedPermissions')) {
+                let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+                for (let i = 0; i < assignedPermissions.length; i++) {
+                    if (assignedPermissions[i] === 'admin:hdCompany:create' || assignedPermissions[i] === 'admin:hdCompany:update' || assignedPermissions[i] === 'admin:hdCompanyAudit:update') {
+                        this.jurisdictionList.adDisabled = true;
+                    }
                 }
             }
         },

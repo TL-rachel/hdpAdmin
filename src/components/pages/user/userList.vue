@@ -120,24 +120,26 @@
         created() {
             this.getUserList(1,10);
             // 权限
-            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
-            for (let i = 0; i < assignedPermissions.length; i++) {
-                if (assignedPermissions[i] === 'admin:user:create') {
-                    this.jurisdictionList.adDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:hdUser:delete') {
-                    this.jurisdictionList.dtDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:hdUser:batchDelete') {
-                    this.jurisdictionList.dbtDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:hdUser:read') {
-                    this.jurisdictionList.rdDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:hdUser:update') {
-                    this.jurisdictionList.upDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:hdUser:batchFaceId') {
-                    this.jurisdictionList.bfDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:hdMedical:read') {
-                    this.jurisdictionList.mcDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:hdMedicalCase:list') {
-                    this.jurisdictionList.csDisabled = true;
+            if (sessionStorage.getItem('assignedPermissions')) {
+                let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+                for (let i = 0; i < assignedPermissions.length; i++) {
+                    if (assignedPermissions[i] === 'admin:user:create') {
+                        this.jurisdictionList.adDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:hdUser:delete') {
+                        this.jurisdictionList.dtDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:hdUser:batchDelete') {
+                        this.jurisdictionList.dbtDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:hdUser:read') {
+                        this.jurisdictionList.rdDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:hdUser:update') {
+                        this.jurisdictionList.upDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:hdUser:batchFaceId') {
+                        this.jurisdictionList.bfDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:hdMedical:read') {
+                        this.jurisdictionList.mcDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:hdMedicalCase:list') {
+                        this.jurisdictionList.csDisabled = true;
+                    }
                 }
             }
         },

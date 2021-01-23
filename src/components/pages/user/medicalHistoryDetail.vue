@@ -154,10 +154,12 @@
                 });
             }
             // 权限
-            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
-            for (let i = 0; i < assignedPermissions.length; i++) {
-                if (assignedPermissions[i] === 'admin:hdMedical:update' || assignedPermissions[i] === 'admin:hdMedical:create') {
-                    this.jurisdictionList.upDisabled = true;
+            if (sessionStorage.getItem('assignedPermissions')) {
+                let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+                for (let i = 0; i < assignedPermissions.length; i++) {
+                    if (assignedPermissions[i] === 'admin:hdMedical:update' || assignedPermissions[i] === 'admin:hdMedical:create') {
+                        this.jurisdictionList.upDisabled = true;
+                    }
                 }
             }
         },

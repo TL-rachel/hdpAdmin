@@ -240,10 +240,12 @@
                 });
             }
             // 权限
-            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
-            for (let i = 0; i < assignedPermissions.length; i++) {
-                if (assignedPermissions[i] === 'admin:hdDevice:update' || assignedPermissions[i] === 'admin:hdDevice:create') {
-                    this.jurisdictionList.adDisabled = true;
+            if (sessionStorage.getItem('assignedPermissions')) {
+                let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+                for (let i = 0; i < assignedPermissions.length; i++) {
+                    if (assignedPermissions[i] === 'admin:hdDevice:update' || assignedPermissions[i] === 'admin:hdDevice:create') {
+                        this.jurisdictionList.adDisabled = true;
+                    }
                 }
             }
         },

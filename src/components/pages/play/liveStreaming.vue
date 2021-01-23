@@ -40,7 +40,7 @@
                 <div class="device-user" :key="index">
                     <div class="user-detail">
                         <ul class="clearfix">
-                            <li><img :src="item.userImage" alt=""></li>
+                            <li><img v-if="item.userImage" :src="item.userImage" alt=""></li>
                             <li>
                                 <div class="user-name">{{item.userName}}</div>
                                 <div class="user-rests">FaceId：{{item.faceId}}</div>
@@ -98,48 +98,6 @@
         mounted() {
             this.initGetDevice();
         },
-        /* created() {
-             // 获取企业
-             companyAllList().then(res => {
-                 if (res.data.errno === 0) {
-                     this.companyList = res.data.data;
-                 } else {
-                     this.$message({
-                         showClose: true,
-                         message: res.data.errmsg,
-                         type: 'error'
-                     });
-                 }
-             });
-             // 判断是否从区域进入
-             if (this.$route.query.obj) {
-                 let obj = JSON.parse(this.$route.query.obj);
-                 // 获取区域
-                 if (obj.companyId) {
-                     this.form.companyId = obj.companyId;
-                     this.getAllRegions();
-                 }
-                 // 获取设备
-                 if (obj.deviceRegionId) {
-                     this.form.regionId = obj.deviceRegionId;
-                     this.getAllDevice();
-                     this.form.deviceId = obj.id;
-                     // 获取视频链接
-                     queryVideos(this.form).then(res => {
-                         if (res.data.errno === 0) {
-                             this.videosList = res.data.data;
-                             this.videoUrl = res.data.data[0].devicePath;
-                         } else {
-                             this.$message({
-                                 showClose: true,
-                                 message: res.data.errmsg,
-                                 type: 'error'
-                             });
-                         }
-                     });
-                 }
-             }
-         },*/
         methods: {
             /**
              * 获取企业

@@ -72,18 +72,20 @@
         created() {
             this.getRegionList();
             // 权限
-            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
-            for (let i = 0; i < assignedPermissions.length; i++) {
-                if (assignedPermissions[i] === 'admin:hdRegion:batchDelete') {
-                    this.jurisdictionList.dbtDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:hdRegion:create') {
-                    this.jurisdictionList.adDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:hdRegion:delete') {
-                    this.jurisdictionList.dtDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:hdRegion:read') {
-                    this.jurisdictionList.rdDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:hdRegion:update') {
-                    this.jurisdictionList.upDisabled = true;
+            if (sessionStorage.getItem('assignedPermissions')) {
+                let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+                for (let i = 0; i < assignedPermissions.length; i++) {
+                    if (assignedPermissions[i] === 'admin:hdRegion:batchDelete') {
+                        this.jurisdictionList.dbtDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:hdRegion:create') {
+                        this.jurisdictionList.adDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:hdRegion:delete') {
+                        this.jurisdictionList.dtDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:hdRegion:read') {
+                        this.jurisdictionList.rdDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:hdRegion:update') {
+                        this.jurisdictionList.upDisabled = true;
+                    }
                 }
             }
         },

@@ -87,20 +87,22 @@
             }
             this.getRegionList();
             // 权限
-            let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
-            for (let i = 0; i < assignedPermissions.length; i++) {
-                if (assignedPermissions[i] === 'admin:hdDevice:batchDelete') {
-                    this.jurisdictionList.dbtDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:hdDevice:create') {
-                    this.jurisdictionList.adDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:hdDevice:delete') {
-                    this.jurisdictionList.dtDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:hdDevice:batchCheck') {
-                    this.jurisdictionList.bcdDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:hdDevice:read') {
-                    this.jurisdictionList.rdDisabled = true;
-                } else if (assignedPermissions[i] === 'admin:hdDevice:update') {
-                    this.jurisdictionList.upDisabled = true;
+            if (sessionStorage.getItem('assignedPermissions')) {
+                let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
+                for (let i = 0; i < assignedPermissions.length; i++) {
+                    if (assignedPermissions[i] === 'admin:hdDevice:batchDelete') {
+                        this.jurisdictionList.dbtDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:hdDevice:create') {
+                        this.jurisdictionList.adDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:hdDevice:delete') {
+                        this.jurisdictionList.dtDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:hdDevice:batchCheck') {
+                        this.jurisdictionList.bcdDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:hdDevice:read') {
+                        this.jurisdictionList.rdDisabled = true;
+                    } else if (assignedPermissions[i] === 'admin:hdDevice:update') {
+                        this.jurisdictionList.upDisabled = true;
+                    }
                 }
             }
         },

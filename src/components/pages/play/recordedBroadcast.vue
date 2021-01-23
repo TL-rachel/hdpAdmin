@@ -63,7 +63,7 @@
                     regionId: '', // 区域
                     deviceId: '', // 设备
                     begin: '',
-                    end: '',
+                    end: new Date(),
                     beginTime: '',//传后台时间格式
                     endTime: '',//传后台时间格式
                 },
@@ -89,28 +89,6 @@
                 deviceList: {}, // 设备列表
                 videosList: {}, // 设备用户信息
                 videoUrl: '', // 视频播放地址
-                // 起期范围选择
-                /* pickerDateBefore: {
-                     disabledDate: time => {
-                         if (this.recordForm.end) {
-                             return (
-                                 time.getTime() > new Date(this.recordForm.end).getTime()
-                             );
-                         } else {
-                             return (
-                                 time.getTime() > new Date().getTime() - 8.64e7
-                             );
-                         }
-                     },
-                 },
-                 // 止期范围选择
-                 pickerDateAfter: {
-                     disabledDate: time => {
-                         return (
-                             time.getTime() > new Date().getTime() - 8.64e7 ||
-                             time.getTime() < new Date(this.recordForm.begin).getTime() - 8.64e7);
-                     },
-                 },*/
             };
         },
         created() {
@@ -301,46 +279,8 @@
                         this.recordForm.regionId = obj.deviceRegionId;
                         this.getAllDevice(2);
                         this.recordForm.deviceId = obj.id;
-                       /* this.recordForm.beginTime = this.recordForm.begin.replace(/:/g, '').replace(/\s+/g, '');
-                        this.recordForm.endTime = this.recordForm.end.replace(/:/g, '').replace(/\s+/g, '');*/
                         // 获取视频链接
                         this.getLiveStreaming();
-                        /*queryBackVideos(this.recordForm).then(res => {
-                            if (res.data.errno === 0) {
-                                // this.videosList = res.data.data;
-                                // this.videoUrl = res.data.data[0].devicePath;
-                                let player = new EZUIKit.EZUIKitPlayer({
-                                    autoplay: true,
-                                    id: 'video-container',
-                                    // accessToken: 'at.0ausyc9n4kwj6fkt2o1dtxe509rqwa7v-4jml95kdof-1yd6qo4-bassrnzjb',
-                                    // url: 'ezopen://open.ys7.com/E99840550/1.live',
-                                    url: 'ezopen://open.ys7.com/E99840550/1.local.rec?begin=20210115100000&end=20210115120000',
-                                    template: 'standard', // simple - 极简版;standard-标准版;security - 安防版(预览回放);voice-语音版；
-                                    // 视频上方头部控件
-                                    // header: ["capturePicture", "save", "zoom"], // 如果templete参数不为simple,该字段将被覆盖
-                                    // plugin: ['talk'],                       // 加载插件，talk-对讲
-                                    // 视频下方底部控件
-                                    // footer: [/!*"talk", "broadcast",*!/ "hd", "fullScreen"], // 如果template参数不为simple,该字段将被覆盖
-                                    audio: 1, // 是否默认开启声音 0 - 关闭 1 - 开启
-                                    openSoundCallBack: data => console.log('开启声音回调', data),
-                                    closeSoundCallBack: data => console.log('关闭声音回调', data),
-                                    // startSaveCallBack: data => console.log("开始录像回调", data),
-                                    // stopSaveCallBack: data => console.log("录像回调", data),
-                                    // capturePictureCallBack: data => console.log("截图成功回调", data),
-                                    fullScreenCallBack: data => console.log('全屏回调', data),
-                                    getOSDTimeCallBack: data => console.log('获取OSDTime回调', data),
-                                    width: 1150,
-                                    height: 600,
-                                });
-                                console.log(player);
-                            } else {
-                                this.$message({
-                                    showClose: true,
-                                    message: res.data.errmsg,
-                                    type: 'error',
-                                });
-                            }
-                        });*/
                     }
                 } else { //直接进去录频页面
                     // this.getAllDevice(1);
