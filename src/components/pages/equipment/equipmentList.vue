@@ -82,6 +82,9 @@
             };
         },
         created() {
+            if (this.$route.query.name) {
+                this.equipmentName = this.$route.query.name;
+            }
             this.getRegionList();
             // 权限
             let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));

@@ -44,29 +44,31 @@
                 <el-form-item label="资质证明附件" class="whole100" label-width="140px">
                     <el-upload v-if="$route.query.type?false:true"
                             class="upload-demo"
+                            ref="upload"
                             :action="actionUrl"
                             multiple
                             :on-success="handleAvatarSuccess1"
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
                         <span v-if="!form.companyPatha">未选择任何文件</span>
-                        <a v-else :href="form.companyPatha" target="_blank">查看</a>
+                        <a v-else :href="form.companyPatha" target="_blank">{{form.companyFileNamea}}</a>
                     </el-upload>
-                    <a v-else :href="form.companyPatha" target="_blank">查看</a>
+                    <a v-else :href="form.companyPatha" target="_blank">{{form.companyFileNamea}}</a>
                 </el-form-item>
 
                 <el-form-item label="网络负责人授权证明" class="whole100" label-width="140px">
                     <el-upload v-if="$route.query.type?false:true"
                             class="upload-demo"
+                            ref="upload"
                             :action="actionUrl"
                             multiple
                             :on-success="handleAvatarSuccess2"
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
                         <span v-if="!form.companyPathb">未选择任何文件</span>
-                        <a v-else :href="form.companyPathb" target="_blank">查看</a>
+                        <a v-else :href="form.companyPathb" target="_blank">{{form.companyFileNameb}}</a>
                     </el-upload>
-                    <a v-else :href="form.companyPathb" target="_blank">查看</a>
+                    <a v-else :href="form.companyPathb" target="_blank">{{form.companyFileNameb}}</a>
                 </el-form-item>
                 <el-form-item label="企业星级" label-width="140px" prop="companyStar">
                     <el-select v-model="form.companyStar" :disabled="$route.query.type?true:false" placeholder="请选择企业星级">
@@ -146,6 +148,8 @@
                     companyPrincipal: '', // 企业主要管理员 多个人员逗号隔开
                     companyPatha: '', // 资格证明附件地址
                     companyPathb: '', // 网络资格人授权证明
+                    companyFileNamea: '', // 资格证明附件名称
+                    companyFileNameb: '', // 网络资格人授权证明名称
                     companyStar: 1, // 企业星级(1-一星；2-二星；3-三星；4-四星；5-五星,默认1)
                     companyStatus: '0', // 企业状态;0-待审核；1-通过；2-驳回；
                     starChangeType: 0, // 星级变更方式(0-系统；1-人工；默认0)
@@ -262,6 +266,9 @@
             }
         },
         methods: {
+            cancel() {
+                this.dialogFormVisible =false;
+            },
             submitVia(type) {
                 if (type === 1) {
                     this.titleName = '审核通过！';
@@ -274,6 +281,8 @@
             handleAvatarSuccess1(res, file) {
                 if (file.response.data.url) {
                     this.form.companyPatha = file.response.data.url;
+                    this.form.companyFileNamea = file.response.data.fileName;
+                    this.$refs.upload.clearFiles();
                 } else {
                     this.$message({
                         showClose: true,
@@ -286,6 +295,8 @@
             handleAvatarSuccess2(res, file) {
                 if (file.response.data.url) {
                     this.form.companyPathb = file.response.data.url;
+                    this.form.companyFileNameb = file.response.data.fileName;
+                    this.$refs.upload.clearFiles();
                 } else {
                     this.$message({
                         showClose: true,

@@ -23,8 +23,8 @@
                             <div class="equipment-name" style="font-size: 16px;">{{t.regionName}}</div>
                         </div>
                         <div class="equipmentTitle areaTitle">
-                            <div>设备总数 <span class="sum">{{t.totalDeviceNum}}</span></div>
-                            <div>异常设备数 <span class="anomaly">{{t.badDeviceNum}}</span></div>
+                            <div>设备总数 <router-link :to="{ path:'/equipmentList',query: {name: t.regionName}}"><span class="sum">{{t.totalDeviceNum}}</span></router-link></div>
+                            <div>异常设备数 <router-link :to="{ path:'/equipmentList',query: {name: t.regionName}}"><span class="anomaly">{{t.badDeviceNum}}</span></router-link></div>
                         </div>
                         <span class="wire"></span>
                         <div class="rests">归属企业：{{t.companyName}}</div>

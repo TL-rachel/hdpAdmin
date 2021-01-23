@@ -263,7 +263,7 @@
                                     position: 'top'
                                 }
                             },
-                            barWidth: '40%',
+                            barWidth: '30%',
                             data: sData
                         }
                     ]

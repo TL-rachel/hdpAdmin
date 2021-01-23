@@ -39,7 +39,16 @@
                     style="width: 100%"
                     @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55"></el-table-column>
-                <el-table-column prop="inspectTime" label="体检时间"> </el-table-column>
+                <el-table-column prop="inspectTime" label="体检时间">
+                    <template slot-scope="scope">
+                        <el-popover trigger="hover" placement="top">
+                            <p>{{ scope.row.inspectTime }}</p>
+                            <div slot="reference" class="name-wrapper text-overflow-1">
+                                <span>{{ scope.row.inspectTime }}</span>
+                            </div>
+                        </el-popover>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="heartRate" label="心率"></el-table-column>
                 <el-table-column prop="bloodComfort" label="血压">
                     <template slot-scope="scope">
@@ -47,8 +56,26 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="bloodOxygen" label="血氧"></el-table-column>
-                <el-table-column prop="abnormalSymptomDesc" label="异常症状描述"></el-table-column>
-                <el-table-column prop="doctorDiagnosis" label="医生诊断"></el-table-column>
+                <el-table-column prop="abnormalSymptomDesc" label="异常症状描述">
+                    <template slot-scope="scope">
+                        <el-popover trigger="hover" placement="top">
+                            <p>{{ scope.row.abnormalSymptomDesc }}</p>
+                            <div slot="reference" class="name-wrapper text-overflow-1">
+                                <span>{{ scope.row.abnormalSymptomDesc }}</span>
+                            </div>
+                        </el-popover>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="doctorDiagnosis" label="医生诊断">
+                    <template slot-scope="scope">
+                        <el-popover trigger="hover" placement="top">
+                            <p>{{ scope.row.doctorDiagnosis }}</p>
+                            <div slot="reference" class="name-wrapper text-overflow-1">
+                                <span>{{ scope.row.doctorDiagnosis }}</span>
+                            </div>
+                        </el-popover>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="medicalRecordAttachment" label="病例报告">
                     <template slot-scope="scope">
                         <a v-if="scope.row.medicalRecordAttachment" :href="scope.row.medicalRecordAttachment" target="_blank">病例报告</a>
@@ -73,7 +100,16 @@
                         <span v-else>——</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="measuringTime" label="测量时间"></el-table-column>
+                <el-table-column prop="measuringTime" label="测量时间">
+                    <template slot-scope="scope">
+                        <el-popover trigger="hover" placement="top">
+                            <p>{{ scope.row.measuringTime }}</p>
+                            <div slot="reference" class="name-wrapper text-overflow-1">
+                                <span>{{ scope.row.measuringTime }}</span>
+                            </div>
+                        </el-popover>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="deviceCode" label="设备编号"></el-table-column>
                 <el-table-column prop="operation" label="操作人"></el-table-column>
                 <el-table-column prop="id" label="操作" width="120px">
