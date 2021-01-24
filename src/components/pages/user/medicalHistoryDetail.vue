@@ -2,7 +2,7 @@
     <div class="equipmentList">
         <div class="user-data clearfix">
             <div class="user-property user-img">
-                <img style="width: 42px;height: 42px;border-radius: 20px" :src="userData.userImage1" alt="">
+                <img style="width: 42px;height: 42px;border-radius: 20px" :src="userData.userImage1?userData.userImage1:userImgUrl" alt="">
             </div>
             <div class="user-property">
                 <div class="user-name">{{userData.userName}}</div>
@@ -14,11 +14,11 @@
             </div>
             <div class="user-property">
                 <div class="user-custom">身高</div>
-                <div>{{userData.userHeight}}</div>
+                <div>{{userData.userHeight}} cm</div>
             </div>
             <div class="user-property">
                 <div class="user-custom">体重</div>
-                <div>{{userData.userWeight}}</div>
+                <div>{{userData.userWeight}} KG</div>
             </div>
             <div class="user-property">
                 <div class="user-custom">BMI</div>
@@ -85,7 +85,7 @@
                 </el-form-item>
 
                 <el-form-item class="operation-btn" label-width="0">
-                    <router-link v-if="jurisdictionList.upDisabled" :to="{ path:'/medicalHistory',query: {id:$route.query.id}}">
+                    <router-link :to="{ path:'/medicalHistory',query: {id:$route.query.id}}">
                         <el-button>编 辑</el-button>
                     </router-link>
                     <el-button @click="handleHistory">返 回</el-button>
@@ -103,9 +103,9 @@
             return {
                 medicalForm: {},
                 userData: {}, // 用户信息
-                jurisdictionList: {
-                    upDisabled: false,
-                }
+                /* eslint-disable */
+                userImgUrl: require("../../../common/image/user.png"),
+                /* eslint-disable */
             };
         },
         created() {
@@ -138,7 +138,7 @@
                                 this.medicalForm.operation = 1;
                             }
                         }
-                        if (this.medicalForm.inheritance !== 0) {
+                        if (this.medicalForm.inheritance !== 0 && this.medicalForm.inheritance) {
                             this.medicalForm.geneticDiseaseMessage = this.medicalForm.inheritance;
                             this.medicalForm.inheritance = 1;
                         }
@@ -152,15 +152,6 @@
                         this.medicalForm.disability = this.medicalForm.disability.split(',');
                     }
                 });
-            }
-            // 权限
-            if (sessionStorage.getItem('assignedPermissions')) {
-                let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
-                for (let i = 0; i < assignedPermissions.length; i++) {
-                    if (assignedPermissions[i] === 'admin:hdMedical:update' || assignedPermissions[i] === 'admin:hdMedical:create') {
-                        this.jurisdictionList.upDisabled = true;
-                    }
-                }
             }
         },
         methods: {

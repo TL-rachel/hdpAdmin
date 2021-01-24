@@ -22,9 +22,9 @@
                     tooltip-effect="dark"
                     v-loading="loading"
                     style="width: 100%">
-                <el-table-column label="img" min-width="60">
+                <el-table-column label="头像" min-width="60">
                     <template slot-scope="scope">
-                        <img class="head-portrait" v-if="scope.row.userImage1" :src="scope.row.userImage1" alt="">
+                        <img class="head-portrait" :src="scope.row.userImage1?scope.row.userImage1:userImgUrl" alt="">
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="姓名" min-width="80">
@@ -43,10 +43,10 @@
                 <el-table-column prop="rate" label="心率" width="180">
                     <template slot-scope="scope">
                         <router-link v-if="scope.row.faceId" :to="{ path:'/heartRateList',query: {obj: scope.row}}">
-                            <span :class="scope.row.rate > 120 && scope.row.rate < 70 ? 'abnormality' : 'normality'">{{scope.row.rate?scope.row.rate:'无'}}</span>
+                            <span :title="scope.row.rate?scope.row.rate:'无检测数据'" :class="scope.row.rate > 120 && scope.row.rate < 70 ? 'abnormality' : 'normality'">{{scope.row.rate?scope.row.rate:'/'}}</span>
                         </router-link>
                         <template v-else>
-                            <span :class="scope.row.rate > 120 && scope.row.rate < 70 ? 'abnormality' : 'normality'">{{scope.row.rate?scope.row.rate:'无'}}</span>
+                            <span :title="scope.row.rate?scope.row.rate:'无检测数据'" :class="scope.row.rate > 120 && scope.row.rate < 70 ? 'abnormality' : 'normality'">{{scope.row.rate?scope.row.rate:'/'}}</span>
                         </template>
                     </template>
                 </el-table-column>
@@ -55,12 +55,12 @@
                         <router-link v-if="scope.row.faceId" :to="{ path:'/fatigueList',query: {obj: scope.row}}">
                             <span class="normality" v-if="scope.row.fatigue == 0">正常</span>
                             <span class="abnormality" v-else-if="scope.row.fatigue == 1">疲劳</span>
-                            <span v-else>{{scope.row.fatigue?scope.row.fatigue:'正常'}}</span>
+                            <span :title="scope.row.rate?scope.row.rate:'无检测数据'" v-else>{{scope.row.fatigue?scope.row.fatigue:'/'}}</span>
                         </router-link>
                         <template v-else>
                             <span class="normality" v-if="scope.row.fatigue == 0">正常</span>
                             <span class="abnormality" v-else-if="scope.row.fatigue == 1">疲劳</span>
-                            <span v-else>{{scope.row.fatigue?scope.row.fatigue:'正常'}}</span>
+                            <span :title="scope.row.rate?scope.row.rate:'无检测数据'" v-else>{{scope.row.fatigue?scope.row.fatigue:'/'}}</span>
                         </template>
                     </template>
                 </el-table-column>
@@ -68,10 +68,10 @@
                 <el-table-column prop="rateCheckTime" label="检测时间" min-width="150"></el-table-column>
                 <el-table-column prop="id" label="操作" min-width="150">
                     <template slot-scope="scope">
-                        <router-link v-if="jurisdictionList.csDisabled" :to="{ path:'/caseList',query: {id:scope.row.id}}">
+                        <router-link :to="{ path:'/caseList',query: {id:scope.row.id}}">
                             <a class="operation-table">病例</a>
                         </router-link>
-                        <router-link v-if="jurisdictionList.mcDisabled" :to="{ path:'/medicalHistoryDetail',query: {id:scope.row.id}}">
+                        <router-link :to="{ path:'/medicalHistoryDetail',query: {id:scope.row.id}}">
                             <a class="operation-table">病史</a>
                         </router-link>
                     </template>
@@ -83,7 +83,7 @@
                 <div style="display:inline-block;text-align: center;">
                     <el-button size="mini" type="primary" class="toolbar-go-btn">Go
                     </el-button>
-                    <el-pagination layout="total,  prev, pager, next, jumper" @current-change="handleCurrentChange"
+                    <el-pagination background layout="total,  prev, pager, next, jumper" @current-change="handleCurrentChange"
                                    :page-size="10" :total="total" style="float:right;">
                     </el-pagination>
                 </div>
@@ -105,25 +105,13 @@
                 total: 0, // 条数
                 page: 1, // 页码
                 loading: false,
-                jurisdictionList: {
-                    csDisabled: false,
-                    mcDisabled: false,
-                }
+                /* eslint-disable */
+                userImgUrl: require("../../../common/image/user.png"),
+                /* eslint-disable */
             };
         },
         created() {
             this.getHealthDataList(1,10);
-            // 权限
-            if (sessionStorage.getItem('assignedPermissions')) {
-                let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
-                for (let i = 0; i < assignedPermissions.length; i++) {
-                    if (assignedPermissions[i] === 'admin:hdMedical:read') {
-                        this.jurisdictionList.mcDisabled = true;
-                    } else if (assignedPermissions[i] === 'admin:hdMedicalCase:list') {
-                        this.jurisdictionList.csDisabled = true;
-                    }
-                }
-            }
         },
         methods: {
             // 修改页数

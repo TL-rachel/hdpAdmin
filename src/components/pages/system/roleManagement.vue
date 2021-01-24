@@ -7,7 +7,7 @@
                 <!--<el-button><i class="icon-picture icon-picture-to-lead"></i>批量导入</el-button>
                 <el-button><i class="icon-picture icon-picture-export"></i>批量导出</el-button>
                 <el-button><i class="icon-picture icon-picture-update"></i>一键更新faceId</el-button>-->
-                <el-button v-if="jurisdictionList.dbtDisabled" @click="deleteRole(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+                <el-button v-if="jurisdictionList.dtDisabled" @click="deleteRole(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             </div>
         </div>
         <div class="table-list">
@@ -26,7 +26,7 @@
                     <template slot-scope="scope">
                         <a v-if="jurisdictionList.upDisabled" class="operation-table" @click="openUpdateRole(1,scope.row)">编辑</a>
                         <a v-if="jurisdictionList.dtDisabled" class="operation-table" @click="deleteRole(scope.row,1)">删除</a>
-                        <a v-if="jurisdictionList.otDisabled" class="operation-table" @click="openTree(scope.row)">授权</a>
+                        <a v-if="jurisdictionList.upDisabled" class="operation-table" @click="openTree(scope.row)">授权</a>
                     </template>
                 </el-table-column>
             </el-table>
@@ -36,7 +36,7 @@
                 <div style="display:inline-block;text-align: center;">
                     <el-button size="mini" type="primary" class="toolbar-go-btn">Go
                     </el-button>
-                    <el-pagination layout="total,  prev, pager, next, jumper" @current-change="handleCurrentChange"
+                    <el-pagination background layout="total,  prev, pager, next, jumper" @current-change="handleCurrentChange"
                                    :page-size="10" :total="total" style="float:right;">
                     </el-pagination>
                 </div>
@@ -118,8 +118,6 @@
                 jurisdictionList: {
                     adDisabled: false,
                     dtDisabled: false,
-                    dbtDisabled: false,
-                    otDisabled: false,
                     upDisabled: false,
                 }
             };
@@ -135,12 +133,8 @@
                         this.jurisdictionList.adDisabled = true;
                     } else if (assignedPermissions[i] === 'admin:role:delete') {
                         this.jurisdictionList.dtDisabled = true;
-                    } else if (assignedPermissions[i] === 'admin:role:batchDelete') {
-                        this.jurisdictionList.dbtDisabled = true;
                     } else if (assignedPermissions[i] === 'admin:role:update') {
                         this.jurisdictionList.upDisabled = true;
-                    } else if (assignedPermissions[i] === 'admin:role:permission:update') {
-                        this.jurisdictionList.otDisabled = true;
                     }
                 }
             }

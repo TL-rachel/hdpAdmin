@@ -6,7 +6,7 @@
                 <router-link v-if="jurisdictionList.adDisabled" :to="{ path:'/addCompany'}">
                     <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
                 </router-link>
-                <el-button v-if="jurisdictionList.dbtDisabled" @click="deleteCompany(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+                <el-button v-if="jurisdictionList.dtDisabled" @click="deleteCompany(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             </div>
         </div>
         <div class="table-list">
@@ -50,6 +50,9 @@
                         <router-link v-if="jurisdictionList.atDisabled" :to="{ path:'/addCompanyAudit',query: {id:scope.row.id,type:2}}">
                             <a v-if="scope.row.companyStatus == 0" class="operation-table">审核</a>
                         </router-link>
+                        <router-link v-if="jurisdictionList.atDisabled" :to="{ path:'/addCompanyAudit',query: {id:scope.row.id,type:2}}">
+                            <a v-if="scope.row.companyStatus == 0" class="operation-table">审核</a>
+                        </router-link>
                         <a v-if="jurisdictionList.dtDisabled" class="operation-table" @click="deleteCompany(scope.row,1)">删除</a>
                     </template>
                 </el-table-column>
@@ -61,7 +64,7 @@
                 <div style="display:inline-block;text-align: center;">
                     <el-button size="mini" type="primary" class="toolbar-go-btn">Go
                     </el-button>
-                    <el-pagination layout="total,  prev, pager, next, jumper" @current-change="handleCurrentChange"
+                    <el-pagination background layout="total,  prev, pager, next, jumper" @current-change="handleCurrentChange"
                                    :page-size="10" :total="total" style="float:right;">
                     </el-pagination>
                 </div>
@@ -86,7 +89,6 @@
                 jurisdictionList: {
                     adDisabled: false,
                     dtDisabled: false,
-                    dbtDisabled: false,
                     atDisabled: false,
                 }
             };
@@ -101,8 +103,6 @@
                         this.jurisdictionList.adDisabled = true;
                     } else if (assignedPermissions[i] === 'admin:hdCompanyAudit:delete') {
                         this.jurisdictionList.dtDisabled = true;
-                    } else if (assignedPermissions[i] === 'admin:hdCompanyAudit:delete') {
-                        this.jurisdictionList.dbtDisabled = true;
                     } else if (assignedPermissions[i] === 'admin:hdCompanyAudit:update') {
                         this.jurisdictionList.atDisabled = true;
                     }

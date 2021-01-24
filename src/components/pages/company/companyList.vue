@@ -6,7 +6,7 @@
                 <router-link v-if="jurisdictionList.adDisabled" :to="{ path:'/addCompany'}">
                     <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
                 </router-link>
-                <el-button v-if="jurisdictionList.dbtDisabled" @click="deleteCompany(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+                <el-button v-if="jurisdictionList.dtDisabled" @click="deleteCompany(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             </div>
         </div>
         <div class="table-list">
@@ -51,7 +51,7 @@
                 <div style="display:inline-block;text-align: center;">
                     <el-button size="mini" type="primary" class="toolbar-go-btn">Go
                     </el-button>
-                    <el-pagination layout="total,  prev, pager, next, jumper" @current-change="handleCurrentChange"
+                    <el-pagination background layout="total,  prev, pager, next, jumper" @current-change="handleCurrentChange"
                                    :page-size="10" :total="total" style="float:right;">
                     </el-pagination>
                 </div>
@@ -76,7 +76,6 @@
                 jurisdictionList: {
                     adDisabled: false,
                     dtDisabled: false,
-                    dbtDisabled: false,
                     rdDisabled: false,
                     upDisabled: false,
                 }
@@ -92,8 +91,6 @@
                         this.jurisdictionList.adDisabled = true;
                     } else if (assignedPermissions[i] === 'admin:hdCompany:delete') {
                         this.jurisdictionList.dtDisabled = true;
-                    } else if (assignedPermissions[i] === 'admin:hdCompany:batchDelete') {
-                        this.jurisdictionList.dbtDisabled = true;
                     } else if (assignedPermissions[i] === 'admin:hdCompany:read') {
                         this.jurisdictionList.rdDisabled = true;
                     } else if (assignedPermissions[i] === 'admin:hdCompany:update') {

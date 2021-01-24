@@ -9,7 +9,7 @@
                 <!--<el-button><i class="icon-picture icon-picture-to-lead"></i>批量导入</el-button>
                 <el-button><i class="icon-picture icon-picture-export"></i>批量导出</el-button>-->
                 <el-button v-if="jurisdictionList.bfDisabled" @click="batchFaceId()"><i class="icon-picture icon-picture-update"></i>一键更新faceId</el-button>
-                <el-button v-if="jurisdictionList.dbtDisabled" @click="userDelete(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+                <el-button v-if="jurisdictionList.dtDisabled" @click="userDelete(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             </div>
         </div>
         <div class="table-list">
@@ -21,9 +21,9 @@
                     v-loading="loading"
                     @selection-change="handleSelectionChange">
                 <el-table-column fixed type="selection" width="55"></el-table-column>
-                <el-table-column label="img" min-width="60">
+                <el-table-column label="头像" min-width="60">
                     <template slot-scope="scope">
-                        <img v-if="scope.row.userImage1" class="head-portrait" :src="scope.row.userImage1" alt="">
+                        <img class="head-portrait" :src="scope.row.userImage1?scope.row.userImage1:userImgUrl" alt="">
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="姓名" min-width="180">
@@ -63,14 +63,14 @@
                                 <a v-if="jurisdictionList.dtDisabled" @click="userDelete(scope.row.id,1)">删除</a>
                             </p>
                             <p>
-                                <router-link v-if="jurisdictionList.csDisabled" :to="{ path:'/caseList',query: {id:scope.row.id}}">
+                                <router-link :to="{ path:'/caseList',query: {id:scope.row.id}}">
                                     <a>病例</a>
                                 </router-link>
-                                <router-link v-if="jurisdictionList.mcDisabled" :to="{ path:'/medicalHistoryDetail',query: {id:scope.row.id}}">
+                                <router-link :to="{ path:'/medicalHistoryDetail',query: {id:scope.row.id}}">
                                     <a>病史</a>
                                 </router-link>
                             </p>
-                            <div v-if="jurisdictionList.mcDisabled || jurisdictionList.csDisabled || jurisdictionList.dtDisabled || jurisdictionList.upDisabled" slot="reference" class="name-wrapper text-overflow-1">
+                            <div slot="reference" class="name-wrapper text-overflow-1">
                                 <a>更多操作</a>
                             </div>
                         </el-popover>
@@ -84,7 +84,7 @@
                 <div style="display:inline-block;text-align: center;">
                     <el-button size="mini" type="primary" class="toolbar-go-btn">Go
                     </el-button>
-                    <el-pagination layout="total,  prev, pager, next, jumper" @current-change="handleCurrentChange"
+                    <el-pagination background layout="total,  prev, pager, next, jumper" @current-change="handleCurrentChange"
                                    :page-size="10" :total="total" style="float:right;">
                     </el-pagination>
                 </div>
@@ -105,10 +105,12 @@
                 total: 0, // 条数
                 page: 1, // 页码
                 loading: false,
+                /* eslint-disable */
+                userImgUrl: require("../../../common/image/user.png"),
+                /* eslint-disable */
                 jurisdictionList: {
                     adDisabled: false,
                     dtDisabled: false,
-                    dbtDisabled: false,
                     rdDisabled: false,
                     bfDisabled: false,
                     upDisabled: false,
@@ -127,8 +129,6 @@
                         this.jurisdictionList.adDisabled = true;
                     } else if (assignedPermissions[i] === 'admin:hdUser:delete') {
                         this.jurisdictionList.dtDisabled = true;
-                    } else if (assignedPermissions[i] === 'admin:hdUser:batchDelete') {
-                        this.jurisdictionList.dbtDisabled = true;
                     } else if (assignedPermissions[i] === 'admin:hdUser:read') {
                         this.jurisdictionList.rdDisabled = true;
                     } else if (assignedPermissions[i] === 'admin:hdUser:update') {

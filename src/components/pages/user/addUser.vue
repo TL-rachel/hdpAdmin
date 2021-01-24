@@ -1,8 +1,8 @@
 <template>
     <div class="form-save">
-        <el-form ref="form" class="clearfix" :rules="rules" :model="form" label-width="80px">
-            <el-form-item :label="!$route.query.id?'创建用户':'用户ID'" class="whole100" label-width="90px">
-                <el-input v-if="$route.query.id" class="w420" v-model="form.id" disabled placeholder="请输入用户ID"></el-input>
+        <el-form ref="form" class="clearfix" style="position: relative;" :rules="rules" :model="form" label-width="80px">
+            <el-form-item label="用户ID" class="whole100" label-width="90px">
+                <el-input class="w420" v-model="form.id" disabled placeholder="系统自动生成"></el-input>
             </el-form-item>
 
             <el-form-item class="upload-img" label="上传图片" label-width="90px">

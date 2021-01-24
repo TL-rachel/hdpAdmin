@@ -2,7 +2,7 @@
     <div class="equipmentList">
         <div class="user-data clearfix">
             <div class="user-property user-img">
-                <img style="width: 42px;height: 42px;border-radius: 20px" :src="userData.userImage1" alt="">
+                <img style="width: 42px;height: 42px;border-radius: 20px" :src="userData.userImage1?userData.userImage1:userImgUrl" alt="">
             </div>
             <div class="user-property">
                 <div class="user-name">{{userData.userName}}</div>
@@ -14,11 +14,11 @@
             </div>
             <div class="user-property">
                 <div class="user-custom">身高</div>
-                <div>{{userData.userHeight}}</div>
+                <div>{{userData.userHeight}} cm</div>
             </div>
             <div class="user-property">
                 <div class="user-custom">体重</div>
-                <div>{{userData.userWeight}}</div>
+                <div>{{userData.userWeight}} KG</div>
             </div>
             <div class="user-property">
                 <div class="user-custom">BMI</div>
@@ -26,10 +26,10 @@
             </div>
         </div>
         <div class="table-list">
-            <router-link v-if="jurisdictionList.adDisabled" :to="{ path:'/addCase',query:{userId: $route.query.id}}">
+            <router-link :to="{ path:'/addCase',query:{userId: $route.query.id}}">
                 <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
             </router-link>
-            <el-button v-if="jurisdictionList.dbtDisabled" @click="medicalDelete(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+            <el-button @click="medicalDelete(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             <el-table
                     ref="multipleTable"
                     :data="tableData"
@@ -114,10 +114,10 @@
                 <el-table-column prop="operation" label="操作人"></el-table-column>
                 <el-table-column prop="id" label="操作" width="120px">
                     <template slot-scope="scope">
-                        <router-link v-if="jurisdictionList.upDisabled" :to="{ path:'/addCaseUpdate',query: {userId: userData.id,id: scope.row.id}}">
+                        <router-link :to="{ path:'/addCaseUpdate',query: {userId: userData.id,id: scope.row.id}}">
                             <a class="operation-table">修改</a>
                         </router-link>
-                        <a v-if="jurisdictionList.dtDisabled" @click="medicalDelete(scope.row.id,1)" class="operation-table">删除</a>
+                        <a @click="medicalDelete(scope.row.id,1)" class="operation-table">删除</a>
                     </template>
                 </el-table-column>
             </el-table><!--工具条-->
@@ -126,7 +126,7 @@
                 <div style="display:inline-block;text-align: center;">
                     <el-button size="mini" type="primary" class="toolbar-go-btn">Go
                     </el-button>
-                    <el-pagination layout="total,  prev, pager, next, jumper" @current-change="handleCurrentChange"
+                    <el-pagination background layout="total,  prev, pager, next, jumper" @current-change="handleCurrentChange"
                                    :page-size="10" :total="total" style="float:right;">
                     </el-pagination>
                 </div>
@@ -147,12 +147,9 @@
                 total: 0, // 条数
                 page: 1, // 页码
                 loading: false,
-                jurisdictionList: {
-                    adDisabled: false,
-                    dtDisabled: false,
-                    dbtDisabled: false,
-                    upDisabled: false,
-                }
+                /* eslint-disable */
+                userImgUrl: require("../../../common/image/user.png"),
+                /* eslint-disable */
             };
         },
         created() {
@@ -170,21 +167,6 @@
                     }
                 });
                 this.getMedicalCaseList(1,10);
-            }
-            // 权限
-            if (sessionStorage.getItem('assignedPermissions')) {
-                let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
-                for (let i = 0; i < assignedPermissions.length; i++) {
-                    if (assignedPermissions[i] === 'admin:hdMedicalCase:create') {
-                        this.jurisdictionList.adDisabled = true;
-                    } else if (assignedPermissions[i] === 'admin:hdMedicalCase:delete') {
-                        this.jurisdictionList.dtDisabled = true;
-                    } else if (assignedPermissions[i] === 'admin:hdMedicalCase:batch-delete') {
-                        this.jurisdictionList.dbtDisabled = true;
-                    } else if (assignedPermissions[i] === 'admin:hdMedicalCase:update') {
-                        this.jurisdictionList.upDisabled = true;
-                    }
-                }
             }
         },
         methods: {

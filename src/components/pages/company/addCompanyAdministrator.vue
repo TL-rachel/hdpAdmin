@@ -3,13 +3,13 @@
         <div class="form-save">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="账号ID">
-                    <el-input class="w420" disabled v-model="ruleForm.id" placeholder="请输入id"></el-input>
+                    <el-input class="w420" disabled v-model="ruleForm.id" placeholder="系统自动生成"></el-input>
                 </el-form-item>
                 <el-form-item label="账号" prop="username">
                     <el-input class="w420" v-model="ruleForm.username" placeholder="请输入账号名称"></el-input>
                 </el-form-item>
-                <el-form-item label="密码" prop="password">
-                    <el-input class="w420" type="password" v-model="ruleForm.password" placeholder="请输入密码，需包含6位以上字母+数字"></el-input>
+                <el-form-item label="密码" :prop="$route.query.id?'':'password'">
+                    <el-input class="w420" v-model="ruleForm.password" :placeholder="$route.query.id?'如需修改请输入新密码':'请输入密码，需包含6位以上字母+数字'"></el-input>
                 </el-form-item>
                 <el-form-item label="归属企业" prop="companyId">
                     <el-select class="w420" v-model="ruleForm.companyId" placeholder="请选择归属企业" @change="change()">
@@ -24,7 +24,7 @@
                         <el-option v-for="(item,index) in options" :label="item.label" :value="item.value" :key="index"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="联系方式" prop="tel">
+                <el-form-item label="联系方式">
                     <el-input class="w420" v-model="ruleForm.tel" placeholder="请输入联系方式"></el-input>
                 </el-form-item>
                 <el-form-item label="状态" prop="deleted">

@@ -2,7 +2,7 @@
     <div class="equipmentList">
         <div class="user-data clearfix">
             <div class="user-property user-img">
-                <img style="width: 42px;height: 42px;border-radius: 20px" v-if="userData.userImage1" :src="userData.userImage1" alt="">
+                <img style="width: 42px;height: 42px;border-radius: 20px" :src="userData.userImage1?userData.userImage1:userImgUrl" alt="">
             </div>
             <div class="user-property">
                 <div class="user-name">{{userData.userName}}</div>
@@ -14,11 +14,11 @@
             </div>
             <div class="user-property">
                 <div class="user-custom">身高</div>
-                <div>{{userData.userHeight}}</div>
+                <div>{{userData.userHeight}} cm</div>
             </div>
             <div class="user-property">
                 <div class="user-custom">体重</div>
-                <div>{{userData.userWeight}}</div>
+                <div>{{userData.userWeight}} KG</div>
             </div>
             <div class="user-property">
                 <div class="user-custom">BMI</div>
@@ -144,7 +144,7 @@
                 </el-form-item>
 
                 <el-form-item class="operation-btn" label-width="0">
-                    <el-button v-if="jurisdictionList.upDisabled" type="primary" @click="submitForm()">保 存</el-button>
+                    <el-button type="primary" @click="submitForm()">保 存</el-button>
                     <el-button @click="handleHistory">返 回</el-button>
                 </el-form-item>
             </el-form>
@@ -186,9 +186,9 @@
                 },
                 userData: {}, // 用户信息
                 userMedicalId: '', // 病历id
-                jurisdictionList: {
-                    upDisabled: false,
-                }
+                /* eslint-disable */
+                userImgUrl: require("../../../common/image/user.png"),
+                /* eslint-disable */
             };
         },
         created: function () {
@@ -307,15 +307,6 @@
                     }
                 });
             }
-            // 权限
-            if (sessionStorage.getItem('assignedPermissions')) {
-                let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
-                for (let i = 0; i < assignedPermissions.length; i++) {
-                    if (assignedPermissions[i] === 'admin:hdMedical:update' || assignedPermissions[i] === 'admin:hdMedical:create') {
-                        this.jurisdictionList.upDisabled = true;
-                    }
-                }
-            }
         },
         methods: {
             /**
@@ -348,11 +339,21 @@
                 if (this.userMedicalId) {
                     para.id = this.userMedicalId;
                 }
-                para.medicalAllergy = this.getToStr(para.medicalAllergy,para.irritabilityMessage);
-                para.medicalExpose = this.getToStr(para.medicalExpose,para.exposureMessage);
-                para.pastDisease = this.getToStr(para.pastDisease,para.previousHistoryMessage3,para.previousHistoryMessage1,para.previousHistoryMessage2);
-                para.familyHis = this.getToStr(para.familyHis,para.familyMessage2,para.familyMessage1);
-                para.disability = this.getToStr(para.disability,para.disabilityMessage);
+                if (para.medicalAllergy) {
+                    para.medicalAllergy = this.getToStr(para.medicalAllergy,para.irritabilityMessage);
+                }
+                if (para.medicalExpose) {
+                    para.medicalExpose = this.getToStr(para.medicalExpose,para.exposureMessage);
+                }
+                if (para.pastDisease) {
+                    para.pastDisease = this.getToStr(para.pastDisease,para.previousHistoryMessage3,para.previousHistoryMessage1,para.previousHistoryMessage2);
+                }
+                if (para.familyHis) {
+                    para.familyHis = this.getToStr(para.familyHis,para.familyMessage2,para.familyMessage1);
+                }
+                if (para.disability) {
+                    para.disability = this.getToStr(para.disability,para.disabilityMessage);
+                }
                 if (para.inheritance === 1) {
                     para.inheritance = para.geneticDiseaseMessage;
                 }
@@ -365,6 +366,7 @@
                                 message: '请完善手术信息',
                                 type: 'error'
                             });
+                            return;
                         } else {
                             if (i === para.dataOperation.length - 1) {
                                 para.pastSurgery += para.dataOperation[i].name + ';' + para.dataOperation[i].date;

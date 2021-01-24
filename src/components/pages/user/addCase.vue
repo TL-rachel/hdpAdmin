@@ -2,7 +2,7 @@
     <div class="equipmentList">
         <div class="user-data clearfix">
             <div class="user-property user-img">
-                <img style="width: 42px;height: 42px;border-radius: 20px" v-if="userData.userImage1" :src="userData.userImage1" alt="">
+                <img style="width: 42px;height: 42px;border-radius: 20px" :src="userData.userImage1?userData.userImage1:userImgUrl" alt="">
             </div>
             <div class="user-property">
                 <div class="user-name">{{userData.userName}}</div>
@@ -14,11 +14,11 @@
             </div>
             <div class="user-property">
                 <div class="user-custom">身高</div>
-                <div>{{userData.userHeight}}</div>
+                <div>{{userData.userHeight}} cm</div>
             </div>
             <div class="user-property">
                 <div class="user-custom">体重</div>
-                <div>{{userData.userWeight}}</div>
+                <div>{{userData.userWeight}} KG</div>
             </div>
             <div class="user-property">
                 <div class="user-custom">BMI</div>
@@ -32,7 +32,7 @@
                     <el-date-picker type="datetime" class="w420" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" v-model="form.inspectTime"></el-date-picker>
                 </el-form-item>
 
-                <el-form-item label="血压" label-width="90px" style="width: 20%;">
+                <el-form-item label="血压" label-width="90px" style="width: 240px">
                     舒适压 <el-input class="w100" v-model="form.bloodComfort" placeholder="请输入舒适压"></el-input>
                 </el-form-item>
 
@@ -71,13 +71,13 @@
                     <el-upload
                                class="upload-demo"
                                :action="actionUrl"
-                               ref="upload"
+                               ref="upload1"
                                multiple
                                :on-success="handleAvatarSuccess1"
                                :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
                         <span v-if="!form.medicalRecordAttachment">未选择任何文件</span>
-                        <a v-else :href="form.medicalRecordAttachment" target="_blank">查看</a>
+                        <a v-else :href="form.medicalRecordAttachment" target="_blank">病例附件</a>
                     </el-upload>
                 </el-form-item>
 
@@ -85,13 +85,13 @@
                     <el-upload
                             class="upload-demo"
                             :action="actionUrl"
-                            ref="upload"
+                            ref="upload2"
                             multiple
                             :on-success="handleAvatarSuccess2"
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
                         <span v-if="!form.medicalReport">未选择任何文件</span>
-                        <a v-else :href="form.medicalReport" target="_blank">查看</a>
+                        <a v-else :href="form.medicalReport" target="_blank">体检报告</a>
                     </el-upload>
                 </el-form-item>
 
@@ -99,13 +99,13 @@
                     <el-upload
                             class="upload-demo"
                             :action="actionUrl"
-                            ref="upload"
+                            ref="upload3"
                             multiple
                             :on-success="handleAvatarSuccess3"
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
                         <span v-if="!form.electrocardiogramData">未选择任何文件</span>
-                        <a v-else :href="form.electrocardiogramData" target="_blank">查看</a>
+                        <a v-else :href="form.electrocardiogramData" target="_blank">心电数据</a>
                     </el-upload>
                 </el-form-item>
 
@@ -113,18 +113,18 @@
                     <el-upload
                             class="upload-demo"
                             :action="actionUrl"
-                            ref="upload"
+                            ref="upload4"
                             multiple
                             :on-success="handleAvatarSuccess4"
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
                         <span v-if="!form.electrocardiogram">未选择任何文件</span>
-                        <a v-else :href="form.electrocardiogram" target="_blank">查看</a>
+                        <a v-else :href="form.electrocardiogram" target="_blank">心电图</a>
                     </el-upload>
                 </el-form-item>
 
                 <el-form-item class="operation-btn" label-width="0">
-                    <el-button v-if="jurisdictionList.adDisabled" type="primary" @click="submitForm('form')">保 存</el-button>
+                    <el-button type="primary" @click="submitForm('form')">保 存</el-button>
                     <el-button @click="handleHistory">返 回</el-button>
                 </el-form-item>
             </el-form>
@@ -150,18 +150,20 @@
                     deviceCode: '', // 设备编号
                     operation: '', // 操作人
                     electrocardiogram: '', // 心电图URL
+                    electrocardiogramName: '', // 心电图名称
                     electrocardiogramData: '', // 心电数据URL
+                    electrocardiogramDataName: '', // 心电数据名称
                     medicalRecordAttachment: '', // 病例附件URL
+                    medicalRecordAttachmentName: '', // 病例附件名称
                     medicalReport: '', // 体检报告URL
+                    medicalReportName: '', // 体检报告名称
                 },
                 imageUrl: '',
                 /* eslint-disable */
+                userImgUrl: require("../../../common/image/user.png"),
                 actionUrl: CAS_SERVER_URL + '/admin/storage/create',
                 /* eslint-disable */
                 userData: {},
-                jurisdictionList: {
-                    adDisabled: false,
-                }
             };
         },
         created() {
@@ -194,22 +196,14 @@
                     }
                 });
             }
-            // 权限
-            if (sessionStorage.getItem('assignedPermissions')) {
-                let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
-                for (let i = 0; i < assignedPermissions.length; i++) {
-                    if (assignedPermissions[i] === 'admin:hdMedicalCase:create' || assignedPermissions[i] === 'admin:hdMedicalCase:update') {
-                        this.jurisdictionList.adDisabled = true;
-                    }
-                }
-            }
         },
         methods: {
             // 病例附件地址
             handleAvatarSuccess1(res, file) {
                 if (file.response.data.url) {
                     this.form.medicalRecordAttachment = file.response.data.url;
-                    this.$refs.upload.clearFiles();
+                    this.form.medicalRecordAttachmentName = file.response.data.fileName;
+                    this.$refs.upload1.clearFiles();
                 } else {
                     this.$message({
                         showClose: true,
@@ -222,7 +216,8 @@
             handleAvatarSuccess2(res, file) {
                 if (file.response.data.url) {
                     this.form.medicalReport = file.response.data.url;
-                    this.$refs.upload.clearFiles();
+                    this.form.medicalReportName = file.response.data.fileName;
+                    this.$refs.upload2.clearFiles();
                 } else {
                     this.$message({
                         showClose: true,
@@ -235,7 +230,8 @@
             handleAvatarSuccess3(res, file) {
                 if (file.response.data.url) {
                     this.form.electrocardiogramData = file.response.data.url;
-                    this.$refs.upload.clearFiles();
+                    this.form.electrocardiogramDataName = file.response.data.fileName;
+                    this.$refs.upload3.clearFiles();
                 } else {
                     this.$message({
                         showClose: true,
@@ -248,7 +244,8 @@
             handleAvatarSuccess4(res, file) {
                 if (file.response.data.url) {
                     this.form.electrocardiogram = file.response.data.url;
-                    this.$refs.upload.clearFiles();
+                    this.form.electrocardiogramName = file.response.data.fileName;
+                    this.$refs.upload4.clearFiles();
                 } else {
                     this.$message({
                         showClose: true,

@@ -31,7 +31,7 @@ export default {
 </script>
 <style>
     #app {
-        min-width: 1440px;
+        min-width: 1440px!important;
     }
     .content-box {
         background: #f8fafb;
@@ -153,5 +153,20 @@ export default {
     }
     .is-active .icon-picture.icon-picture-nav-system {
         background-image: url("../../common/image/navi_system_selected.png");
+    }
+    .el-pagination.is-background .btn-prev, .el-pagination.is-background .btn-next, .el-pagination.is-background .el-pager li {
+        background-color: #f8fafb;
+        border: 0!important;
+    }
+    .el-pagination.is-background .el-pager li:not(.disabled).active {
+        background-color: #4D7CFE;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+    }
+    .el-input.el-pagination__editor.is-in-pagination .el-input__inner {
+        width: 30px;
+        background-color: #f8fafb;
+        height: 20px;
     }
 </style>

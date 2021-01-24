@@ -8,7 +8,7 @@
                 <router-link v-if="jurisdictionList.adDisabled" :to="{ path:'/addArea'}">
                     <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
                 </router-link>
-                <el-button v-if="jurisdictionList.dbtDisabled" @click="regionDelete(checkId,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+                <el-button v-if="jurisdictionList.dtDisabled" @click="regionDelete(checkId,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             </div>
         </div>
         <template v-for="(item,index) in areaList">
@@ -63,7 +63,6 @@
                 jurisdictionList: {
                     adDisabled: false,
                     dtDisabled: false,
-                    dbtDisabled: false,
                     rdDisabled: false,
                     upDisabled: false,
                 }
@@ -75,9 +74,7 @@
             if (sessionStorage.getItem('assignedPermissions')) {
                 let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
                 for (let i = 0; i < assignedPermissions.length; i++) {
-                    if (assignedPermissions[i] === 'admin:hdRegion:batchDelete') {
-                        this.jurisdictionList.dbtDisabled = true;
-                    } else if (assignedPermissions[i] === 'admin:hdRegion:create') {
+                    if (assignedPermissions[i] === 'admin:hdRegion:create') {
                         this.jurisdictionList.adDisabled = true;
                     } else if (assignedPermissions[i] === 'admin:hdRegion:delete') {
                         this.jurisdictionList.dtDisabled = true;

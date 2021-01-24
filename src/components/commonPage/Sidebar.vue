@@ -62,8 +62,7 @@ export default {
                 {
                     icon: 'icon-picture-nav-home',
                     index: 'home',
-                    title: '首页',
-                    jurisdictionList: 'admin:admin:chart'
+                    title: '首页'
                 },
                 {
                     icon: 'icon-picture-nav-equipment',
@@ -162,42 +161,49 @@ export default {
     },
     created() {
         let userData = JSON.parse(sessionStorage.getItem('userData'));
-        rolePermissions({roleId: userData.roleIds[0]}).then(res => {
-            if (res.data.errno === 0) {
-                // 获取权限
-                this.assignedPermissions = res.data.data.assignedPermissions;
-                // 将权限存入session 页面里面用
-                sessionStorage.setItem('assignedPermissions',JSON.stringify(res.data.data.assignedPermissions));
-                // 循环得到权限的菜单
-                for (let i = 0; i < this.itemList.length; i++) {
-                    if (this.assignedPermissions.indexOf(this.itemList[i].jurisdictionList) !== -1) {
-                        this.items.push(this.itemList[i]);
-                    }
-                    if (this.itemList[i].subs) {
-                        let subList = [];
-                        for (let j = 0; j < this.itemList[i].subs.length; j++) {
-                            if (this.assignedPermissions.indexOf(this.itemList[i].subs[j].jurisdictionList) !== -1) {
-                                subList.push(this.itemList[i].subs[j]);
+        if (sessionStorage.getItem('userData')) {
+            rolePermissions({roleId: userData.roleIds[0]}).then(res => {
+                if (res.data.errno === 0) {
+                    // 获取权限
+                    this.assignedPermissions = res.data.data.assignedPermissions;
+                    // 将权限存入session 页面里面用
+                    sessionStorage.setItem('assignedPermissions',JSON.stringify(res.data.data.assignedPermissions));
+                    // 循环得到权限的菜单
+                    this.items.push({
+                        icon: 'icon-picture-nav-home',
+                        index: 'home',
+                        title: '首页'
+                    });
+                    for (let i = 0; i < this.itemList.length; i++) {
+                        if (this.assignedPermissions.indexOf(this.itemList[i].jurisdictionList) !== -1) {
+                            this.items.push(this.itemList[i]);
+                        }
+                        if (this.itemList[i].subs) {
+                            let subList = [];
+                            for (let j = 0; j < this.itemList[i].subs.length; j++) {
+                                if (this.assignedPermissions.indexOf(this.itemList[i].subs[j].jurisdictionList) !== -1) {
+                                    subList.push(this.itemList[i].subs[j]);
+                                }
+                            }
+                            if (subList.length > 0) {
+                                this.items.push({
+                                    icon: this.itemList[i].icon,
+                                    index: this.itemList[i].index,
+                                    title: this.itemList[i].title,
+                                    subs: subList,
+                                });
                             }
                         }
-                        if (subList.length > 0) {
-                            this.items.push({
-                                icon: this.itemList[i].icon,
-                                index: this.itemList[i].index,
-                                title: this.itemList[i].title,
-                                subs: subList,
-                            });
-                        }
                     }
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: '获取菜单列表失败',
+                        type: 'error'
+                    });
                 }
-            } else {
-                this.$message({
-                    showClose: true,
-                    message: '获取菜单列表失败',
-                    type: 'error'
-                });
-            }
-        });
+            });
+        }
     },
     methods: {
     },

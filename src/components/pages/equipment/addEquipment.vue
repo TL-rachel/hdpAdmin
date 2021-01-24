@@ -2,7 +2,7 @@
     <div class="form-save">
         <el-form ref="form" class="clearfix" :rules="rules" :model="form" label-width="80px">
             <el-form-item label="设备ID" label-width="110px">
-                <el-input class="w420" v-model="form.id" disabled placeholder="请输入设备ID"></el-input>
+                <el-input class="w420" v-model="form.id" disabled placeholder="系统自动生成"></el-input>
             </el-form-item>
 
             <el-form-item label="设备编码" label-width="110px" prop="deviceCode">
@@ -27,16 +27,15 @@
                 <el-input class="w420" :disabled="$route.query.type==1?true:false" v-model="form.leadPhone" placeholder="请输入手机号"></el-input>
             </el-form-item>
 
-            <el-form-item label="设备区域" label-width="110px" prop="deviceRegionId">
-                <el-select class="w420" :disabled="$route.query.type==1?true:false" v-model="form.deviceRegionId" placeholder="请选择设备区域">
-                    <el-option v-for="(item,index) in allRegions" :key="index" :label="item.regionName" :value="item.id"></el-option>
+            <el-form-item label="归属企业" label-width="110px" prop="companyId">
+                <el-select class="w420" :disabled="$route.query.type==1?true:false" @change="getRegion(form.companyId)" v-model="form.companyId" placeholder="请选择归属企业">
+                    <el-option v-for="(item,index) in companyList" :key="index" :label="item.companyName" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="设备状态" label-width="110px" prop="deviceStatus">
-                <el-select class="w420" disabled v-model="form.deviceStatus" placeholder="请选择设备状态">
-                    <el-option label="正常" :value="0"></el-option>
-                    <el-option label="断开" :value="1"></el-option>
+            <el-form-item label="设备区域" label-width="110px" prop="deviceRegionId">
+                <el-select class="w420" :disabled="$route.query.type==1?true:false" v-model="form.deviceRegionId" placeholder="请选择设备区域">
+                    <el-option v-for="(item,index) in allRegions" :key="index" :label="item.regionName" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
 
@@ -46,18 +45,21 @@
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="厂家联系人" label-width="110px" style="width: 280px;" >
+            <el-form-item label="厂家联系人" label-width="110px" style="width: 260px;">
                 <el-input class="w140" :disabled="$route.query.type==1?true:false" v-model="form.manufactorPeople" placeholder="请输入人名"></el-input>
             </el-form-item>
-            <el-form-item label="厂家联系方式" label-width="110px" style="width: 310px" >
-                <el-input class="w140" :disabled="$route.query.type==1?true:false" v-model="form.manufactorPhone" placeholder="请输入手机号"></el-input>
+
+            <el-form-item label="厂家联系方式" label-width="110px" style="width: 310px">
+                <el-input class="w160" :disabled="$route.query.type==1?true:false" v-model="form.manufactorPhone" placeholder="请输入手机号"></el-input>
             </el-form-item>
 
-            <el-form-item label="归属企业" label-width="110px" prop="companyId">
-                <el-select class="w420" :disabled="$route.query.type==1?true:false" v-model="form.companyId" placeholder="请选择归属企业">
-                    <el-option v-for="(item,index) in companyList" :key="index" :label="item.companyName" :value="item.id"></el-option>
+            <el-form-item label="设备状态" label-width="110px" prop="deviceStatus">
+                <el-select class="w420" disabled v-model="form.deviceStatus" placeholder="请选择设备状态">
+                    <el-option label="正常" :value="0"></el-option>
+                    <el-option label="断开" :value="1"></el-option>
                 </el-select>
             </el-form-item>
+
             <el-form-item label="链接地址" label-width="110px" style="width: 100%;" prop="devicePath">
                 <el-input class="w420" disabled v-model="form.devicePath" placeholder="请输入网络地址"></el-input>
                 <el-button @click="getCheckDevicePath()" class="test-btn">点击测试</el-button>
@@ -66,10 +68,10 @@
             </el-form-item>
 
             <el-form-item label="添加人" v-if="$route.query.id?true:false" :disabled="$route.query.id?true:false" label-width="110px" prop="createdUserName">
-                <el-input class="w420" :disabled="$route.query.type==1?true:false" v-model="form.createdUserName" placeholder="请输入人名"></el-input>
+                <el-input class="w420" disabled v-model="form.createdUserName" placeholder="请输入人名"></el-input>
             </el-form-item>
             <el-form-item label="更新人" v-if="$route.query.id?true:false" :disabled="$route.query.id?true:false" label-width="110px" prop="updatedUserName">
-                <el-input class="w420" :disabled="$route.query.type==1?true:false" v-model="form.updatedUserName" placeholder="请输入人名"></el-input>
+                <el-input class="w420" disabled v-model="form.updatedUserName" placeholder="请输入人名"></el-input>
             </el-form-item>
 
             <el-form-item label="添加时间" v-if="$route.query.id?true:false" label-width="110px" prop="createdTime">
@@ -177,18 +179,6 @@
             };
         },
         created() {
-            // 获取区域列表
-            regionAllRegions().then(res => {
-                if (res.data.errno === 0) {
-                    this.allRegions = res.data.data;
-                } else {
-                    this.$message({
-                        showClose: true,
-                        message: '区域列表' + res.data.errmsg,
-                        type: 'error'
-                    });
-                }
-            });
             // 获取归属企业列表
             hdCompanyList({page: 1,limit: 1000,sort: 'created_time',order: 'desc'}).then(res => {
                 if (res.data.errno === 0) {
@@ -230,6 +220,7 @@
                 deviceRead({id: this.$route.query.id}).then(res => {
                     if (res.data.errno === 0) {
                         this.form = res.data.data;
+                        this.getRegion(res.data.data.companyId);
                     } else {
                         this.$message({
                             showClose: true,
@@ -250,6 +241,22 @@
             }
         },
         methods: {
+            getRegion(companyId) {
+                this.form.deviceRegionId = '';
+                this.allRegions = [];
+                // 获取区域列表
+                regionAllRegions({companyId: companyId}).then(res => {
+                    if (res.data.errno === 0) {
+                        this.allRegions = res.data.data;
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: '区域列表' + res.data.errmsg,
+                            type: 'error'
+                        });
+                    }
+                });
+            },
             /**
              * 获取设备 及 检查设备是否正常
              */
@@ -412,6 +419,9 @@
         width: 420px!important;
     }
     .w140 {
+        width: 140px!important;
+    }
+    .w160 {
         width: 140px!important;
     }
 </style>

@@ -39,9 +39,11 @@ export default {
         };
     },
     created() {
-        this.userData = JSON.parse(sessionStorage.getItem('userData'));
-        // 设置标签
-        this.setTags(this.$route);
+        if (sessionStorage.getItem('userData')) {
+            this.userData = JSON.parse(sessionStorage.getItem('userData'));
+            // 设置标签
+            this.setTags(this.$route);
+        }
     },
     methods: {
         /**

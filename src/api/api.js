@@ -19,6 +19,8 @@ instance.interceptors.request.use(config => {
     if (sessionStorage.getItem('token')) {
         config.headers.common['X-Dts-Admin-Token']=sessionStorage.getItem('token');
         Cookie.set('JSESSIONID',sessionStorage.getItem('token'));
+    } else {
+        router.replace({path: '/login'});
     }
     return config;
 }, error => {
@@ -34,16 +36,8 @@ instance.interceptors.response.use(response => {
         router.replace({path: '/login'});
     }
 
-    // 判断是否有返回错误编码
-    if (!response.data) {
-        //alert(response.data.errorCode);
-        if (501 === response.data.errno) {
-            router.replace({path: '/login'});
-        } else if (0 === response.data) {
-
-        } else {
-            return;
-        }
+    if (501 === response.data.errno) {
+        router.replace({path: '/login'});
     }
     return response;
 }, error => {

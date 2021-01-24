@@ -42,13 +42,14 @@
                     <el-upload
                             class="upload-demo"
                             :action="actionUrl"
+                            ref="upload1"
                             multiple
                             accept = "application/pdf"
                             :on-success="handleAvatarSuccess1"
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
                         <span v-if="!form.companyPatha">未选择任何文件</span>
-                        <a v-else :href="form.companyPatha" target="_blank">查看</a>
+                        <a v-else :href="form.companyPatha" target="_blank">{{form.companyPathaName}}</a>
                     </el-upload>
                 </el-form-item>
 
@@ -56,13 +57,14 @@
                     <el-upload
                             class="upload-demo"
                             :action="actionUrl"
+                            ref="upload2"
                             multiple
                             accept = "application/pdf"
                             :on-success="handleAvatarSuccess2"
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
                         <span v-if="!form.companyPathb">未选择任何文件</span>
-                        <a v-else :href="form.companyPathb" target="_blank">查看</a>
+                        <a v-else :href="form.companyPathb" target="_blank">{{form.companyPathbName}}</a>
                     </el-upload>
                 </el-form-item>
                 <el-form-item class="operation-btn company-btn" label-width="0">
@@ -92,7 +94,9 @@
                     companyLead: '', // 企业负责人
                     companyPrincipal: '', // 企业主要管理员 多个人员逗号隔开
                     companyPatha: '', // 资格证明附件地址
+                    companyPathaName: '', // 资格证明附件地址
                     companyPathb: '', // 网络资格人授权证明
+                    companyFilebName: '', // 网络资格人授权证明
                 },
                 // 必填校验
                 rules: {
@@ -127,7 +131,6 @@
                     ]
                 },
                 imageUrl: '',
-                imgType: ['application/pdf'],
                 /* eslint-disable */
                 actionUrl: CAS_SERVER_URL + '/admin/storage/create',
                 /* eslint-disable */
@@ -136,11 +139,31 @@
         methods: {
             // 资格证明附件地址
             handleAvatarSuccess1(res, file) {
-                this.form.companyPatha = file.response.data.url;
+                if (file.response.data.url) {
+                    this.form.companyPatha = file.response.data.url;
+                    this.form.companyFileaName = file.response.data.fileName;
+                    this.$refs.upload1.clearFiles();
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: '上传失败，请重新上传',
+                        type: 'error'
+                    });
+                }
             },
             // 网络资格人授权证明
             handleAvatarSuccess2(res, file) {
-                this.form.companyPathb = file.response.data.url;
+                if (file.response.data.url) {
+                    this.form.companyPathb = file.response.data.url;
+                    this.form.companyFilebName = file.response.data.fileName;
+                    this.$refs.upload2.clearFiles();
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: '上传失败，请重新上传',
+                        type: 'error'
+                    });
+                }
             },
             cleanForm() {
                 this.form = {

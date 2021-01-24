@@ -27,7 +27,16 @@
                 <el-table-column prop="companyName" label="变更企业" min-width="80"></el-table-column>
                 <el-table-column prop="optUserName" label="操作人" min-width="60"></el-table-column>
                 <el-table-column prop="optType" label="操作类型" min-width="60"></el-table-column>
-                <el-table-column prop="optAction" label="操作行为" min-width="60"></el-table-column>
+                <el-table-column prop="optAction" label="操作行为" min-width="60">
+                    <template slot-scope="scope">
+                        <el-popover trigger="hover" placement="top">
+                            <p>{{ scope.row.optAction }}</p>
+                            <div slot="reference" class="name-wrapper text-overflow-1">
+                                <span>{{ scope.row.optAction }}</span>
+                            </div>
+                        </el-popover>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="createdTime" label="操作时间" min-width="60"></el-table-column>
             </el-table>
             <!--工具条-->
@@ -36,7 +45,7 @@
                 <div style="display:inline-block;text-align: center;">
                     <el-button size="mini" type="primary" class="toolbar-go-btn">Go
                     </el-button>
-                    <el-pagination layout="total,  prev, pager, next, jumper" @current-change="handleCurrentChange"
+                    <el-pagination prev-text background layout="total,  prev, pager, next, jumper" @current-change="handleCurrentChange"
                                    :page-size="10" :total="total" style="float:right;">
                     </el-pagination>
                 </div>

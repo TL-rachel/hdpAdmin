@@ -23,6 +23,7 @@
                 </div>
             </el-form>
         </div>
+        <div class="login-footer">零睿科技</div>
     </div>
 </template>
 
@@ -280,6 +281,15 @@
         color: #fff;
     }
     #app {
-        min-width: 144px;
+        min-width: 144px!important;
+    }
+    .login-footer{
+        position: absolute;
+        margin: 10px auto;
+        bottom: 0;
+        text-align: center;
+        width: 100%;
+        color: #A4BACA;
+        font-size: 20px;
     }
 </style>

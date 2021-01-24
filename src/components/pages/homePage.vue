@@ -52,11 +52,13 @@
                     this.sex = res.data.data.sex;
                 } else {
                     this.myChart = [];
-                    this.$message({
-                        showClose: true,
-                        message: res.data.errmsg,
-                        type: 'error'
-                    });
+                    if (res.data.errno !== 501) {
+                        this.$message({
+                            showClose: true,
+                            message: res.data.errmsg,
+                            type: 'error'
+                        });
+                    }
                 }
             });
         },
@@ -84,7 +86,7 @@
                     xData.push({value: this.deviceType[i].proportion * 100,name: (this.deviceType[i].del_flag === 0 ? '无效' : '有效')});
                 }
                 this.chartPie = echarts.init(document.getElementById('chartPieIllness'));
-                this.chartPie.setOption(this.pieChart('设备状态分布',['有效','无效'],'设备状态',xData));
+                this.chartPie.setOption(this.pieChart('设备状态分布',['有效','无效'],'设备状态',xData,['#8AF1B9', '#F4BE5E']));
             },
             /**
              * 性别分布
@@ -95,7 +97,7 @@
                     sexList.push({value: this.sex[i].proportion * 100,name: !this.sex[i].user_sex ? '男' : '女'});
                 }
                 this.chartPie = echarts.init(document.getElementById('chartPieSex'));
-                this.chartPie.setOption(this.pieChart('性别分布',['男','女'],'性别',sexList));
+                this.chartPie.setOption(this.pieChart('性别分布',['男','女'],'性别',sexList,['#4D75F6', '#FF808B']));
             },
             /**
              * 企业设备分布
@@ -132,8 +134,10 @@
                 let xName = [];
                 let xData = [];
                 for (let i = 0; i < this.age.length; i++) {
-                    xName.push(this.age[i].age_range + '岁');
-                    xData.push(this.age[i].cont);
+                    if (this.age[i].age_range) {
+                        xName.push(this.age[i].age_range + '岁');
+                        xData.push(this.age[i].cont);
+                    }
                 }
                 let myChart = echarts.init(document.getElementById('myChartAge'));
                 // 绘制图表
@@ -157,16 +161,17 @@
              * @param {Array} lData 类型
              * @param {String} name 类型名称
              * @param {Array} sData 数据
+             * @param {Array} pColor 颜色
              * @returns {{backgroundColor: string, color: string[], legend: {data: *, top: string}, series: [{animationDuration: number, animationEasing: string, data: *, center: string[], name: *, label: {normal: {formatter: string, show: boolean, position: string}}, labelLine: {normal: {show: boolean}}, type: string, radius: [string, string]}], tooltip: {formatter: string, trigger: string}, title: {text: *}}} 对象
              */
-            pieChart(text,lData,name,sData) {
+            pieChart(text,lData,name,sData,pColor) {
                 return {
                     title: {
                         text: text,
                     },
                     backgroundColor: '#f8fafb',
-                    // color: ['#37a2da', '#32c5e9','#67e0e3','#9fe6b8','#ffdb5c','#ff9f7f','#fb7293','#e062ae','#e690d1','#e7bcf3','#9d96f5','#8378ea','#96bfff'],
-                    color: ['#96bfff', '#8378ea','#9d96f5','#e7bcf3','#e690d1','#e062ae','#fb7293','#ff9f7f','#ffdb5c','#9fe6b8','#67e0e3','#32c5e9','#37a2da'],
+                    // color: ['#7CE7AC', '#F4BE5E','#5E81F4','#8E90FF','#8ED5FF','#ffe08e','#A8DD1F','#FF8ED0','#FF808B'],
+                    color: pColor,
                     tooltip: {
                         trigger: 'item',
                         formatter: '{a} <br/>{b} : {c} ({d}%)',
@@ -240,6 +245,7 @@
                         splitLine: {
                             show: false
                         },
+                        allowDecimals: false,
                     },
                     series: [
                         {
@@ -250,8 +256,8 @@
                                     color: new echarts.graphic.LinearGradient(
                                         1, 1, 1, 0,
                                         [
-                                            {offset: 1, color: '#3562F5'},
-                                            {offset: 0, color: '#d5deff'}
+                                            {offset: 1, color: '#1C5DFF'},
+                                            {offset: 0, color: '#ffffff'}
                                         ]
                                     )
                                 },
@@ -266,7 +272,16 @@
                             barWidth: '30%',
                             data: sData
                         }
-                    ]
+                    ],
+                    dataZoom: [{
+                        type: 'inside',
+                        start: 0,
+                        end: 100,
+                        zoomOnMouseWheel: 'ctrl'
+                    }, {
+                        start: 0,
+                        end: 100
+                    }],
                 };
             }
         },

@@ -44,31 +44,31 @@
                 <el-form-item label="资质证明附件" class="whole100" label-width="140px">
                     <el-upload v-if="$route.query.type?false:true"
                             class="upload-demo"
-                            ref="upload"
+                            ref="upload1"
                             :action="actionUrl"
                             multiple
                             :on-success="handleAvatarSuccess1"
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
                         <span v-if="!form.companyPatha">未选择任何文件</span>
-                        <a v-else :href="form.companyPatha" target="_blank">{{form.companyFileNamea}}</a>
+                        <a v-else :href="form.companyPatha" target="_blank">{{form.companyPathaName}}</a>
                     </el-upload>
-                    <a v-else :href="form.companyPatha" target="_blank">{{form.companyFileNamea}}</a>
+                    <a v-else :href="form.companyPatha" target="_blank">{{form.companyPathaName}}</a>
                 </el-form-item>
 
                 <el-form-item label="网络负责人授权证明" class="whole100" label-width="140px">
                     <el-upload v-if="$route.query.type?false:true"
                             class="upload-demo"
-                            ref="upload"
+                            ref="upload2"
                             :action="actionUrl"
                             multiple
                             :on-success="handleAvatarSuccess2"
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
                         <span v-if="!form.companyPathb">未选择任何文件</span>
-                        <a v-else :href="form.companyPathb" target="_blank">{{form.companyFileNameb}}</a>
+                        <a v-else :href="form.companyPathb" target="_blank">{{form.companyPathbName}}</a>
                     </el-upload>
-                    <a v-else :href="form.companyPathb" target="_blank">{{form.companyFileNameb}}</a>
+                    <a v-else :href="form.companyPathb" target="_blank">{{form.companyPathbName}}</a>
                 </el-form-item>
                 <el-form-item label="企业星级" label-width="140px" prop="companyStar">
                     <el-select v-model="form.companyStar" :disabled="$route.query.type?true:false" placeholder="请选择企业星级">
@@ -148,8 +148,8 @@
                     companyPrincipal: '', // 企业主要管理员 多个人员逗号隔开
                     companyPatha: '', // 资格证明附件地址
                     companyPathb: '', // 网络资格人授权证明
-                    companyFileNamea: '', // 资格证明附件名称
-                    companyFileNameb: '', // 网络资格人授权证明名称
+                    companyPathaName: '', // 资格证明附件名称
+                    companyPathbName: '', // 网络资格人授权证明名称
                     companyStar: 1, // 企业星级(1-一星；2-二星；3-三星；4-四星；5-五星,默认1)
                     companyStatus: '0', // 企业状态;0-待审核；1-通过；2-驳回；
                     starChangeType: 0, // 星级变更方式(0-系统；1-人工；默认0)
@@ -212,7 +212,6 @@
                     ]
                 },
                 imageUrl: '',
-                imgType: ['application/pdf'],
                 /* eslint-disable */
                 actionUrl: CAS_SERVER_URL + '/admin/storage/create',
                 /* eslint-disable */
@@ -283,8 +282,8 @@
             handleAvatarSuccess1(res, file) {
                 if (file.response.data.url) {
                     this.form.companyPatha = file.response.data.url;
-                    this.form.companyFileNamea = file.response.data.fileName;
-                    this.$refs.upload.clearFiles();
+                    this.form.companyFileaName = file.response.data.fileName;
+                    this.$refs.upload1.clearFiles();
                 } else {
                     this.$message({
                         showClose: true,
@@ -297,8 +296,8 @@
             handleAvatarSuccess2(res, file) {
                 if (file.response.data.url) {
                     this.form.companyPathb = file.response.data.url;
-                    this.form.companyFileNameb = file.response.data.fileName;
-                    this.$refs.upload.clearFiles();
+                    this.form.companyFilebName = file.response.data.fileName;
+                    this.$refs.upload2.clearFiles();
                 } else {
                     this.$message({
                         showClose: true,
@@ -340,7 +339,7 @@
                                             message: '更新成功',
                                             type: 'success'
                                         });
-                                        this.$router.push({path: '/companyAuditList'});
+                                        this.$router.back(-1);
                                     } else {
                                         // 失败
                                         this.$message({
@@ -359,7 +358,7 @@
                                             message: '添加成功',
                                             type: 'success'
                                         });
-                                        this.$router.push({path: '/companyAuditList'});
+                                        this.$router.back(-1);
                                     } else {
                                         // 失败
                                         this.$message({
@@ -395,7 +394,7 @@
                                 message: '更新成功',
                                 type: 'success'
                             });
-                            this.$router.push({path: '/companyAuditList'});
+                            this.$router.back(-1);
                         } else {
                             // 失败
                             this.$message({

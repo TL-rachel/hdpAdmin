@@ -7,7 +7,7 @@
                    <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
                </router-link>
                <el-button v-if="jurisdictionList.bcdDisabled" @click="getCheckDevicePath()"><i class="icon-picture icon-picture-detection"></i>批量检测</el-button>
-               <el-button v-if="jurisdictionList.dbtDisabled" @click="regionDelete(checkId,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+               <el-button v-if="jurisdictionList.dtDisabled" @click="regionDelete(checkId,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
            </div>
         </div>
         <div class="tag-top" style="margin-top: 20px;">
@@ -74,7 +74,6 @@
                 jurisdictionList: {
                     adDisabled: false,
                     dtDisabled: false,
-                    dbtDisabled: false,
                     bcdDisabled: false,
                     rdDisabled: false,
                     upDisabled: false,
@@ -90,9 +89,7 @@
             if (sessionStorage.getItem('assignedPermissions')) {
                 let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
                 for (let i = 0; i < assignedPermissions.length; i++) {
-                    if (assignedPermissions[i] === 'admin:hdDevice:batchDelete') {
-                        this.jurisdictionList.dbtDisabled = true;
-                    } else if (assignedPermissions[i] === 'admin:hdDevice:create') {
+                    if (assignedPermissions[i] === 'admin:hdDevice:create') {
                         this.jurisdictionList.adDisabled = true;
                     } else if (assignedPermissions[i] === 'admin:hdDevice:delete') {
                         this.jurisdictionList.dtDisabled = true;

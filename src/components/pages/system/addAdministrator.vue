@@ -6,8 +6,8 @@
                 <el-form-item label="账号" prop="username">
                     <el-input class="w420" v-model="ruleForm.username" placeholder="包含英文字母"></el-input>
                 </el-form-item>
-                <el-form-item :label="$route.query.id?'密码':'初始密码'" prop="password">
-                    <el-input class="w420" type="password" v-model="ruleForm.password" placeholder="请输入密码"></el-input>
+                <el-form-item :label="$route.query.id?'密码':'初始密码'" :prop="$route.query.id?'':'password'">
+                    <el-input class="w420" v-model="ruleForm.password" :placeholder="$route.query.id?'如需修改请输入新密码':'请输入密码'"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名" prop="username2">
                     <el-input class="w420" v-model="ruleForm.username2" placeholder="请输入姓名"></el-input>
