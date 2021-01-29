@@ -40,17 +40,17 @@
                 <div class="device-user" :key="index">
                     <div class="user-detail">
                         <ul class="clearfix">
-                            <li><img v-if="item.userImage" :src="item.userImage" alt=""></li>
+                            <li><img :src="item.userImage?item.userImage:userImgUrl" alt=""></li>
                             <li>
                                 <div class="user-name">{{item.userName}}</div>
                                 <div class="user-rests">FaceId：{{item.faceId}}</div>
                             </li>
                             <li>
-                                <div class="user-rests1">心率{{item.rate}}</div>
+                                <div class="user-rests1">心率 {{item.rate}}</div>
                                 <div class="user-rests">检测时间：{{item.checkTime}}</div>
                             </li>
                             <li>
-                                <div class="user-rests1">疲劳度{{item.fatigue == 0?'正常':'疲劳'}}</div>
+                                <div class="user-rests1">疲劳度 {{item.fatigue == 0?'正常':'疲劳'}}</div>
                             </li>
                         </ul>
                     </div>
@@ -62,7 +62,7 @@
 
 <script>
     import EZUIKit from 'ezuikit-js';
-    import {companyAllList, allRegions, allDevice, queryVideos} from '../../../api/api';
+    import {companyAllList, allRegions, allDevice, queryVideos,queryDeviceRateAndFatigue} from '../../../api/api';
 
     export default {
         name: 'liveStreaming',
@@ -87,13 +87,28 @@
                 companyList: {}, // 企业列表
                 regionList: {}, // 区域列表
                 deviceList: {}, // 设备列表
+                videosListFlag: false, // 设备用户信息
                 videosList: {}, // 设备用户信息
                 videoUrl: '', // 视频播放地址
+                /* eslint-disable */
+                userImgUrl: require("../../../common/image/user.png"),
+                /* eslint-disable */
             };
         },
         created() {
             // 初始化获取企业
             this.getCompanyList();
+            setInterval(() => {
+                setTimeout(() => {
+                    if (this.videosListFlag) {
+                        queryDeviceRateAndFatigue({deviceId: this.recordForm.deviceId}).then(res => {
+                            if (res.data.errno === 0) {
+                                this.videosList = res.data.data;
+                            }
+                        });
+                    }
+                }, 0);
+            }, 3000);
         },
         mounted() {
             this.initGetDevice();
@@ -219,7 +234,7 @@
                                     height: 600,
                                 });
                                 console.log('player', player);
-                                this.videosList = res.data.data;
+                                this.videosListFlag = true;
                                 // this.videoUrl = res.data.data[0].devicePath;
                             } else {
                                 this.$message({

@@ -109,6 +109,11 @@
                 batchCheckDevicePath().then(res => {
                     if (res.data.errno === 0) {
                         this.getRegionList();
+                        this.$message({
+                            showClose: true,
+                            message: '检测成功',
+                            type: 'error'
+                        });
                     } else {
                         this.$message({
                             showClose: true,

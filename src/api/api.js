@@ -417,4 +417,9 @@ export const medicalCaseDelete = params => {
 export const medicalCaseBatchDelete = params => {
     return instance.get(`${base}/admin/hd_medical_case/batch-delete`,{params: params});
 };
+
+// 查询设备前十用户的心率和疲劳度接口
+export const queryDeviceRateAndFatigue = params => {
+    return instance.post(`${base}/admin/hd_device/queryDeviceRateAndFatigue`,params);
+};
 /* eslint-disable */
