@@ -1,47 +1,53 @@
 <template>
     <div class='live-video'>
         <div class="query">
-            <el-form :inline="true" ref="recordForm" :model="recordForm" :rules="recordRules" class="demo-form-inline query-btn">
+            <el-form :inline="true" ref="recordForm" :model="recordForm" :rules="recordRules"
+                     class="demo-form-inline query-btn recorded-broadcast">
                 <span class="choice-camera">选择摄像头</span>
                 <el-form-item label="" prop="companyId">
                     <el-select v-model="recordForm.companyId" placeholder="请选择企业" @change="getAllRegions()">
-                        <el-option v-for="(item,index) in companyList" :key="index" :label="item.companyName" :value="item.id"></el-option>
+                        <el-option v-for="(item,index) in companyList" :key="index" :label="item.companyName"
+                                   :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="" prop="regionId">
                     <el-select v-model="recordForm.regionId" placeholder="请选择区域" @change="getAllDevice()">
-                        <el-option v-for="(item,index) in regionList" :key="index" :label="item.regionName" :value="item.id"></el-option>
+                        <el-option v-for="(item,index) in regionList" :key="index" :label="item.regionName"
+                                   :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="" prop="deviceId">
                     <el-select v-model="recordForm.deviceId" placeholder="请选择设备">
-                        <el-option v-for="(item,index) in deviceList" :key="index" :label="item.deviceName" :value="item.id"></el-option>
+                        <el-option v-for="(item,index) in deviceList" :key="index" :label="item.deviceName"
+                                   :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <div style="display:inline-block;">
-	                <span class="choice-camera">选择时间</span>
-	                <el-form-item label="" prop="begin" >
-	                    <el-date-picker
-	                            v-model="recordForm.begin"
-	                            type="datetime"
-	                            value-format="yyyy-MM-dd HH:mm:ss"
-	                            placeholder="选择开始日期时间">
-	                    </el-date-picker>
-	                </el-form-item>
-	                -
-	                <el-form-item label="" prop="end">
-	                    <el-date-picker
-	                            v-model="recordForm.end"
-	                            type="datetime"
-	                            format="yyyy-MM-dd HH:mm:ss"
-	                            value-format="yyyy-MM-dd HH:mm:ss"
-	                            placeholder="选择结束日期时间">
-	                    </el-date-picker>
-	                </el-form-item>
+                    <span class="choice-camera">选择时间</span>
+                    <el-form-item label="" prop="begin">
+                        <el-date-picker
+                                v-model="recordForm.begin"
+                                type="datetime"
+                                value-format="yyyy-MM-dd HH:mm:ss"
+                                placeholder="选择开始日期时间">
+                        </el-date-picker>
+                    </el-form-item>
+                    -
+                    <el-form-item label="" prop="end">
+                        <el-date-picker
+                                v-model="recordForm.end"
+                                type="datetime"
+                                format="yyyy-MM-dd HH:mm:ss"
+                                value-format="yyyy-MM-dd HH:mm:ss"
+                                placeholder="选择结束日期时间">
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button style="margin-left: 20px" type="primary" @click="getLiveStreaming()"><i
+                                class="icon-picture icon-picture-query"></i>查询
+                        </el-button>
+                    </el-form-item>
                 </div>
-                <el-form-item>
-                    <el-button style="margin-left: 20px" type="primary" @click="getLiveStreaming()"><i class="icon-picture icon-picture-query"></i>查询</el-button>
-                </el-form-item>
             </el-form>
         </div>
         <div class="video-play">
@@ -103,12 +109,12 @@
             setTime() {
                 let endNowTime = new Date();
                 let endTimeY = endNowTime.getFullYear();
-               /* let endTimeM = endNowTime.getMonth() + 1;
-                let endTimeD = endNowTime.getDate();
-                let endTimeH = endNowTime.getHours();
-                let beginTimeH = endNowTime.getHours() - 2;
-                let endTimem = endNowTime.getMinutes();
-                let endTimeS = endNowTime.getSeconds();*/
+                /* let endTimeM = endNowTime.getMonth() + 1;
+                 let endTimeD = endNowTime.getDate();
+                 let endTimeH = endNowTime.getHours();
+                 let beginTimeH = endNowTime.getHours() - 2;
+                 let endTimem = endNowTime.getMinutes();
+                 let endTimeS = endNowTime.getSeconds();*/
 
                 let endTimeM = (endNowTime.getMonth() + 1) < 10 ? '0' + (endNowTime.getMonth() + 1) : (endNowTime.getMonth() + 1);
                 let endTimeD = endNowTime.getDate() < 10 ? '0' + endNowTime.getDate() : endNowTime.getDate();
@@ -156,7 +162,7 @@
                     if (res.data.errno === 0) {
                         this.regionList = res.data.data;
                         if (type === 1) {
-                            if ( this.regionList.length > 0) {
+                            if (this.regionList.length > 0) {
                                 this.recordForm.regionId = this.regionList[0].id;
                                 this.getAllDevice(1);
                             } else if (type === 1 && this.regionList.length < 1) {
@@ -188,12 +194,12 @@
                     if (res.data.errno === 0) {
                         this.deviceList = res.data.data;
                         if (type === 1) {
-                            if ( this.deviceList.length > 0 ) {
+                            if (this.deviceList.length > 0) {
                                 this.recordForm.deviceId = this.deviceList[0].id;
                             } else {
                                 this.recordForm.deviceId = '';
                             }
-                        } else if ( type === 2) {
+                        } else if (type === 2) {
                             // this.recordForm.deviceId = '' ;
                         } else {
                             this.recordForm.deviceId = '';
@@ -216,8 +222,8 @@
                         document.getElementById('video-container').innerHTML = '';
                         let para = {
                             deviceId: this.recordForm.deviceId,
-                            beginTime: this.recordForm.begin.replace(/:/g, '').replace(/-/g,'').replace(/\s+/g, ''),
-                            endTime: this.recordForm.end.replace(/:/g, '').replace(/-/g,'').replace(/\s+/g, ''),
+                            beginTime: this.recordForm.begin.replace(/:/g, '').replace(/-/g, '').replace(/\s+/g, ''),
+                            endTime: this.recordForm.end.replace(/:/g, '').replace(/-/g, '').replace(/\s+/g, ''),
                         };
                         // para.beginTime = '20210115100000';
                         // para.endTime = '20210115120000';
@@ -393,6 +399,28 @@
                         margin-top: 10px;
                     }
                 }
+            }
+        }
+    }
+
+    .recorded-broadcast {
+        .el-input__inner {
+            border: 0;
+            background: #F2F7FA;
+            border-radius: 4px;
+            height: 30px;
+            line-height: 30px;
+        }
+
+        .el-button.el-button--primary {
+            height: 30px;
+            line-height: 30px;
+        }
+
+        .el-date-editor--datetime {
+            width: 200px;
+            .el-input__inner {
+                width: 200px;
             }
         }
     }

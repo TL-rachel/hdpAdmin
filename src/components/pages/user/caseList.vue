@@ -6,7 +6,7 @@
             </div>
             <div class="user-property">
                 <div class="user-name">{{userData.userName}}</div>
-                <div class="user-custom">{{userData.userAge}} &nbsp; {{userData.userSex === 0 ? '男' : '女'}}</div>
+                <div class="user-custom">{{userData.userAge}} 岁 &nbsp; {{userData.userSex === 0 ? '男' : '女'}}</div>
             </div>
             <div class="user-property">
                 <div class="user-custom">联系电话</div>
@@ -278,42 +278,4 @@
 </script>
 
 <style lang="less">
-    .table-list {
-        background: #fff;
-        padding: 10px;
-        .el-button {
-            height: 36px;
-            line-height: 36px;
-            border-radius: 4px;
-            background-color: rgba(242, 247, 250, 1);
-            padding: 0 15px;
-            color: #4D7CFE;
-            border: 0;
-            margin-right: 20px;
-            margin-bottom: 14px;
-            box-shadow: 0px 2px 4px 0px rgba(196, 206, 220, 0.5);
-        }
-    }
-    .user-data {
-        height: 77px;
-        border-radius: 4px;
-        background-color: rgba(255, 255, 255, 1);
-        box-shadow: 0px 2px 5px 0px rgba(185, 187, 190, 0.5);
-        padding: 15px;
-        .user-property {
-            float: left;
-            width: 200px;
-            .user-name {
-                color: rgba(77, 124, 254, 100);
-                font-size: 16px;
-            }
-            .user-custom {
-                color: rgba(119, 140, 162, 100);
-                font-size: 14px;
-            }
-        }
-        .user-img {
-            width: 80px;
-        }
-    }
 </style>

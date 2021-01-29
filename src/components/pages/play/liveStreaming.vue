@@ -2,7 +2,7 @@
     <div class='live-video'>
         <div class="query">
             <el-form :inline="true" ref="recordForm" :model="recordForm" :rules="recordRules"
-                     class="demo-form-inline query-btn">
+                     class="demo-form-inline query-btn recorded-broadcast">
                 <span class="choice-camera">选择摄像头</span>
                 <el-form-item label="" prop="companyId">
                     <el-select v-model="recordForm.companyId"
@@ -265,109 +265,4 @@
 </script>
 
 <style lang="less">
-    .live-video {
-        .query {
-            background: #fff;
-            padding: 20px 20px 0 20px;
-
-            .choice-camera {
-                height: 35px;
-                line-height: 35px;
-                color: #0F0F10;
-                margin-right: 20px;
-            }
-        }
-
-        .video-play {
-            height: 630px;
-            width: 100%;
-            background: #fff;
-            margin-top: 20px;
-            padding: 20px;
-            position: relative;
-            text-align: center;
-
-            .play-pause-img {
-                width: 97%;
-                height: 100%;
-                background: #000;
-                opacity: .3;
-                position: absolute;
-                top: 0;
-                z-index: 10;
-
-                .pause-img {
-                    background-image: url("../../../common/image/pause.png");
-                    background-size: cover;
-                    width: 80px;
-                    height: 80px;
-                    display: inline-block;
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    margin-top: -40px;
-                    margin-left: -40px;
-                    cursor: pointer;
-                }
-
-                .play-img {
-                    background-image: url("../../../common/image/play.png");
-                    background-size: cover;
-                    width: 80px;
-                    height: 80px;
-                    display: inline-block;
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    margin-top: -40px;
-                    margin-left: -40px;
-                    cursor: pointer;
-                }
-            }
-        }
-
-        .device-user {
-            width: 580px;
-            height: 100px;
-            margin: 20px 10px 20px 0;
-            background-color: rgba(255, 255, 255, 1);
-            box-shadow: 0px 2px 5px 0px rgba(188, 189, 190, 0.21);
-            float: left;
-
-            ul {
-                padding: 20px 0;
-
-                li {
-                    float: left;
-                    margin-left: 16px;
-
-                    img {
-                        width: 64px;
-                        height: 64px;
-                        border-radius: 50px;
-                    }
-
-                    .user-name {
-                        color: rgba(77, 124, 254, 100);
-                        font-size: 20px;
-                        text-align: left;
-                        margin-top: 10px;
-                    }
-
-                    .user-rests {
-                        color: rgba(119, 140, 162, 100);
-                        font-size: 14px;
-                        text-align: left;
-                    }
-
-                    .user-rests1 {
-                        color: rgba(66, 77, 88, 100);
-                        font-size: 20px;
-                        text-align: left;
-                        margin-top: 10px;
-                    }
-                }
-            }
-        }
-    }
 </style>

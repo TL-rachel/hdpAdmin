@@ -6,7 +6,7 @@
             </div>
             <div class="user-property">
                 <div class="user-name">{{userData.userName}}</div>
-                <div class="user-custom">{{userData.userAge}} &nbsp; {{userData.userSex === 0 ? '男' : '女'}}</div>
+                <div class="user-custom">{{userData.userAge}} 岁 &nbsp; {{userData.userSex === 0 ? '男' : '女'}}</div>
             </div>
             <div class="user-property">
                 <div class="user-custom">联系电话</div>

@@ -50,9 +50,6 @@
                         <router-link v-if="jurisdictionList.atDisabled" :to="{ path:'/addCompanyAudit',query: {id:scope.row.id,type:2}}">
                             <a v-if="scope.row.companyStatus == 0" class="operation-table">审核</a>
                         </router-link>
-                        <router-link v-if="jurisdictionList.atDisabled" :to="{ path:'/addCompanyAudit',query: {id:scope.row.id,type:2}}">
-                            <a v-if="scope.row.companyStatus == 0" class="operation-table">审核</a>
-                        </router-link>
                         <a v-if="jurisdictionList.dtDisabled" class="operation-table" @click="deleteCompany(scope.row,1)">删除</a>
                     </template>
                 </el-table-column>
