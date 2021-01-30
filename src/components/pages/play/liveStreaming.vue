@@ -90,6 +90,7 @@
                 videosListFlag: false, // 设备用户信息
                 videosList: {}, // 设备用户信息
                 videoUrl: '', // 视频播放地址
+                setIntervalExample: null, // 定时器
                 /* eslint-disable */
                 userImgUrl: require("../../../common/image/user.png"),
                 /* eslint-disable */
@@ -98,7 +99,7 @@
         created() {
             // 初始化获取企业
             this.getCompanyList();
-            setInterval(() => {
+            this.setIntervalExample = setInterval(() => {
                 setTimeout(() => {
                     if (this.videosListFlag) {
                         queryDeviceRateAndFatigue({deviceId: this.recordForm.deviceId}).then(res => {
@@ -276,6 +277,12 @@
                 }
             },
         },
+        // 离开页面销毁实例  释放资源
+        destroyed() {
+            if (this.setIntervalExample) {
+                clearInterval(this.setIntervalExample);
+            }
+        }
     };
 </script>
 

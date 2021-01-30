@@ -50,10 +50,10 @@
                             :on-success="handleAvatarSuccess1"
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
-                        <span v-if="!form.companyPatha">未选择任何文件</span>
-                        <a v-else :href="form.companyPatha" target="_blank">{{form.companyPathaName}}</a>
                     </el-upload>
+                    <span v-if="!form.companyPatha">未选择任何文件</span>
                     <a v-else :href="form.companyPatha" target="_blank">{{form.companyPathaName}}</a>
+                    <a v-if="$route.query.type?true:false" :href="form.companyPatha" target="_blank">{{form.companyPathaName}}</a>
                 </el-form-item>
 
                 <el-form-item label="网络负责人授权证明" class="whole100" label-width="140px">
@@ -65,10 +65,10 @@
                             :on-success="handleAvatarSuccess2"
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
-                        <span v-if="!form.companyPathb">未选择任何文件</span>
-                        <a v-else :href="form.companyPathb" target="_blank">{{form.companyPathbName}}</a>
                     </el-upload>
+                    <span v-if="!form.companyPathb">未选择任何文件</span>
                     <a v-else :href="form.companyPathb" target="_blank">{{form.companyPathbName}}</a>
+                    <a v-if="$route.query.type?true:false" :href="form.companyPathb" target="_blank">{{form.companyPathbName}}</a>
                 </el-form-item>
                 <el-form-item label="企业星级" label-width="140px" prop="companyStar">
                     <el-select v-model="form.companyStar" :disabled="$route.query.type?true:false" placeholder="请选择企业星级">

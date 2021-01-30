@@ -76,9 +76,9 @@
                                :on-success="handleAvatarSuccess1"
                                :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
-                        <span v-if="!form.medicalRecordAttachment">未选择任何文件</span>
-                        <a v-else :href="form.medicalRecordAttachment" target="_blank">病例附件</a>
                     </el-upload>
+                    <span v-if="!form.medicalRecordAttachment">未选择任何文件</span>
+                    <a v-else :href="form.medicalRecordAttachment" target="_blank">病例附件</a>
                 </el-form-item>
 
                 <el-form-item label="体检报告" label-width="90px">
@@ -90,9 +90,9 @@
                             :on-success="handleAvatarSuccess2"
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
-                        <span v-if="!form.medicalReport">未选择任何文件</span>
-                        <a v-else :href="form.medicalReport" target="_blank">体检报告</a>
                     </el-upload>
+                    <span v-if="!form.medicalReport">未选择任何文件</span>
+                    <a v-else :href="form.medicalReport" target="_blank">体检报告</a>
                 </el-form-item>
 
                 <el-form-item label="心电数据" label-width="90px">
@@ -104,9 +104,9 @@
                             :on-success="handleAvatarSuccess3"
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
-                        <span v-if="!form.electrocardiogramData">未选择任何文件</span>
-                        <a v-else :href="form.electrocardiogramData" target="_blank">心电数据</a>
                     </el-upload>
+                    <span v-if="!form.electrocardiogramData">未选择任何文件</span>
+                    <a v-else :href="form.electrocardiogramData" target="_blank">心电数据</a>
                 </el-form-item>
 
                 <el-form-item label="心电图" label-width="90px">
@@ -118,9 +118,9 @@
                             :on-success="handleAvatarSuccess4"
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
-                        <span v-if="!form.electrocardiogram">未选择任何文件</span>
-                        <a v-else :href="form.electrocardiogram" target="_blank">心电图</a>
                     </el-upload>
+                    <span v-if="!form.electrocardiogram">未选择任何文件</span>
+                    <a v-else :href="form.electrocardiogram" target="_blank">心电图</a>
                 </el-form-item>
 
                 <el-form-item class="operation-btn" label-width="0">
@@ -334,5 +334,11 @@
     }
     .whole100Calc.el-textarea textarea{
         width: e("calc( 50% + 464px)")!important;
+    }
+    .el-form-item__content {
+        .upload-demo {
+            width: 100px;
+            display: inline-block;
+        }
     }
 </style>
