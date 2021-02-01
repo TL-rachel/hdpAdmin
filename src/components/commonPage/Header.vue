@@ -15,7 +15,7 @@
                             <el-submenu index="1">
                                 <template slot="title">
                                     {{userData.name}}
-                                    <img class="header-img" :src="userData.avatar" alt="">
+                                    <img class="header-img" :src="userData.avatar?userData.avatar:userImgUrl" alt="">
                                 </template>
                                 <el-menu-item @click="$router.push({path: '/'})">首页</el-menu-item>
                                 <el-menu-item @click="updatePsw()">修改密码</el-menu-item>
@@ -35,7 +35,10 @@ export default {
         return {
             userData: '', // 用户名
             headerTitle: '',
-            headerIcon: ''
+            headerIcon: '',
+            /* eslint-disable */
+            userImgUrl: require("../../common/image/user.png"),
+            /* eslint-disable */
         };
     },
     created() {

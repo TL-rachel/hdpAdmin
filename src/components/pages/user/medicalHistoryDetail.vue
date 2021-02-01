@@ -143,13 +143,31 @@
                             this.medicalForm.inheritance = 1;
                         }
                         this.medicalForm.medicalAllergy = this.medicalForm.medicalAllergy.split(',');
+                        if (!this.medicalForm.medicalAllergy[0]) {
+                            this.medicalForm.medicalAllergy.shift();
+                        }
                         this.medicalForm.medicalExpose = this.medicalForm.medicalExpose.split(',');
+                        if (!this.medicalForm.medicalExpose[0]) {
+                            this.medicalForm.medicalExpose.shift();
+                        }
                         this.medicalForm.pastDisease = this.medicalForm.pastDisease.split(',');
+                        if (!this.medicalForm.pastDisease[0]) {
+                            this.medicalForm.pastDisease.shift();
+                        }
                         this.medicalForm.familyHis = this.medicalForm.familyHis.split(',');
+                        if (!this.medicalForm.familyHis[0]) {
+                            this.medicalForm.familyHis.shift();
+                        }
                         if (this.medicalForm.geneticDiseaseMessage) {
                             this.medicalForm.geneticDiseaseMessage = this.medicalForm.geneticDiseaseMessage.split(',');
+                            if (!this.medicalForm.geneticDiseaseMessage[0]) {
+                                this.medicalForm.geneticDiseaseMessage.shift();
+                            }
                         }
                         this.medicalForm.disability = this.medicalForm.disability.split(',');
+                        if (!this.medicalForm.disability[0]) {
+                            this.medicalForm.disability.shift();
+                        }
                     }
                 });
             }

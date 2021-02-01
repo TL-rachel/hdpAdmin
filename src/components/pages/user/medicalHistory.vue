@@ -398,7 +398,7 @@
                         if (res.data.errno === 0) {
                             this.$message({
                                 showClose: true,
-                                message: '修改成功',
+                                message: '添加成功',
                                 type: 'success'
                             });
                             this.$router.back(-1);
@@ -425,10 +425,20 @@
                         list.splice(i,1);
                     }
                     if (list[i] === '恶性肿瘤') {
-                        list[i] = list[i] + ':' + arguments[2];
+                        if (arguments[2]) {
+                            list[i] = list[i] + ':' + arguments[2];
+                        }
+                        if (!arguments[2]) {
+                            list[i] = list[i];
+                        }
                     }
                     if (list[i] === '职业病') {
-                        list[i] = list[i] + ':' + arguments[3];
+                        if (arguments[3]) {
+                            list[i] = list[i] + ':' + arguments[3];
+                        }
+                        if (!arguments[3]) {
+                            list[i] = list[i];
+                        }
                     }
                 }
                 return list.toString();

@@ -112,7 +112,7 @@
                         this.$message({
                             showClose: true,
                             message: '检测成功',
-                            type: 'error'
+                            type: 'success'
                         });
                     } else {
                         this.$message({
