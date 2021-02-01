@@ -11,7 +11,7 @@
                 <el-form-item label="区域负责人" prop="regionLead">
                     <el-input class="w420" :disabled="$route.query.type?true:false" v-model="form.regionLead" placeholder="请输入区域负责人"></el-input>
                 </el-form-item>
-                <el-form-item label="负责人联系方式">
+                <el-form-item label="负责人联系方式" prop="leadPhone">
                     <el-input class="w420" :disabled="$route.query.type?true:false" v-model="form.leadPhone" placeholder="请输入负责人联系方式"></el-input>
                 </el-form-item>
                 <el-form-item label="区域操作人" prop="regionOperation">

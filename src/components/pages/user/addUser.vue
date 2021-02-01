@@ -94,7 +94,7 @@
                 <el-input class="w420" v-model="form.userEducation" :disabled="$route.query.type==1?true:false" placeholder="请输入学历"></el-input>
             </el-form-item>
 
-            <el-form-item label="归属企业" label-width="90px">
+            <el-form-item label="归属企业" label-width="90px" prop="companyId">
                 <el-select class="w420" v-model="form.companyId" :disabled="$route.query.type==1?true:false" placeholder="请选择归属企业">
                     <el-option v-for="(item,index) in companyList" :key="index" :label="item.companyName" :value="item.id"></el-option>
                 </el-select>

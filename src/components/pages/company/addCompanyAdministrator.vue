@@ -24,7 +24,7 @@
                         <el-option v-for="(item,index) in options" :label="item.label" :value="item.value" :key="index"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="联系方式">
+                <el-form-item label="联系方式" prop="tel">
                     <el-input class="w420" v-model="ruleForm.tel" placeholder="请输入联系方式"></el-input>
                 </el-form-item>
                 <el-form-item label="状态" prop="deleted">
