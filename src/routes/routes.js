@@ -394,6 +394,15 @@ let routes = [
                 }
             },
             {
+                path: '/addCompanyAuditRead',
+                component: AddCompany,
+                meta: {
+                    title: '企业管理 / 企业管理列表 / 审核企业查看',
+                    icon: 'icon-picture-nav-enterprise',
+                    flag: 2
+                }
+            },
+            {
                 path: '/addCompanyUpdate',
                 component: AddCompany,
                 meta: {

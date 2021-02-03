@@ -19,7 +19,7 @@
                         ref: 'myChartAge'
                     },
                     {
-                        id: 'chartPieIllness',
+                        id: 'chartMedical',
                         ref: ''
                     },
                     {
@@ -31,6 +31,10 @@
                         ref: 'myChartEquipment'
                     },
                     {
+                        id: 'chartPieIllness',
+                        ref: ''
+                    },
+                    {
                         id: 'myChartEnterprise',
                         ref: 'myChartEnterprise'
                     }
@@ -38,6 +42,7 @@
                 deviceType: [], // 设备状态分布数据
                 age: [], // 年龄分布数据
                 companyDevice: [], // 企业设备分布数据
+                medical: [], // 疾病分布
                 companyUser: [], // 查询企业用户分布数据
                 sex: [], // 性别分布数据
             };
@@ -50,6 +55,7 @@
                     this.companyDevice = res.data.data.companyDevice;
                     this.companyUser = res.data.data.companyUser;
                     this.sex = res.data.data.sex;
+                    this.medical = res.data.data.medical;
                 } else {
                     this.myChart = [];
                     if (res.data.errno !== 501) {
@@ -67,6 +73,7 @@
                 immediate: true,
                 handler() {
                     this.$nextTick(() => {
+                        this.chartMedical(); // 疾病状态分布
                         this.chartPieIllness(); // 疾病状态分布
                         this.chartPieSex(); // 性别分布
                         this.myChartAge(); // 年龄分布
@@ -77,6 +84,21 @@
             }
         },
         methods: {
+            /**
+             * 疾病分布图
+             */
+            chartMedical() {
+                let xData = Object.keys(this.medical);
+                let yData = [];
+                for (let i in this.medical) {
+                    yData.push({
+                        value: this.medical[i] * 100,
+                        name: i
+                    });
+                }
+                this.chartPie = echarts.init(document.getElementById('chartMedical'));
+                this.chartPie.setOption(this.pieChart('疾病状态分布',xData,'疾病状态',yData,['#7CE7AC', '#F4BE5E','#5E81F4','#8E90FF','#8ED5FF','#ffe08e','#A8DD1F','#FF8ED0','#FF808B']));
+            },
             /**
              * 设备状态分布
              */
@@ -179,6 +201,7 @@
                     legend: {
                         data: lData,
                         top: 'bottom',
+                        icon: 'circle',
                     },
                     series: [
                         {

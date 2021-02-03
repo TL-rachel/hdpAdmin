@@ -53,7 +53,7 @@
                     </el-upload>
                     <span v-if="!form.companyPatha">未选择任何文件</span>
                     <a v-else :href="form.companyPatha" target="_blank">{{form.companyPathaName}}</a>
-                    <a v-if="$route.query.type?true:false" :href="form.companyPatha" target="_blank">{{form.companyPathaName}}</a>
+                    <!--<a v-if="$route.query.type?true:false" :href="form.companyPatha" target="_blank">{{form.companyPathaName}}</a>-->
                 </el-form-item>
 
                 <el-form-item label="网络负责人授权证明" class="whole100" label-width="140px">
@@ -68,7 +68,7 @@
                     </el-upload>
                     <span v-if="!form.companyPathb">未选择任何文件</span>
                     <a v-else :href="form.companyPathb" target="_blank">{{form.companyPathbName}}</a>
-                    <a v-if="$route.query.type?true:false" :href="form.companyPathb" target="_blank">{{form.companyPathbName}}</a>
+                    <!--<a v-if="$route.query.type?true:false" :href="form.companyPathb" target="_blank">{{form.companyPathbName}}</a>-->
                 </el-form-item>
                 <el-form-item label="企业星级" label-width="140px" prop="companyStar">
                     <el-select v-model="form.companyStar" :disabled="$route.query.type?true:false" placeholder="请选择企业星级">
@@ -282,7 +282,7 @@
             handleAvatarSuccess1(res, file) {
                 if (file.response.data.url) {
                     this.form.companyPatha = file.response.data.url;
-                    this.form.companyFileaName = file.response.data.fileName;
+                    this.form.companyPathaName = file.response.data.fileName;
                     this.$refs.upload1.clearFiles();
                 } else {
                     this.$message({
@@ -296,7 +296,7 @@
             handleAvatarSuccess2(res, file) {
                 if (file.response.data.url) {
                     this.form.companyPathb = file.response.data.url;
-                    this.form.companyFilebName = file.response.data.fileName;
+                    this.form.companyPathbName = file.response.data.fileName;
                     this.$refs.upload2.clearFiles();
                 } else {
                     this.$message({

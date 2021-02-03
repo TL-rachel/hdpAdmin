@@ -261,30 +261,32 @@
              * 获取设备 及 检查设备是否正常
              */
             getCheckDevicePath() {
-                checkDevicePath({deviceCode: this.form.deviceCode}).then(res => {
-                    if (res.data.errno === 0) {
-                        if (Number(res.data.data.code) === 200) {
-                            this.form.devicePath = res.data.data.path2;
-                            this.form.deviceBackPath = res.data.data.path3;
-                            this.form.deviceStatus = 0;
-                            this.deviceFlag = true;
+                if (this.form.deviceCode) {
+                    checkDevicePath({deviceCode: this.form.deviceCode}).then(res => {
+                        if (res.data.errno === 0) {
+                            if (Number(res.data.data.code) === 200) {
+                                this.form.devicePath = res.data.data.path2;
+                                this.form.deviceBackPath = res.data.data.path3;
+                                this.form.deviceStatus = 0;
+                                this.deviceFlag = true;
+                            } else {
+                                this.deviceFlag = false;
+                                this.form.deviceStatus = 1;
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.data.msg,
+                                    type: 'error'
+                                });
+                            }
                         } else {
-                            this.deviceFlag = false;
-                            this.form.deviceStatus = 1;
                             this.$message({
                                 showClose: true,
-                                message: res.data.data.msg,
+                                message: res.data.errmsg,
                                 type: 'error'
                             });
                         }
-                    } else {
-                        this.$message({
-                            showClose: true,
-                            message: res.data.errmsg,
-                            type: 'error'
-                        });
-                    }
-                });
+                    });
+                }
             },
             /**
              * 提交数据
