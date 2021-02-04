@@ -78,25 +78,45 @@
                 </el-table-column>
                 <el-table-column prop="medicalRecordAttachment" label="病例报告">
                     <template slot-scope="scope">
-                        <a v-if="scope.row.medicalRecordAttachment" :href="scope.row.medicalRecordAttachment" target="_blank">病例报告</a>
+                        <el-popover v-if="scope.row.medicalRecordAttachments && scope.row.medicalRecordAttachments.length > 0" trigger="hover" placement="top">
+                            <p v-for="(item,index) in scope.row.medicalRecordAttachments" :key="index"><a :href="item.url" target="_blank">{{ item.fileName }}</a></p>
+                            <div slot="reference" class="name-wrapper text-overflow-1">
+                                <span v-for="(item,index) in scope.row.medicalRecordAttachments" :key="index">{{ item.fileName }}</span>
+                            </div>
+                        </el-popover>
                         <span v-else>——</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="medicalReport" label="体检报告">
                     <template slot-scope="scope">
-                        <a v-if="scope.row.medicalReport" :href="scope.row.medicalReport" target="_blank">体检报告</a>
+                        <el-popover v-if="scope.row.medicalReports && scope.row.medicalReports.length > 0" trigger="hover" placement="top">
+                            <p v-for="(item,index) in scope.row.medicalReports" :key="index"><a :href="item.url" target="_blank">{{ item.fileName }}</a></p>
+                            <div slot="reference" class="name-wrapper text-overflow-1">
+                                <span v-for="(item,index) in scope.row.medicalReports" :key="index">{{ item.fileName }}</span>
+                            </div>
+                        </el-popover>
                         <span v-else>——</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="electrocardiogramData" label="心电数据">
                     <template slot-scope="scope">
-                        <a v-if="scope.row.electrocardiogramData" :href="scope.row.electrocardiogramData" target="_blank">心电数据</a>
+                        <el-popover v-if="scope.row.electrocardiogramDatas && scope.row.electrocardiogramDatas.length > 0" trigger="hover" placement="top">
+                            <p v-for="(item,index) in scope.row.electrocardiogramDatas" :key="index"><a :href="item.url" target="_blank">{{ item.fileName }}</a></p>
+                            <div slot="reference" class="name-wrapper text-overflow-1">
+                                <span v-for="(item,index) in scope.row.electrocardiogramDatas" :key="index">{{ item.fileName }}</span>
+                            </div>
+                        </el-popover>
                         <span v-else>——</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="electrocardiogram" label="心电图">
                     <template slot-scope="scope">
-                        <a v-if="scope.row.electrocardiogram" :href="scope.row.electrocardiogram" target="_blank">心电图</a>
+                        <el-popover v-if="scope.row.electrocardiograms && scope.row.electrocardiograms.length > 0" trigger="hover" placement="top">
+                            <p v-for="(item,index) in scope.row.electrocardiograms" :key="index"><a :href="item.url" target="_blank">{{ item.fileName }}</a></p>
+                            <div slot="reference" class="name-wrapper text-overflow-1">
+                                <span v-for="(item,index) in scope.row.electrocardiograms" :key="index">{{ item.fileName }}</span>
+                            </div>
+                        </el-popover>
                         <span v-else>——</span>
                     </template>
                 </el-table-column>

@@ -67,61 +67,83 @@
                     <el-input class="w420" v-model="form.operation" placeholder="请输入人名"></el-input>
                 </el-form-item>
 
-                <el-form-item label="病例附件" label-width="90px">
-                    <el-upload
-                               class="upload-demo"
-                               :action="actionUrl"
-                               ref="upload1"
-                               multiple
-                               :on-success="handleAvatarSuccess1"
-                               :limit="1">
-                        <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
-                    </el-upload>
-                    <span v-if="!form.medicalRecordAttachment">未选择任何文件</span>
-                    <a v-else :href="form.medicalRecordAttachment" target="_blank">病例附件</a>
-                </el-form-item>
+                <div class="clearfix">
+                    <el-form-item label="病例附件" label-width="90px">
+                        <el-upload
+                                class="upload-demo"
+                                :action="actionUrl"
+                                ref="upload1"
+                                multiple
+                                :on-success="handleAvatarSuccess1"
+                                :limit="10">
+                            <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
+                        </el-upload>
+                        <span v-if="form.medicalRecordAttachmentList.length === 0">未选择任何文件</span>
+                        <div v-else class="upload-list">
+                            <div v-for="(item,index) in form.medicalRecordAttachmentList" :key="index">
+                                <a :href="item.url" target="_blank">{{item.fileName}}</a>
+                                <i @click="uploadDelete(1,index)" class="icon-picture icon-picture-delete"></i>
+                            </div>
+                        </div>
+                    </el-form-item>
+                    <el-form-item label="体检报告" label-width="90px">
+                        <el-upload
+                                class="upload-demo"
+                                :action="actionUrl"
+                                ref="upload2"
+                                multiple
+                                :on-success="handleAvatarSuccess2"
+                                :limit="10">
+                            <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
+                        </el-upload>
+                        <span v-if="form.medicalReportList.length === 0">未选择任何文件</span>
+                        <div v-else class="upload-list">
+                            <div v-for="(item,index) in form.medicalReportList" :key="index">
+                                <a :href="item.url" target="_blank">{{item.fileName}}</a>
+                                <i @click="uploadDelete(2,index)" class="icon-picture icon-picture-delete"></i>
+                            </div>
+                        </div>
+                    </el-form-item>
+                </div>
 
-                <el-form-item label="体检报告" label-width="90px">
-                    <el-upload
-                            class="upload-demo"
-                            :action="actionUrl"
-                            ref="upload2"
-                            multiple
-                            :on-success="handleAvatarSuccess2"
-                            :limit="1">
-                        <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
-                    </el-upload>
-                    <span v-if="!form.medicalReport">未选择任何文件</span>
-                    <a v-else :href="form.medicalReport" target="_blank">体检报告</a>
-                </el-form-item>
-
-                <el-form-item label="心电数据" label-width="90px">
-                    <el-upload
-                            class="upload-demo"
-                            :action="actionUrl"
-                            ref="upload3"
-                            multiple
-                            :on-success="handleAvatarSuccess3"
-                            :limit="1">
-                        <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
-                    </el-upload>
-                    <span v-if="!form.electrocardiogramData">未选择任何文件</span>
-                    <a v-else :href="form.electrocardiogramData" target="_blank">心电数据</a>
-                </el-form-item>
-
-                <el-form-item label="心电图" label-width="90px">
-                    <el-upload
-                            class="upload-demo"
-                            :action="actionUrl"
-                            ref="upload4"
-                            multiple
-                            :on-success="handleAvatarSuccess4"
-                            :limit="1">
-                        <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
-                    </el-upload>
-                    <span v-if="!form.electrocardiogram">未选择任何文件</span>
-                    <a v-else :href="form.electrocardiogram" target="_blank">心电图</a>
-                </el-form-item>
+                <div class="clearfix">
+                    <el-form-item label="心电数据" label-width="90px">
+                        <el-upload
+                                class="upload-demo"
+                                :action="actionUrl"
+                                ref="upload3"
+                                multiple
+                                :on-success="handleAvatarSuccess3"
+                                :limit="10">
+                            <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
+                        </el-upload>
+                        <span v-if="form.electrocardiogramDataList.length === 0">未选择任何文件</span>
+                        <div v-else class="upload-list">
+                            <div v-for="(item,index) in form.electrocardiogramDataList" :key="index">
+                                <a :href="item.url" target="_blank">{{item.fileName}}</a>
+                                <i @click="uploadDelete(3,index)" class="icon-picture icon-picture-delete"></i>
+                            </div>
+                        </div>
+                    </el-form-item>
+                    <el-form-item label="心电图" label-width="90px">
+                        <el-upload
+                                class="upload-demo"
+                                :action="actionUrl"
+                                ref="upload4"
+                                multiple
+                                :on-success="handleAvatarSuccess4"
+                                :limit="10">
+                            <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
+                        </el-upload>
+                        <span v-if="form.electrocardiogramList.length === 0">未选择任何文件</span>
+                        <div v-else class="upload-list">
+                            <div v-for="(item,index) in form.electrocardiogramList" :key="index">
+                                <a :href="item.url" target="_blank">{{item.fileName}}</a>
+                                <i @click="uploadDelete(4,index)" class="icon-picture icon-picture-delete"></i>
+                            </div>
+                        </div>
+                    </el-form-item>
+                </div>
 
                 <el-form-item class="operation-btn" label-width="0">
                     <el-button type="primary" @click="submitForm('form')">保 存</el-button>
@@ -149,14 +171,10 @@
                     measuringTime: '', // 测量时间
                     deviceCode: '', // 设备编号
                     operation: '', // 操作人
-                    electrocardiogram: '', // 心电图URL
-                    electrocardiogramName: '', // 心电图名称
-                    electrocardiogramData: '', // 心电数据URL
-                    electrocardiogramDataName: '', // 心电数据名称
-                    medicalRecordAttachment: '', // 病例附件URL
-                    medicalRecordAttachmentName: '', // 病例附件名称
-                    medicalReport: '', // 体检报告URL
-                    medicalReportName: '', // 体检报告名称
+                    electrocardiogramList: [], // 心电图URL
+                    electrocardiogramDataList: [], // 心电数据URL
+                    medicalRecordAttachmentList: [], // 病例附件URL
+                    medicalReportList: [], // 体检报告URL
                 },
                 imageUrl: '',
                 /* eslint-disable */
@@ -185,8 +203,16 @@
             if (this.$route.query.id) {
                 medicalCaseRead(this.$route.query.id).then(res => {
                     if (res.data.errno === 0) {
-                        this.form = res.data.data;
+                        this.form = JSON.parse(JSON.stringify(res.data.data));
                         this.form.id = this.$route.query.id;
+                        this.form.electrocardiogramList = [];
+                        this.form.electrocardiogramDataList = [];
+                        this.form.medicalRecordAttachmentList = [];
+                        this.form.medicalReportList = [];
+                        this.form.electrocardiogramList = res.data.data.electrocardiograms;
+                        this.form.electrocardiogramDataList = res.data.data.electrocardiogramDatas;
+                        this.form.medicalRecordAttachmentList = res.data.data.medicalRecordAttachments;
+                        this.form.medicalReportList = res.data.data.medicalReports;
                     } else {
                         this.$message({
                             showClose: true,
@@ -198,12 +224,31 @@
             }
         },
         methods: {
+            /**
+             * 删除上传文件
+             * @param {Number} type 字段标识 1 病例附件 2 体检附件 3 心电数据 4 心电图
+             * @param {Number} index 要删除的文件索引
+             */
+            uploadDelete(type,index) {
+              if (type === 1) {
+                  this.form.medicalRecordAttachmentList.splice(index,1);
+              } else if (type === 2) {
+                  this.form.medicalReportList.splice(index,1);
+              } else if (type === 3) {
+                  this.form.electrocardiogramDataList.splice(index,1);
+              } else if (type === 4) {
+                  this.form.electrocardiogramList.splice(index,1);
+              }
+              this.$forceUpdate();
+            },
             // 病例附件地址
             handleAvatarSuccess1(res, file) {
-                if (file.response.data.url) {
-                    this.form.medicalRecordAttachment = file.response.data.url;
-                    this.form.medicalRecordAttachmentName = file.response.data.fileName;
-                    this.$refs.upload1.clearFiles();
+                if (file.response.errno === 0) {
+                    this.form.medicalRecordAttachmentList.push({
+                        url: file.response.data[0].url,
+                        fileName: file.response.data[0].fileName
+                    });
+                    this.$forceUpdate();
                 } else {
                     this.$message({
                         showClose: true,
@@ -214,10 +259,12 @@
             },
             // 体检附件地址
             handleAvatarSuccess2(res, file) {
-                if (file.response.data.url) {
-                    this.form.medicalReport = file.response.data.url;
-                    this.form.medicalReportName = file.response.data.fileName;
-                    this.$refs.upload2.clearFiles();
+                if (file.response.errno === 0) {
+                    this.form.medicalReportList.push({
+                        url: file.response.data[0].url,
+                        fileName: file.response.data[0].fileName
+                    });
+                    this.$forceUpdate();
                 } else {
                     this.$message({
                         showClose: true,
@@ -228,10 +275,12 @@
             },
             // 心电数据URL
             handleAvatarSuccess3(res, file) {
-                if (file.response.data.url) {
-                    this.form.electrocardiogramData = file.response.data.url;
-                    this.form.electrocardiogramDataName = file.response.data.fileName;
-                    this.$refs.upload3.clearFiles();
+                if (file.response.errno === 0) {
+                    this.form.electrocardiogramDataList.push({
+                        url: file.response.data[0].url,
+                        fileName: file.response.data[0].fileName
+                    });
+                    this.$forceUpdate();
                 } else {
                     this.$message({
                         showClose: true,
@@ -242,10 +291,12 @@
             },
             // 心电图URL
             handleAvatarSuccess4(res, file) {
-                if (file.response.data.url) {
-                    this.form.electrocardiogram = file.response.data.url;
-                    this.form.electrocardiogramName = file.response.data.fileName;
-                    this.$refs.upload4.clearFiles();
+                if (file.response.errno === 0) {
+                    this.form.electrocardiogramList.push({
+                        url: file.response.data[0].url,
+                        fileName: file.response.data[0].fileName
+                    });
+                    this.$forceUpdate();
                 } else {
                     this.$message({
                         showClose: true,
@@ -258,8 +309,42 @@
              * 提交数据
              */
             submitForm() {
+                // 组装数据  获取上传的文件，分别存贮在指定的字段中，逗号拼接
+                let para = JSON.parse(JSON.stringify(this.form));
+                para.electrocardiogram = '';
+                para.electrocardiogramData = '';
+                para.medicalRecordAttachment = '';
+                para.medicalReport = '';
+                for (let i = 0; i < this.form.electrocardiogramList.length; i++) {
+                    if (i === this.form.electrocardiogramList.length - 1) {
+                        para.electrocardiogram += this.form.electrocardiogramList[i].url;
+                    } else {
+                        para.electrocardiogram += this.form.electrocardiogramList[i].url + ',';
+                    }
+                }
+                for (let i = 0; i < this.form.electrocardiogramDataList.length; i++) {
+                    if (i === this.form.electrocardiogramDataList.length - 1) {
+                        para.electrocardiogramData += this.form.electrocardiogramDataList[i].url;
+                    } else {
+                        para.electrocardiogramData += this.form.electrocardiogramDataList[i].url + ',';
+                    }
+                }
+                for (let i = 0; i < this.form.medicalRecordAttachmentList.length; i++) {
+                    if (i === this.form.medicalRecordAttachmentList.length - 1) {
+                        para.medicalRecordAttachment += this.form.medicalRecordAttachmentList[i].url;
+                    } else {
+                        para.medicalRecordAttachment += this.form.medicalRecordAttachmentList[i].url + ',';
+                    }
+                }
+                for (let i = 0; i < this.form.medicalReportList.length; i++) {
+                    if (i === this.form.medicalReportList.length - 1) {
+                        para.medicalReport += this.form.medicalReportList[i].url;
+                    } else {
+                        para.medicalReport += this.form.medicalReportList[i].url + ',';
+                    }
+                }
                 if (this.$route.query.id) {
-                    medicalCaseUpdate(this.form).then(res => {
+                    medicalCaseUpdate(para).then(res => {
                         if (res.data.errno === 0) {
                             this.$message({
                                 showClose: true,
@@ -276,7 +361,7 @@
                         }
                     })
                 } else {
-                    medicalCaseCreate(this.form).then(res => {
+                    medicalCaseCreate(para).then(res => {
                         if (res.data.errno === 0) {
                             this.$message({
                                 showClose: true,
@@ -339,6 +424,18 @@
         .upload-demo {
             width: 100px;
             display: inline-block;
+        }
+    }
+    .upload-list {
+        width: 300px;
+        vertical-align: top;
+        display: inline-block;
+        div {
+            display: flex;
+            justify-content: space-between;
+            .icon-picture-delete {
+                margin-top: 8px;
+            }
         }
     }
 </style>
