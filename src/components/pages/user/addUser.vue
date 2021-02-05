@@ -11,7 +11,7 @@
                             class="avatar-uploader"
                             :disabled="$route.query.type==1?true:false"
                             :action="actionUrl"
-                            accept="image/jpg, image/png"
+                            accept=".gif,.jpg,.jpeg,.png,.GIF,.JPG,.PNG"
                             :show-file-list="false"
                             :on-success="handleAvatarSuccess1"
                             :before-upload="beforeAvatarUpload">
@@ -22,7 +22,7 @@
                             class="avatar-uploader"
                             :disabled="$route.query.type==1?true:false"
                             :action="actionUrl"
-                            accept="image/jpg, image/png"
+                            accept=".gif,.jpg,.jpeg,.png,.GIF,.JPG,.PNG"
                             :show-file-list="false"
                             :on-success="handleAvatarSuccess2"
                             :before-upload="beforeAvatarUpload">
@@ -33,7 +33,7 @@
                             class="avatar-uploader"
                             :disabled="$route.query.type==1?true:false"
                             :action="actionUrl"
-                            accept="image/jpg, image/png"
+                            accept=".gif,.jpg,.jpeg,.png,.GIF,.JPG,.PNG"
                             :show-file-list="false"
                             :on-success="handleAvatarSuccess3"
                             :before-upload="beforeAvatarUpload">
@@ -264,13 +264,13 @@
         },
         methods: {
             handleAvatarSuccess1(res, file) {
-                this.form.userImage1 = file.response.data.url;
+                this.form.userImage1 = file.response.data[0].url;
             },
             handleAvatarSuccess2(res, file) {
-                this.form.userImage2 = file.response.data.url;
+                this.form.userImage2 = file.response.data[0].url;
             },
             handleAvatarSuccess3(res, file) {
-                this.form.userImage3 = file.response.data.url;
+                this.form.userImage3 = file.response.data[0].url;
             },
             beforeAvatarUpload(file) {
                 // 调用testFileType方法，把定义的imgType数组和我们上传的图片类型file.type一起传进去

@@ -28,7 +28,7 @@
             </el-form-item>
 
             <el-form-item label="归属企业" label-width="110px" prop="companyId">
-                <el-select class="w420" :disabled="$route.query.type==1?true:false" @change="getRegion(form.companyId)" v-model="form.companyId" placeholder="请选择归属企业">
+                <el-select class="w420" :disabled="$route.query.type==1?true:false" @change="getRegion(form.companyId,0)" v-model="form.companyId" placeholder="请选择归属企业">
                     <el-option v-for="(item,index) in companyList" :key="index" :label="item.companyName" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -220,7 +220,7 @@
                 deviceRead({id: this.$route.query.id}).then(res => {
                     if (res.data.errno === 0) {
                         this.form = res.data.data;
-                        this.getRegion(res.data.data.companyId);
+                        this.getRegion(res.data.data.companyId,1);
                     } else {
                         this.$message({
                             showClose: true,
@@ -241,9 +241,16 @@
             }
         },
         methods: {
-            getRegion(companyId) {
-                this.form.deviceRegionId = '';
-                this.allRegions = [];
+            /**
+             * 获取区域
+             * @param {Number} companyId 企业id
+             * @param {Number} flag 编辑标识
+             */
+            getRegion(companyId,flag) {
+                if (flag !== 1) {
+                    this.form.deviceRegionId = '';
+                    this.allRegions = [];
+                }
                 // 获取区域列表
                 regionAllRegions({companyId: companyId}).then(res => {
                     if (res.data.errno === 0) {
