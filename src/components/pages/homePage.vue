@@ -92,7 +92,7 @@
                 let yData = [];
                 for (let i in this.medical) {
                     yData.push({
-                        value: this.medical[i] * 100,
+                        value: this.medical[i] * 1,
                         name: i
                     });
                 }
@@ -105,7 +105,7 @@
             chartPieIllness() {
                 let xData = [];
                 for (let i = 0; i < this.deviceType.length; i++) {
-                    xData.push({value: this.deviceType[i].proportion * 100,name: (this.deviceType[i].del_flag * 1 === 0 ? '无效' : '有效')});
+                    xData.push({value: this.deviceType[i].cont,name: (this.deviceType[i].del_flag * 1 === 0 ? '无效' : '有效')});
                 }
                 this.chartPie = echarts.init(document.getElementById('chartPieIllness'));
                 this.chartPie.setOption(this.pieChart('设备状态分布',['有效','无效'],'设备状态',xData,['#8AF1B9', '#F4BE5E']));
@@ -116,7 +116,7 @@
             chartPieSex() {
                 let sexList = [];
                 for (let i = 0; i < this.sex.length; i++) {
-                    sexList.push({value: this.sex[i].proportion * 100,name: !this.sex[i].user_sex ? '男' : '女'});
+                    sexList.push({value: this.sex[i].cont,name: !this.sex[i].user_sex ? '男' : '女'});
                 }
                 this.chartPie = echarts.init(document.getElementById('chartPieSex'));
                 this.chartPie.setOption(this.pieChart('性别分布',['男','女'],'性别',sexList,['#4D75F6', '#FF808B']));
