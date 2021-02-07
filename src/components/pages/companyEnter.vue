@@ -139,7 +139,7 @@
         methods: {
             // 资格证明附件地址
             handleAvatarSuccess1(res, file) {
-                if (file.response.data.url) {
+                if (file.response.data[0].url) {
                     this.form.companyPatha = file.response.data[0].url;
                     this.form.companyFileaName = file.response.data[0].fileName;
                     this.$refs.upload1.clearFiles();
@@ -153,7 +153,7 @@
             },
             // 网络资格人授权证明
             handleAvatarSuccess2(res, file) {
-                if (file.response.data.url) {
+                if (file.response.data[0].url) {
                     this.form.companyPathb = file.response.data[0].url;
                     this.form.companyFilebName = file.response.data[0].fileName;
                     this.$refs.upload2.clearFiles();

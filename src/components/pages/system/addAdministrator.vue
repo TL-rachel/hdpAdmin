@@ -41,7 +41,6 @@
                     username2: '', // 姓名
                     tel: '', // 手机号
                     roleId: '', // 角色
-                    deleted: false, // 是否删除
                 },
                 // 必填校验
                 rules: {

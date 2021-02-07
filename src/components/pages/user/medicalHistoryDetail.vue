@@ -146,17 +146,29 @@
                         if (!this.medicalForm.medicalAllergy[0]) {
                             this.medicalForm.medicalAllergy.shift();
                         }
+                        if (this.medicalForm.medicalAllergy.length === 0) {
+                            this.medicalForm.medicalAllergy = '无';
+                        }
                         this.medicalForm.medicalExpose = this.medicalForm.medicalExpose.split(',');
                         if (!this.medicalForm.medicalExpose[0]) {
                             this.medicalForm.medicalExpose.shift();
+                        }
+                        if (this.medicalForm.medicalExpose.length === 0) {
+                            this.medicalForm.medicalExpose = '无';
                         }
                         this.medicalForm.pastDisease = this.medicalForm.pastDisease.split(',');
                         if (!this.medicalForm.pastDisease[0]) {
                             this.medicalForm.pastDisease.shift();
                         }
+                        if (this.medicalForm.pastDisease.length === 0) {
+                            this.medicalForm.pastDisease = '无';
+                        }
                         this.medicalForm.familyHis = this.medicalForm.familyHis.split(',');
                         if (!this.medicalForm.familyHis[0]) {
                             this.medicalForm.familyHis.shift();
+                        }
+                        if (this.medicalForm.familyHis.length === 0) {
+                            this.medicalForm.familyHis = '无';
                         }
                         if (this.medicalForm.geneticDiseaseMessage) {
                             this.medicalForm.geneticDiseaseMessage = this.medicalForm.geneticDiseaseMessage.split(',');
@@ -168,6 +180,15 @@
                         if (!this.medicalForm.disability[0]) {
                             this.medicalForm.disability.shift();
                         }
+                        if (this.medicalForm.disability.length === 0) {
+                            this.medicalForm.disability = '无';
+                        }
+                    } else {
+                        this.medicalForm.medicalAllergy = '无';
+                        this.medicalForm.medicalExpose = '无';
+                        this.medicalForm.pastDisease = '无';
+                        this.medicalForm.disability = '无';
+                        this.medicalForm.familyHis = '无';
                     }
                 });
             }
