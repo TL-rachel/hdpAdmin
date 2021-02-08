@@ -92,7 +92,7 @@
                 let yData = [];
                 for (let i in this.medical) {
                     yData.push({
-                        value: this.medical[i] * 1,
+                        value: this.medical[i] * 100,
                         name: i
                     });
                 }

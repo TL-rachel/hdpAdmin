@@ -87,6 +87,7 @@
                 companyList: [],
                 // 角色列表
                 options: [],
+                submitBtn: true,
                 jurisdictionList: {
                     adDisabled: false,
                 }
@@ -154,46 +155,51 @@
                         para.roleIds = [];
                         para.roleIds.push(para.roleId);
                         delete para.roleId;
-                        if (this.$route.query.id) {
-                            // 编辑
-                            qyAdminUpdate(para).then(res => {
-                                if (res.data.errno === 0) {
-                                    // 成功
-                                    this.$message({
-                                        showClose: true,
-                                        message: res.data.errmsg,
-                                        type: 'success'
-                                    });
-                                    this.$router.push('/companyAdministratorList');
-                                } else {
-                                    // 失败
-                                    this.$message({
-                                        showClose: true,
-                                        message: res.data.errmsg,
-                                        type: 'error'
-                                    });
-                                }
-                            });
-                        } else {
-                            // 新增
-                            qyAdminCreate(para).then(res => {
-                                if (res.data.errno === 0) {
-                                    // 成功
-                                    this.$message({
-                                        showClose: true,
-                                        message: res.data.errmsg,
-                                        type: 'success'
-                                    });
-                                    this.$router.push('/companyAdministratorList');
-                                } else {
-                                    // 失败
-                                    this.$message({
-                                        showClose: true,
-                                        message: res.data.errmsg,
-                                        type: 'error'
-                                    });
-                                }
-                            });
+                        if (this.submitBtn) {
+                            this.submitBtn = false;
+                            if (this.$route.query.id) {
+                                // 编辑
+                                qyAdminUpdate(para).then(res => {
+                                    if (res.data.errno === 0) {
+                                        // 成功
+                                        this.$message({
+                                            showClose: true,
+                                            message: res.data.errmsg,
+                                            type: 'success'
+                                        });
+                                        this.$router.push('/companyAdministratorList');
+                                    } else {
+                                        // 失败
+                                        this.$message({
+                                            showClose: true,
+                                            message: res.data.errmsg,
+                                            type: 'error'
+                                        });
+                                        this.submitBtn = true;
+                                    }
+                                });
+                            } else {
+                                // 新增
+                                qyAdminCreate(para).then(res => {
+                                    if (res.data.errno === 0) {
+                                        // 成功
+                                        this.$message({
+                                            showClose: true,
+                                            message: res.data.errmsg,
+                                            type: 'success'
+                                        });
+                                        this.$router.push('/companyAdministratorList');
+                                    } else {
+                                        // 失败
+                                        this.$message({
+                                            showClose: true,
+                                            message: res.data.errmsg,
+                                            type: 'error'
+                                        });
+                                        this.submitBtn = true;
+                                    }
+                                });
+                            }
                         }
                     }
                 });

@@ -63,6 +63,7 @@
                 },
                 // 角色列表
                 options: [],
+                submitBtn: true,
                 jurisdictionList: {
                     adDisabled: false,
                 }
@@ -126,46 +127,51 @@
                         para.roleIds = [];
                         para.roleIds.push(para.roleId);
                         delete para.roleId;
-                        if (this.$route.query.id) {
-                            // 编辑
-                            adminUpdate(para).then(res => {
-                                if (res.data.errno === 0) {
-                                    // 成功
-                                    this.$message({
-                                        showClose: true,
-                                        message: res.data.errmsg,
-                                        type: 'success'
-                                    });
-                                    this.$router.push('/administratorList');
-                                } else {
-                                    // 失败
-                                    this.$message({
-                                        showClose: true,
-                                        message: res.data.errmsg,
-                                        type: 'error'
-                                    });
-                                }
-                            });
-                        } else {
-                            // 新增
-                            adminCreate(para).then(res => {
-                                if (res.data.errno === 0) {
-                                    // 成功
-                                    this.$message({
-                                        showClose: true,
-                                        message: res.data.errmsg,
-                                        type: 'success'
-                                    });
-                                    this.$router.push('/administratorList');
-                                } else {
-                                    // 失败
-                                    this.$message({
-                                        showClose: true,
-                                        message: res.data.errmsg,
-                                        type: 'error'
-                                    });
-                                }
-                            });
+                        if (this.submitBtn) {
+                            this.submitBtn = false;
+                            if (this.$route.query.id) {
+                                // 编辑
+                                adminUpdate(para).then(res => {
+                                    if (res.data.errno === 0) {
+                                        // 成功
+                                        this.$message({
+                                            showClose: true,
+                                            message: res.data.errmsg,
+                                            type: 'success'
+                                        });
+                                        this.$router.push('/administratorList');
+                                    } else {
+                                        // 失败
+                                        this.$message({
+                                            showClose: true,
+                                            message: res.data.errmsg,
+                                            type: 'error'
+                                        });
+                                        this.submitBtn = true;
+                                    }
+                                });
+                            } else {
+                                // 新增
+                                adminCreate(para).then(res => {
+                                    if (res.data.errno === 0) {
+                                        // 成功
+                                        this.$message({
+                                            showClose: true,
+                                            message: res.data.errmsg,
+                                            type: 'success'
+                                        });
+                                        this.$router.push('/administratorList');
+                                    } else {
+                                        // 失败
+                                        this.$message({
+                                            showClose: true,
+                                            message: res.data.errmsg,
+                                            type: 'error'
+                                        });
+                                        this.submitBtn = true;
+                                    }
+                                });
+                            }
                         }
                     }
                 });

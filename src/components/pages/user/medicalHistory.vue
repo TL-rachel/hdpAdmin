@@ -189,6 +189,7 @@
                 /* eslint-disable */
                 userImgUrl: require("../../../common/image/user.png"),
                 /* eslint-disable */
+                submitBtn: true,
             };
         },
         created: function () {
@@ -376,40 +377,45 @@
                         }
                     }
                 }
-                if (this.userMedicalId) {
-                    medicalUpdate(para).then(res => {
-                        if (res.data.errno === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: '修改成功',
-                                type: 'success'
-                            });
-                            this.$router.back(-1);
-                        } else {
-                            this.$message({
-                                showClose: true,
-                                message: res.data.errmsg,
-                                type: 'error'
-                            });
-                        }
-                    });
-                } else {
-                    medicalCreate(para).then(res => {
-                        if (res.data.errno === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: '添加成功',
-                                type: 'success'
-                            });
-                            this.$router.back(-1);
-                        } else {
-                            this.$message({
-                                showClose: true,
-                                message: res.data.errmsg,
-                                type: 'error'
-                            });
-                        }
-                    });
+                if (this.submitBtn) {
+                    this.submitBtn = false;
+                    if (this.userMedicalId) {
+                        medicalUpdate(para).then(res => {
+                            if (res.data.errno === 0) {
+                                this.$message({
+                                    showClose: true,
+                                    message: '修改成功',
+                                    type: 'success'
+                                });
+                                this.$router.back(-1);
+                            } else {
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.errmsg,
+                                    type: 'error'
+                                });
+                                this.submitBtn = true;
+                            }
+                        });
+                    } else {
+                        medicalCreate(para).then(res => {
+                            if (res.data.errno === 0) {
+                                this.$message({
+                                    showClose: true,
+                                    message: '添加成功',
+                                    type: 'success'
+                                });
+                                this.$router.back(-1);
+                            } else {
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.errmsg,
+                                    type: 'error'
+                                });
+                                this.submitBtn = true;
+                            }
+                        });
+                    }
                 }
             },
             /**

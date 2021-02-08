@@ -182,6 +182,7 @@
                 actionUrl: CAS_SERVER_URL + '/admin/storage/create',
                 /* eslint-disable */
                 userData: {},
+                submitBtn: true,
             };
         },
         created() {
@@ -343,40 +344,45 @@
                         para.medicalReport += this.form.medicalReportList[i].url + ',';
                     }
                 }
-                if (this.$route.query.id) {
-                    medicalCaseUpdate(para).then(res => {
-                        if (res.data.errno === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: '修改成功',
-                                type: 'success'
-                            });
-                            this.$router.back(-1);
-                        } else {
-                            this.$message({
-                                showClose: true,
-                                message: res.data.errmsg,
-                                type: 'error'
-                            });
-                        }
-                    })
-                } else {
-                    medicalCaseCreate(para).then(res => {
-                        if (res.data.errno === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: '添加成功',
-                                type: 'success'
-                            });
-                            this.$router.back(-1);
-                        } else {
-                            this.$message({
-                                showClose: true,
-                                message: res.data.errmsg,
-                                type: 'error'
-                            });
-                        }
-                    });
+                if (this.submitBtn) {
+                    this.submitBtn = false;
+                    if (this.$route.query.id) {
+                        medicalCaseUpdate(para).then(res => {
+                            if (res.data.errno === 0) {
+                                this.$message({
+                                    showClose: true,
+                                    message: '修改成功',
+                                    type: 'success'
+                                });
+                                this.$router.back(-1);
+                            } else {
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.errmsg,
+                                    type: 'error'
+                                });
+                                this.submitBtn = true;
+                            }
+                        })
+                    } else {
+                        medicalCaseCreate(para).then(res => {
+                            if (res.data.errno === 0) {
+                                this.$message({
+                                    showClose: true,
+                                    message: '添加成功',
+                                    type: 'success'
+                                });
+                                this.$router.back(-1);
+                            } else {
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.errmsg,
+                                    type: 'error'
+                                });
+                                this.submitBtn = true;
+                            }
+                        });
+                    }
                 }
             },
             handleHistory() {

@@ -173,6 +173,7 @@
                 manufacturer: [], // 厂商列表
                 equipmentList: [], // 设备类型
                 deviceFlag: '', // 设备正常状态
+                submitBtn: true,
                 jurisdictionList: {
                     adDisabled: false,
                 }
@@ -302,44 +303,49 @@
                 // 必填校验
                 this.$refs.form.validate(valid => {
                     if (valid) {
-                        if (this.$route.query.id) {
-                            deviceUpdate(this.form).then(res => {
-                                if (res.data.errno === 0) {
-                                    // 成功
-                                    this.$message({
-                                        showClose: true,
-                                        message: '更新成功',
-                                        type: 'success'
-                                    });
-                                    this.$router.push({path: '/equipmentList'});
-                                } else {
-                                    // 失败
-                                    this.$message({
-                                        showClose: true,
-                                        message: res.data.errmsg,
-                                        type: 'error'
-                                    });
-                                }
-                            });
-                        } else {
-                            deviceCreate(this.form).then(res => {
-                                if (res.data.errno === 0) {
-                                    // 成功
-                                    this.$message({
-                                        showClose: true,
-                                        message: '添加成功',
-                                        type: 'success'
-                                    });
-                                    this.$router.push({path: '/equipmentList'});
-                                } else {
-                                    // 失败
-                                    this.$message({
-                                        showClose: true,
-                                        message: res.data.errmsg,
-                                        type: 'error'
-                                    });
-                                }
-                            });
+                        if (this.submitBtn) {
+                            this.submitBtn = false;
+                            if (this.$route.query.id) {
+                                deviceUpdate(this.form).then(res => {
+                                    if (res.data.errno === 0) {
+                                        // 成功
+                                        this.$message({
+                                            showClose: true,
+                                            message: '更新成功',
+                                            type: 'success'
+                                        });
+                                        this.$router.push({path: '/equipmentList'});
+                                    } else {
+                                        // 失败
+                                        this.$message({
+                                            showClose: true,
+                                            message: res.data.errmsg,
+                                            type: 'error'
+                                        });
+                                        this.submitBtn = true;
+                                    }
+                                });
+                            } else {
+                                deviceCreate(this.form).then(res => {
+                                    if (res.data.errno === 0) {
+                                        // 成功
+                                        this.$message({
+                                            showClose: true,
+                                            message: '添加成功',
+                                            type: 'success'
+                                        });
+                                        this.$router.push({path: '/equipmentList'});
+                                    } else {
+                                        // 失败
+                                        this.$message({
+                                            showClose: true,
+                                            message: res.data.errmsg,
+                                            type: 'error'
+                                        });
+                                        this.submitBtn = true;
+                                    }
+                                });
+                            }
                         }
                     }
                 });

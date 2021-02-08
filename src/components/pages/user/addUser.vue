@@ -221,6 +221,7 @@
                 /* eslint-disable */
                 actionUrl: CAS_SERVER_URL + '/admin/storage/create',
                 /* eslint-disable */
+                submitBtn: true,
                 jurisdictionList: {
                     adDisabled: false
                 }
@@ -296,40 +297,45 @@
             submitForm() { // 必填校验
                 this.$refs.form.validate(valid => {
                     if (valid) {
-                        if (this.$route.query.id) {
-                            userUpdate(this.form).then(res => {
-                                if (res.data.errno === 0) {
-                                    this.$message({
-                                        showClose: true,
-                                        message: '更新用户成功',
-                                        type: 'success'
-                                    });
-                                    this.$router.push({path: '/userList'});
-                                } else {
-                                    this.$message({
-                                        showClose: true,
-                                        message: res.data.errmsg,
-                                        type: 'error'
-                                    });
-                                }
-                            })
-                        } else {
-                            userCreate(this.form).then(res => {
-                                if (res.data.errno === 0) {
-                                    this.$message({
-                                        showClose: true,
-                                        message: '添加用户成功',
-                                        type: 'success'
-                                    });
-                                    this.$router.push({path: '/userList'});
-                                } else {
-                                    this.$message({
-                                        showClose: true,
-                                        message: res.data.errmsg,
-                                        type: 'error'
-                                    });
-                                }
-                            });
+                        if (this.submitBtn) {
+                            this.submitBtn = false;
+                            if (this.$route.query.id) {
+                                userUpdate(this.form).then(res => {
+                                    if (res.data.errno === 0) {
+                                        this.$message({
+                                            showClose: true,
+                                            message: '更新用户成功',
+                                            type: 'success'
+                                        });
+                                        this.$router.push({path: '/userList'});
+                                    } else {
+                                        this.$message({
+                                            showClose: true,
+                                            message: res.data.errmsg,
+                                            type: 'error'
+                                        });
+                                        this.submitBtn = true;
+                                    }
+                                })
+                            } else {
+                                userCreate(this.form).then(res => {
+                                    if (res.data.errno === 0) {
+                                        this.$message({
+                                            showClose: true,
+                                            message: '添加用户成功',
+                                            type: 'success'
+                                        });
+                                        this.$router.push({path: '/userList'});
+                                    } else {
+                                        this.$message({
+                                            showClose: true,
+                                            message: res.data.errmsg,
+                                            type: 'error'
+                                        });
+                                        this.submitBtn = true;
+                                    }
+                                });
+                            }
                         }
                     }
                 });
