@@ -69,7 +69,7 @@
                 <el-table-column prop="id" label="操作" min-width="150">
                     <template slot-scope="scope">
                         <router-link :to="{ path:'/caseList',query: {id:scope.row.id}}">
-                            <a class="operation-table">病例</a>
+                            <a class="operation-table">病历</a>
                         </router-link>
                         <router-link :to="{ path:'/medicalHistoryDetail',query: {id:scope.row.id}}">
                             <a class="operation-table">病史</a>

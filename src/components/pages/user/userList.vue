@@ -64,7 +64,7 @@
                             </p>
                             <p>
                                 <router-link :to="{ path:'/caseList',query: {id:scope.row.id}}">
-                                    <a>病例</a>
+                                    <a>病历</a>
                                 </router-link>
                                 <router-link :to="{ path:'/medicalHistoryDetail',query: {id:scope.row.id}}">
                                     <a>病史</a>

@@ -20,17 +20,17 @@
                     <el-input class="w420" v-model="ruleForm.username2" placeholder="请输入姓名"></el-input>
                 </el-form-item>
                 <el-form-item label="角色" prop="roleId">
-                    <el-select class="w420" v-model="ruleForm.roleId" placeholder="请选择角色" @change="change()">
+                    <el-select class="w420" disabled v-model="ruleForm.roleId" placeholder="请选择角色" @change="change()">
                         <el-option v-for="(item,index) in options" :label="item.label" :value="item.value" :key="index"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="联系方式" prop="tel">
                     <el-input class="w420" v-model="ruleForm.tel" placeholder="请输入联系方式"></el-input>
                 </el-form-item>
-                <el-form-item label="状态" prop="deleted">
-                    <el-select class="w420" v-model="ruleForm.deleted" placeholder="请选择状态" @change="change()">
-                        <el-option label="有效" :value="0"></el-option>
-                        <el-option label="无效" :value="1"></el-option>
+                <el-form-item label="状态" prop="status">
+                    <el-select class="w420" v-model="ruleForm.status" placeholder="请选择状态" @change="change()">
+                        <el-option label="有效" value="00"></el-option>
+                        <el-option label="无效" value="01"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item class="operation-btn" label-width="0">
@@ -54,9 +54,9 @@
                     password: '', // 初始密码
                     username2: '', // 姓名
                     tel: '', // 手机号
-                    roleId: '', // 角色
+                    roleId: 1, // 角色
                     companyId: '', // 企业id
-                    deleted: 0, // 状态
+                    status: '00', // 状态
                 },
                 // 必填校验
                 rules: {
@@ -79,7 +79,7 @@
                     companyId: [
                         { required: true, message: '请选择企业', trigger: 'change' }
                     ],
-                    deleted: [
+                    status: [
                         { required: true, message: '请选择状态', trigger: 'change' }
                     ]
                 },

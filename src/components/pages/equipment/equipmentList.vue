@@ -22,7 +22,7 @@
                             <el-checkbox-group class="module-checkbox" v-model="checkId">
                                 <el-checkbox :label="t.id"></el-checkbox>
                             </el-checkbox-group>
-                            <div class="equipment-name">设备名称{{t.deviceName}}</div>
+                            <div class="equipment-name">设备名称:{{t.deviceName}}</div>
                             <div class="equipment-status">
                                 <span class="point-1" v-if="t.deviceStatus == '0'"><span></span>正常</span>
                                 <span class="point-0" v-if="t.deviceStatus == '1'"><span></span>断开</span>
