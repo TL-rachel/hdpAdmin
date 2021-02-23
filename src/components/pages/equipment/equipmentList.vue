@@ -10,7 +10,7 @@
                <el-button v-if="jurisdictionList.dtDisabled" @click="regionDelete(checkId,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
            </div>
         </div>
-        <div class="tag-top" style="margin-top: 20px;">
+        <div class="tag-top">
             <el-tag v-for="(item,index) in tags" :key="index" :class="item.class" @click="cutTag(item.name)">{{item.name}}</el-tag>
         </div>
         <template v-for="(item,index) in equipmentList">
@@ -81,9 +81,6 @@
             };
         },
         created() {
-            if (this.$route.query.name) {
-                this.equipmentName = this.$route.query.name;
-            }
             this.getRegionList();
             // 权限
             if (sessionStorage.getItem('assignedPermissions')) {
@@ -99,6 +96,16 @@
                         this.jurisdictionList.rdDisabled = true;
                     } else if (assignedPermissions[i] === 'admin:hdDevice:update') {
                         this.jurisdictionList.upDisabled = true;
+                    }
+                }
+            }
+        },
+        watch: {
+            equipmentList1: {
+                immediate: true,
+                handler() {
+                    if (this.$route.query.name) {
+                        this.cutTag(this.$route.query.name);
                     }
                 }
             }

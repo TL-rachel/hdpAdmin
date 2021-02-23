@@ -323,6 +323,7 @@
         text-align: center;
         border: 0;
         margin-right: 14px;
+        margin-top: 14px;
         cursor: pointer;
     }
     .tag-top .el-tag.active {

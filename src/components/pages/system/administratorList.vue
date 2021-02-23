@@ -23,6 +23,12 @@
                 <el-table-column prop="username2" label="姓名" min-width="60"></el-table-column>
                 <el-table-column prop="roleName" label="管理员角色" min-width="60"></el-table-column>
                 <el-table-column prop="tel" label="手机号" min-width="120"></el-table-column>
+                <el-table-column prop="status" label="状态" min-width="60">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.status == '00'">有效</span>
+                        <span v-if="scope.row.status == '01'">无效</span>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="id" label="操作" width="120">
                     <template slot-scope="scope">
                         <router-link v-if="jurisdictionList.upDisabled" :to="{ path:'/addAdministratorUpdate',query: {id:scope.row.id}}">

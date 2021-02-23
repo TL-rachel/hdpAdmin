@@ -20,6 +20,12 @@
                         <el-option v-for="(item,index) in options" :label="item.label" :value="item.value" :key="index"></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="状态" prop="status">
+                    <el-select class="w420" v-model="ruleForm.status" placeholder="请选择状态" @change="change()">
+                        <el-option label="有效" value="00"></el-option>
+                        <el-option label="无效" value="01"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item class="operation-btn" label-width="0">
                     <el-button v-if="jurisdictionList.adDisabled" type="primary" @click="submitForm()">保 存</el-button>
                     <el-button @click="handleHistory">返 回</el-button>
@@ -41,6 +47,7 @@
                     username2: '', // 姓名
                     tel: '', // 手机号
                     roleId: '', // 角色
+                    status: '', // 状态
                 },
                 // 必填校验
                 rules: {
@@ -59,6 +66,9 @@
                     ],
                     roleId: [
                         { required: true, message: '请选择角色', trigger: 'change' }
+                    ],
+                    status: [
+                        { required: true, message: '请选择状态', trigger: 'change' }
                     ]
                 },
                 // 角色列表
