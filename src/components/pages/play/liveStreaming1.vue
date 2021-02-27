@@ -40,9 +40,9 @@
                                 <div class="user-name">{{item.userName}}</div>
                                 <div class="user-rests">FaceId：{{item.faceId}}</div>
                             </li>
-                            <li>
+                            <li style="width: 200px;">
                                 <div class="user-rests1">心率{{item.rate}}</div>
-                                <div class="user-rests">检测时间：{{item.checkTime}}</div>
+                                <div class="user-rests" style="width: 250px;">检测时间：{{item.checkTime}}</div>
                             </li>
                             <li>
                                 <div class="user-rests1">疲劳度{{item.fatigue == 0?'正常':'疲劳'}}</div>
@@ -312,7 +312,7 @@
             }
         }
         .device-user {
-            width: 600px;
+            width: 545px;
             height: 100px;
             margin: 20px 20px 20px 0;
             background-color: rgba(255, 255, 255, 1);

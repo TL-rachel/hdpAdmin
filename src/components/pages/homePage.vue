@@ -1,7 +1,7 @@
 <template>
     <div class="home">
         <div v-if="myChart.length > 0" class="chart clearfix">
-            <div v-for="(item,index) in myChart" :key="index" :id="item.id" :ref="item.ref" :style="{width: '555px', height: '352px',float: 'left','margin-right': '20px','margin-bottom': '40px'}"></div>
+            <div v-for="(item,index) in myChart" :key="index" :id="item.id" :ref="item.ref" :style="{width: '520px', height: '352px',float: 'left','margin-right': '20px','margin-bottom': '40px'}"></div>
         </div>
     </div>
 </template>
@@ -89,142 +89,142 @@
              */
             chartMedical() {
                 let xData = Object.keys(this.medical);
-                let yData = [];
-                for (let i in this.medical) {
-                    yData.push({
-                        value: this.medical[i] * 100,
-                        name: i
-                    });
+                if (xData.length > 0) {
+                    let yData = [];
+                    for (let i in this.medical) {
+                        yData.push({
+                            value: this.medical[i] * 100,
+                            name: i
+                        });
+                    }
+                    this.chartPie = echarts.init(document.getElementById('chartMedical'));
+                    this.chartPie.setOption(this.pieChart('疾病状态分布',xData,'疾病状态',yData,['#7CE7AC', '#F4BE5E','#5E81F4','#8E90FF','#8ED5FF','#ffe08e','#A8DD1F','#FF8ED0','#FF808B']));
                 }
-                this.chartPie = echarts.init(document.getElementById('chartMedical'));
-                this.chartPie.setOption(this.pieChart('疾病状态分布',xData,'疾病状态',yData,['#7CE7AC', '#F4BE5E','#5E81F4','#8E90FF','#8ED5FF','#ffe08e','#A8DD1F','#FF8ED0','#FF808B']));
             },
             /**
              * 设备状态分布
              */
             chartPieIllness() {
-                let xData = [];
-                for (let i = 0; i < this.deviceType.length; i++) {
-                    xData.push({value: this.deviceType[i].cont,name: (this.deviceType[i].deviceStatus * 1 === 0 ? '正常' : '断开')});
-                }
-                this.chartPie = echarts.init(document.getElementById('chartPieIllness'));
-                this.chartPie.setOption(this.pieChart('设备状态分布',['正常','断开'],'设备状态',xData,['#8AF1B9', '#F4BE5E']));
-                let _this = this;
-                this.chartPie.on('click', function (res) {
-                    let deviceStatus = res.data.name === '正常' ? '0' : '1';
-                    _this.$router.push({
-                        path: '/equipmentList',
-                        query: {
-                            deviceStatus: deviceStatus
-                        }
+                if (this.deviceType && this.deviceType.length > 0) {
+                    let xData = [];
+                    for (let i = 0; i < this.deviceType.length; i++) {
+                        xData.push({value: this.deviceType[i].cont,name: (this.deviceType[i].deviceStatus * 1 === 0 ? '正常' : '断开')});
+                    }
+                    this.chartPie = echarts.init(document.getElementById('chartPieIllness'));
+                    this.chartPie.setOption(this.pieChart('设备状态分布',['正常','断开'],'设备状态',xData,['#8AF1B9', '#F4BE5E']));
+                    let _this = this;
+                    this.chartPie.on('click', function (res) {
+                        let deviceStatus = res.data.name === '正常' ? '0' : '1';
+                        _this.$router.push({
+                            path: '/equipmentList',
+                            query: {
+                                deviceStatus: deviceStatus
+                            }
+                        });
                     });
-                });
+                }
             },
             /**
              * 性别分布
              */
             chartPieSex() {
-                let sexList = [];
-                for (let i = 0; i < this.sex.length; i++) {
-                    sexList.push({value: this.sex[i].cont,name: !this.sex[i].user_sex ? '男' : '女'});
+                if (this.sex && this.sex.length > 0) {
+                    let sexList = [];
+                    for (let i = 0; i < this.sex.length; i++) {
+                        sexList.push({value: this.sex[i].cont,name: !this.sex[i].user_sex ? '男' : '女'});
+                    }
+                    this.chartPie = echarts.init(document.getElementById('chartPieSex'));
+                    this.chartPie.setOption(this.pieChart('性别分布',['男','女'],'性别',sexList,['#4D75F6', '#FF808B']));
+                    let _this = this;
+                    this.chartPie.on('click', function (res) {
+                        let userSex = res.data.name === '男' ? '0' : '1';
+                        _this.$router.push({
+                            path: '/userList',
+                            query: {
+                                userSex: userSex
+                            }
+                        });
+                    });
                 }
-                this.chartPie = echarts.init(document.getElementById('chartPieSex'));
-                this.chartPie.setOption(this.pieChart('性别分布',['男','女'],'性别',sexList,['#4D75F6', '#FF808B']));
-                let _this = this;
-                this.chartPie.on('click', function (res) {
-                    let userSex = res.data.name === '男' ? '0' : '1';
-                     _this.$router.push({
-                         path: '/userList',
-                         query: {
-                             userSex: userSex
-                         }
-                     });
-                });
             },
             /**
              * 企业设备分布
              */
             myChartEquipment() {
-                let xName = [];
-                let xData = [];
-                for (let i = 0; i < this.companyDevice.length; i++) {
-                    xName.push(this.companyDevice[i].company_name);
-                    xData.push(this.companyDevice[i].cont);
-                }
-                let myChart = echarts.init(document.getElementById('myChartEquipment'));
-                // 绘制图表
-                myChart.setOption(this.histogramOption('企业设备分布',xName,'设备数','企业',xData));
-                let _this = this;
-                myChart.on('click', function (res) {
-                    let companyId = '';
-                    for (let i = 0; i < _this.companyDevice.length; i++) {
-                        if (_this.companyDevice[i].company_name === res.name) {
-                            companyId = _this.companyDevice[i].company_id;
-                        }
+                if (this.companyDevice && this.companyDevice.length > 0) {
+                    let xName = [];
+                    let xData = [];
+                    for (let i = 0; i < this.companyDevice.length; i++) {
+                        xName.push(this.companyDevice[i].company_name);
+                        xData.push(this.companyDevice[i].cont);
                     }
-                    _this.$router.push({
-                        path: '/equipmentList',
-                        query: {
-                            companyId: companyId
+                    let myChart = echarts.init(document.getElementById('myChartEquipment'));
+                    // 绘制图表
+                    myChart.setOption(this.histogramOption('企业设备分布',xName,'设备数','企业',xData));
+                    let _this = this;
+                    myChart.on('click', function (res) {
+                        let companyId = '';
+                        for (let i = 0; i < _this.companyDevice.length; i++) {
+                            if (_this.companyDevice[i].company_name === res.name) {
+                                companyId = _this.companyDevice[i].company_id;
+                            }
                         }
+                        _this.$router.push({
+                            path: '/equipmentList',
+                            query: {
+                                companyId: companyId
+                            }
+                        });
                     });
-                });
+                }
             },
             /**
              * 企业人员分布
              */
             myChartEnterprise() {
-                let xName = [];
-                let xData = [];
-                for (let i = 0; i < this.companyUser.length; i++) {
-                    xName.push(this.companyUser[i].company_name);
-                    xData.push(this.companyUser[i].cont);
-                }
-                let myChart = echarts.init(document.getElementById('myChartEnterprise'));
-                // 绘制图表
-                myChart.setOption(this.histogramOption('企业人员分布',xName,'人数','企业',xData));
-                let _this = this;
-                myChart.on('click', function (res) {
-                    let companyId = '';
-                    for (let i = 0; i < _this.companyUser.length; i++) {
-                        if (_this.companyUser[i].company_name === res.name) {
-                            companyId = _this.companyUser[i].company_id;
-                        }
+                if (this.companyUser && this.companyUser.length > 0) {
+                    let xName = [];
+                    let xData = [];
+                    for (let i = 0; i < this.companyUser.length; i++) {
+                        xName.push(this.companyUser[i].company_name);
+                        xData.push(this.companyUser[i].cont);
                     }
-                    _this.$router.push({
-                        path: '/userList',
-                        query: {
-                            companyId: companyId
+                    let myChart = echarts.init(document.getElementById('myChartEnterprise'));
+                    // 绘制图表
+                    myChart.setOption(this.histogramOption('企业人员分布',xName,'人数','企业',xData));
+                    let _this = this;
+                    myChart.on('click', function (res) {
+                        let companyId = '';
+                        for (let i = 0; i < _this.companyUser.length; i++) {
+                            if (_this.companyUser[i].company_name === res.name) {
+                                companyId = _this.companyUser[i].company_id;
+                            }
                         }
+                        _this.$router.push({
+                            path: '/userList',
+                            query: {
+                                companyId: companyId
+                            }
+                        });
                     });
-                });
+                }
             },
             /**
              * 年龄分布
              */
             myChartAge() {
-                let xName = [];
-                let xData = [];
-                for (let i = 0; i < this.age.length; i++) {
-                    if (this.age[i].age_range) {
-                        xName.push(this.age[i].age_range + '岁');
-                        xData.push(this.age[i].cont);
+                if (this.age && this.age.length > 0) {
+                    let xName = [];
+                    let xData = [];
+                    for (let i = 0; i < this.age.length; i++) {
+                        if (this.age[i].age_range) {
+                            xName.push(this.age[i].age_range + '岁');
+                            xData.push(this.age[i].cont);
+                        }
                     }
-                }
-                let myChart = echarts.init(document.getElementById('myChartAge'));
-                // 绘制图表
-                myChart.setOption(this.histogramOption('年龄分布',xName,'人数','年龄',xData));
-            },
-            /**
-             * 切换标签
-             * @param {String} id 标签id
-             */
-            cutTag(id) {
-                for (let i = 0; i < this.tags.length; i++) {
-                    this.tags[i].class = '';
-                    if (id === this.tags[i].id) {
-                        this.tags[i].class = 'active';
-                    }
+                    let myChart = echarts.init(document.getElementById('myChartAge'));
+                    // 绘制图表
+                    myChart.setOption(this.histogramOption('年龄分布',xName,'人数','年龄',xData));
                 }
             },
             /**

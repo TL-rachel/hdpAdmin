@@ -115,4 +115,8 @@ export default {
     .el-menu--horizontal .el-menu .el-menu-item, .el-menu--horizontal .el-menu .el-submenu__title {
         color: rgba(83, 89, 114, 100);
     }
+    .el-menu--horizontal {
+        left: unset!important;
+        right: 30px!important;
+    }
 </style>

@@ -359,7 +359,7 @@
         }
 
         .device-user {
-            width: 580px;
+            width: 545px;
             height: 100px;
             margin: 20px 10px 20px 0;
             background-color: rgba(255, 255, 255, 1);

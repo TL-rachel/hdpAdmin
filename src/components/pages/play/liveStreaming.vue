@@ -45,9 +45,9 @@
                                 <div class="user-name">{{item.userName?item.userName: '未知用户'}}</div>
                                 <div class="user-rests">FaceId：{{item.faceId}}</div>
                             </li>
-                            <li>
+                            <li style="width: 160px;">
                                 <div class="user-rests1">心率 <span class="user-name">{{item.rate}}</span></div>
-                                <div class="user-rests">检测时间：{{item.checkTime}}</div>
+                                <div class="user-rests" style="width: 250px;">检测时间：{{item.checkTime}}</div>
                             </li>
                             <li>
                                 <div class="user-rests1">疲劳度 <span class="user-name">{{item.fatigue == 0?'正常':'疲劳'}}</span></div>
@@ -91,6 +91,7 @@
                 videosList: {}, // 设备用户信息
                 videoUrl: '', // 视频播放地址
                 setIntervalExample: null, // 定时器
+                setTimeout: null, // 定时器
                 /* eslint-disable */
                 userImgUrl: require("../../../common/image/user.png"),
                 /* eslint-disable */
@@ -273,7 +274,12 @@
                         this.getLiveStreaming();
                     }
                 } else { //直接进去录频页面
-                    // this.getAllDevice(1);
+                    let _this = this;
+                    this.setTimeout = window.setTimeout(function (){
+                        if (_this.recordForm.deviceId) {
+                            _this.getLiveStreaming();
+                        }
+                    },1000);
                 }
             },
         },
@@ -281,6 +287,9 @@
         destroyed() {
             if (this.setIntervalExample) {
                 clearInterval(this.setIntervalExample);
+            }
+            if (this.setTimeout) {
+                window.clearTimeout(this.setTimeout);
             }
         }
     };

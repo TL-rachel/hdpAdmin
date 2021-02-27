@@ -20,6 +20,8 @@
                     v-loading="loading"
                     @selection-change="handleSelectionChange">
                 <el-table-column fixed type="selection" width="55"></el-table-column>
+                <el-table-column prop="regionName" label="区域名称"></el-table-column>
+                <el-table-column prop="regionPosition" label="区域位置"></el-table-column>
                 <el-table-column label="设备总数" prop="totalDeviceNum">
                     <template slot-scope="scope">
                         <router-link v-if="jurisdictionList.rdDisabled" :to="scope.row.totalDeviceNum > 0?{ path:'/equipmentList',query: {deviceRegionId: scope.row.id}}:''">

@@ -222,6 +222,7 @@
                     if (res.data.errno === 0) {
                         this.form = res.data.data;
                         this.getRegion(res.data.data.companyId,1);
+                        this.getCheckDevicePath();
                     } else {
                         this.$message({
                             showClose: true,

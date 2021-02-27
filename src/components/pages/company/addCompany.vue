@@ -120,7 +120,31 @@
                 </div>
             </div>
             <span style="vertical-align: top;margin-left: 30px;margin-right: 10px">批注</span>
-                <el-input type="textarea" class="w320 examineContent" v-model="form.examineContent" placeholder="请输入批注意见"></el-input>
+            <el-input type="textarea" class="w320 examineContent" v-model="form.examineContent" placeholder="请输入批注意见"></el-input>
+
+            <div v-if="titleName == '审核通过！'? true : false" style="margin-top: 10px">
+                <span style="vertical-align: top;margin-left: 16px;margin-right: 10px">是否自动创建企业管理员账号</span>
+                <el-switch
+                        v-model="form.addPassword"
+                        active-color="#13ce66">
+                </el-switch>
+            </div>
+
+            <div v-if="form.addPassword && titleName == '审核通过！'? true : false" style="margin-top: 10px">
+                <span style="vertical-align: top;margin-left: 16px;margin-right: 10px">用户名</span>
+                <el-input v-model="form.username" class="w320" placeholder="请输入用户名"></el-input>
+            </div>
+
+            <div v-if="form.addPassword && titleName == '审核通过！'? true : false" style="margin-top: 10px">
+                <span style="vertical-align: top;margin-left: 30px;margin-right: 10px">密码</span>
+                <el-input v-model="form.password" class="w320" placeholder="请输入密码"></el-input>
+            </div>
+
+            <div v-if="form.addPassword && titleName == '审核通过！'? true : false" style="margin-top: 10px">
+                <span style="vertical-align: top;margin-left: 2px;margin-right: 10px">确认密码</span>
+                <el-input v-model="form.confirmPassword" class="w320" placeholder="确认密码"></el-input>
+            </div>
+
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="submitForm(2)">提 交</el-button>
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -130,7 +154,7 @@
 </template>
 
 <script>
-    import {companyCreate,companyRead,companyUpdate,companyAuditUpdate,companyAuditRead} from '../../../api/api';
+    import {companyCreate,companyRead,companyUpdate,companyAuditUpdate ,companyAuditRead} from '../../../api/api';
     export default {
         name: 'addCompany',
         data() {
@@ -156,7 +180,11 @@
                     starChangeUserName: '', // 企业审核人
                     intoTime: '', // 企业入驻时间
                     updatedTime: '', // 更新时间
-                    examineContent: '' // 审核批注
+                    examineContent: '', // 审核批注
+                    addPassword: false, // 是否创建账号
+                    username: '', // 账号
+                    password: '', // 密码
+                    confirmPassword: '', // 确认密码
                 },
                 // 必填校验
                 rules: {
@@ -379,6 +407,32 @@
                     });
                 } else if (type === 2) {
                     let para = JSON.parse(JSON.stringify(this.form));
+                    if (para.addPassword) {
+                        if (!para.username) {
+                            this.$message({
+                                showClose: true,
+                                message: '请填写账号',
+                                type: 'error'
+                            });
+                            return;
+                        }
+                        if (!para.password) {
+                            this.$message({
+                                showClose: true,
+                                message: '请填写密码',
+                                type: 'error'
+                            });
+                            return;
+                        }
+                        if (!para.confirmPassword) {
+                            this.$message({
+                                showClose: true,
+                                message: '请再次填写密码',
+                                type: 'error'
+                            });
+                            return;
+                        }
+                    }
                     if (this.titleName === '审核通过！') {
                         para.companyStatus = '1';
                     } else if (this.titleName === '驳回！') {
