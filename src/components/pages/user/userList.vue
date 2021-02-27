@@ -236,7 +236,9 @@
                     order: 'desc',
                     sort: 'created_time',
                     page: currentPage,
-                    userName: this.userName
+                    userName: this.userName,
+                    userSex: this.$route.query.userSex ? this.$route.query.userSex : '',
+                    companyId: this.$route.query.companyId ? this.$route.query.companyId : '',
                 };
                 this.loading = true;
                 hdUserList(para).then(res => {
@@ -250,6 +252,7 @@
                             message: res.data.errmsg,
                             type: 'error'
                         });
+                        this.loading = true;
                     }
                 });
             },

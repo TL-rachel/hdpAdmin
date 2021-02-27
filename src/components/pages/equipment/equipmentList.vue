@@ -1,75 +1,93 @@
 <template>
     <div class="equipmentList">
         <div class="query">
-            <div><i class="icon-picture icon-picture-grabble icon-position"></i><el-input class="query-input icon-position" type="text" placeholder="搜索设备" @blur="getRegionList()" v-model="equipmentName"></el-input></div>
+            <div><i class="icon-picture icon-picture-grabble icon-position"></i><el-input class="query-input icon-position" type="text" placeholder="搜索设备" @blur="getRegionList(1,10)" v-model="equipmentName"></el-input></div>
            <div class="query-btn">
                <router-link v-if="jurisdictionList.adDisabled" :to="{ path:'/addEquipment'}">
                    <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
                </router-link>
                <el-button v-if="jurisdictionList.bcdDisabled" @click="getCheckDevicePath()"><i class="icon-picture icon-picture-detection"></i>批量检测</el-button>
-               <el-button v-if="jurisdictionList.dtDisabled" @click="regionDelete(checkId,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+               <el-button v-if="jurisdictionList.dtDisabled" @click="regionDelete(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
            </div>
         </div>
-        <div class="tag-top">
-            <el-tag v-for="(item,index) in tags" :key="index" :class="item.class" @click="cutTag(item.name)">{{item.name}}</el-tag>
-        </div>
-        <template v-for="(item,index) in equipmentList">
-            <div class="equipmentType clearfix" v-if="item.devices.length" :key="index">
-                <h4>{{item.regionName}}</h4>
-                <template v-for="(t,i) in item.devices">
-                    <div class="equipmentDetail" :key="i">
-                        <div class="equipmentTitle">
-                            <el-checkbox-group class="module-checkbox" v-model="checkId">
-                                <el-checkbox :label="t.id"></el-checkbox>
-                            </el-checkbox-group>
-                            <div class="equipment-name">设备名称:{{t.deviceName}}</div>
-                            <div class="equipment-status">
-                                <span class="point-1" v-if="t.deviceStatus == '0'"><span></span>正常</span>
-                                <span class="point-0" v-if="t.deviceStatus == '1'"><span></span>断开</span>
+        <div class="table-list">
+            <el-table
+                    ref="multipleTable"
+                    :data="equipmentList"
+                    tooltip-effect="dark"
+                    style="width: 100%"
+                    v-loading="loading"
+                    @selection-change="handleSelectionChange">
+                <el-table-column fixed type="selection" width="55"></el-table-column>
+                <el-table-column label="设备名称" prop="deviceName"></el-table-column>
+                <el-table-column prop="deviceCode" label="编码"></el-table-column>
+                <el-table-column prop="companyName" label="归属企业"></el-table-column>
+                <el-table-column prop="deviceLead" label="负责人"></el-table-column>
+                <el-table-column prop="regionName" label="设备区域"></el-table-column>
+                <el-table-column prop="createdTime" label="添加时间" min-width="160"></el-table-column>
+                <el-table-column prop="updatedTime" label="更新时间" min-width="160"></el-table-column>
+                <el-table-column prop="deviceStatus" label="设备状态">
+                    <template slot-scope="scope">
+                        {{scope.row.deviceStatus == '0' ? '正常' : '断开'}}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="id" label="操作" fixed="right" width="90">
+                    <template slot-scope="scope">
+                        <router-link v-if="jurisdictionList.rdDisabled" :to="{ path:'/addEquipment',query: {id:scope.row.id,type:1}}">
+                            <a>查看详情</a>
+                        </router-link>
+                        <el-popover trigger="hover" placement="bottom">
+                            <p>
+                                <router-link v-if="jurisdictionList.upDisabled" :to="{ path:'/addEquipment',query: {id:scope.row.id}}">
+                                    <a>编辑</a>
+                                </router-link>
+                                <a v-if="jurisdictionList.dtDisabled" @click="regionDelete(scope.row.id,1)">删除</a>
+                            </p>
+                            <p>
+                                <router-link :to="{ path:'/liveStreaming',query: {obj:JSON.stringify(scope.row)}}">
+                                    <a>直播</a>
+                                </router-link>
+                                <router-link :to="{ path:'/recordedBroadcast',query: {obj:JSON.stringify(scope.row)}}">
+                                    <a>录播</a>
+                                </router-link>
+                            </p>
+                            <div slot="reference" class="name-wrapper text-overflow-1">
+                                <a>更多操作</a>
                             </div>
-                        </div>
-                        <span class="encoding">编码{{t.deviceCode}}</span>
-                        <span class="wire"></span>
-                        <div class="rests">归属企业：{{t.companyName}}</div>
-                        <div class="rests">负责人：{{t.deviceLead}}</div>
-                        <div class="rests">设备区域：{{t.regionName}}</div>
-                        <div class="rests">添加时间：{{t.createdTime}}</div>
-                        <div class="rests">更新时间：{{t.updatedTime}}</div>
-                        <span class="wire"></span>
-                        <div class="button-btn">
-                            <router-link v-if="jurisdictionList.rdDisabled" :to="{ path:'/addEquipmentDetail',query: {id:t.id,type:1}}">
-                                <el-button>查看</el-button>
-                            </router-link>
-                            <router-link v-if="jurisdictionList.upDisabled" :to="{ path:'/addEquipmentUpdate',query: {id:t.id}}">
-                                <el-button>编辑</el-button>
-                            </router-link>
-                            <router-link :to="{ path:'/liveStreaming',query: {obj:JSON.stringify(t)}}">
-                                <el-button>直播</el-button>
-                            </router-link>
-                            <router-link :to="{ path:'/recordedBroadcast',query: {obj:JSON.stringify(t)}}">
-                                <el-button>录播</el-button>
-                            </router-link>
-                            <el-button v-if="jurisdictionList.dtDisabled" @click="regionDelete(t.id,1)">删除</el-button>
-                        </div>
-                    </div>
-                </template>
+                        </el-popover>
 
-            </div>
-        </template>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <!--工具条-->
+            <!--引入页码 start-->
+            <el-col :span="24" class="toolbar" style="text-align: center;">
+                <div style="display:inline-block;text-align: center;">
+                    <el-button size="mini" type="primary" class="toolbar-go-btn">Go
+                    </el-button>
+                    <el-pagination background layout="total,  prev, pager, next, jumper" @current-change="handleCurrentChange"
+                                   :page-size="10" :total="total" style="float:right;">
+                    </el-pagination>
+                </div>
+            </el-col>
+        </div>
     </div>
 </template>
 
 <script>
-    import {deviceList, deviceBatchDelete, deviceDelete,batchCheckDevicePath} from '../../../api/api';
+    import {deviceList, deviceDelete, deviceBatchDelete, batchCheckDevicePath} from '../../../api/api';
     export default {
         name: 'equipmentList',
         data() {
             return {
                 equipmentName: '', // 查询的设备名称
                 tags: [],
-                equipmentList: [], // 切换后的设备列表
-                equipmentList1: [], // 初始化所有设备列表
+                equipmentList: [], // 初始化所有设备列表
+                total: 0, // 条数
+                page: 1, // 页码
+                loading: false,
                 checkId: [], // 用于批量删除的设备id
+                multipleSelection: [],
                 initAllIds: '', // 用于批量检测的设备id
                 jurisdictionList: {
                     adDisabled: false,
@@ -81,7 +99,7 @@
             };
         },
         created() {
-            this.getRegionList();
+            this.getRegionList(1,10);
             // 权限
             if (sessionStorage.getItem('assignedPermissions')) {
                 let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
@@ -100,22 +118,12 @@
                 }
             }
         },
-        watch: {
-            equipmentList1: {
-                immediate: true,
-                handler() {
-                    if (this.$route.query.name) {
-                        this.cutTag(this.$route.query.name);
-                    }
-                }
-            }
-        },
         methods: {
             // 批量检测功能
             getCheckDevicePath() {
                 batchCheckDevicePath().then(res => {
                     if (res.data.errno === 0) {
-                        this.getRegionList();
+                        this.getRegionList(this.page,10);
                         this.$message({
                             showClose: true,
                             message: '检测成功',
@@ -131,26 +139,19 @@
                 });
             },
             /**
-             * 切换标签
-             * @param {String} name 标签id
+             * 获取选中事件 获取选中id
+             * @param {Object} val 值
              */
-            cutTag(name) {
-                let para = JSON.parse(JSON.stringify(this.equipmentList1));
-                this.equipmentList = [];
-                for (let i = 0; i < para.length; i++) {
-                    if (name === para[i].regionName) {
-                        this.equipmentList.push(para[i]);
-                    }
-                    if (name === '所有设备') {
-                        this.equipmentList = para;
-                    }
+            handleSelectionChange(val) {
+                this.multipleSelection = [];
+                for (let i = 0; i < val.length; i++) {
+                    this.multipleSelection.push(val[i].id);
                 }
-                for (let i = 0; i < this.tags.length; i++) {
-                    this.tags[i].class = '';
-                    if (name === this.tags[i].name) {
-                        this.tags[i].class = 'active';
-                    }
-                }
+            },
+            // 修改页数
+            handleCurrentChange(val) {
+                this.page = val;
+                this.getRegionList((typeof val === 'number' ? val : 1), 10);
             },
             /**
              * 删除操作
@@ -158,7 +159,7 @@
              * @param {Number} type 删除标记 1 单个  2  批量
              */
             regionDelete(id,type) {
-                if (id) {
+                if (id && id.toString().length > 0) {
                     this.$confirm('此操作将永久删除设备, 是否继续?', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
@@ -223,31 +224,31 @@
             },
             /**
              * 初始化查询设备列表
+             * @param {number} currentPage 当前页
+             * @param {number} pageSize 一页多少条
              */
-            getRegionList() {
-                deviceList({deviceName: this.equipmentName}).then(res => {
+            getRegionList(currentPage, pageSize) {
+                let para = {
+                    limit: pageSize,
+                    page: currentPage,
+                    deviceName: this.equipmentName,
+                    deviceStatus: this.$route.query.deviceStatus ? this.$route.query.deviceStatus : '',
+                    companyId: this.$route.query.companyId ? this.$route.query.companyId : '',
+                    deviceRegionId: this.$route.query.deviceRegionId ? this.$route.query.deviceRegionId : ''
+                };
+                this.loading = true;
+                deviceList(para).then(res => {
+                    this.loading = false;
                     if (res.data.errno === 0) {
-                        this.equipmentList = JSON.parse(JSON.stringify(res.data.data));
-                        // 初始化所有的
-                        this.equipmentList1 = JSON.parse(JSON.stringify(res.data.data));
-                        this.tags = [
-                            {
-                                name: '所有设备',
-                                class: ''
-                            }
-                        ];
-                        for (let i = 0; i < this.equipmentList.length; i++) {
-                            this.tags.push({
-                                name: this.equipmentList[i].regionName,
-                                class: ''
-                            });
-                        }
+                        this.equipmentList = res.data.data.items;
+                        this.total = res.data.data.total;
                     } else {
                         this.$message({
                             showClose: true,
                             message: res.data.errmsg,
                             type: 'error'
                         });
+                        this.loading = true;
                     }
                 });
             }

@@ -105,10 +105,20 @@
             chartPieIllness() {
                 let xData = [];
                 for (let i = 0; i < this.deviceType.length; i++) {
-                    xData.push({value: this.deviceType[i].cont,name: (this.deviceType[i].del_flag * 1 === 0 ? '无效' : '有效')});
+                    xData.push({value: this.deviceType[i].cont,name: (this.deviceType[i].deviceStatus * 1 === 0 ? '正常' : '断开')});
                 }
                 this.chartPie = echarts.init(document.getElementById('chartPieIllness'));
-                this.chartPie.setOption(this.pieChart('设备状态分布',['有效','无效'],'设备状态',xData,['#8AF1B9', '#F4BE5E']));
+                this.chartPie.setOption(this.pieChart('设备状态分布',['正常','断开'],'设备状态',xData,['#8AF1B9', '#F4BE5E']));
+                let _this = this;
+                this.chartPie.on('click', function (res) {
+                    let deviceStatus = res.data.name === '正常' ? '0' : '1';
+                    _this.$router.push({
+                        path: '/equipmentList',
+                        query: {
+                            deviceStatus: deviceStatus
+                        }
+                    });
+                });
             },
             /**
              * 性别分布
@@ -120,6 +130,16 @@
                 }
                 this.chartPie = echarts.init(document.getElementById('chartPieSex'));
                 this.chartPie.setOption(this.pieChart('性别分布',['男','女'],'性别',sexList,['#4D75F6', '#FF808B']));
+                let _this = this;
+                this.chartPie.on('click', function (res) {
+                    let userSex = res.data.name === '男' ? '0' : '1';
+                     _this.$router.push({
+                         path: '/userList',
+                         query: {
+                             userSex: userSex
+                         }
+                     });
+                });
             },
             /**
              * 企业设备分布
@@ -134,6 +154,21 @@
                 let myChart = echarts.init(document.getElementById('myChartEquipment'));
                 // 绘制图表
                 myChart.setOption(this.histogramOption('企业设备分布',xName,'设备数','企业',xData));
+                let _this = this;
+                myChart.on('click', function (res) {
+                    let companyId = '';
+                    for (let i = 0; i < _this.companyDevice.length; i++) {
+                        if (_this.companyDevice[i].company_name === res.name) {
+                            companyId = _this.companyDevice[i].company_id;
+                        }
+                    }
+                    _this.$router.push({
+                        path: '/equipmentList',
+                        query: {
+                            companyId: companyId
+                        }
+                    });
+                });
             },
             /**
              * 企业人员分布
@@ -148,6 +183,21 @@
                 let myChart = echarts.init(document.getElementById('myChartEnterprise'));
                 // 绘制图表
                 myChart.setOption(this.histogramOption('企业人员分布',xName,'人数','企业',xData));
+                let _this = this;
+                myChart.on('click', function (res) {
+                    let companyId = '';
+                    for (let i = 0; i < _this.companyUser.length; i++) {
+                        if (_this.companyUser[i].company_name === res.name) {
+                            companyId = _this.companyUser[i].company_id;
+                        }
+                    }
+                    _this.$router.push({
+                        path: '/userList',
+                        query: {
+                            companyId: companyId
+                        }
+                    });
+                });
             },
             /**
              * 年龄分布
@@ -164,12 +214,6 @@
                 let myChart = echarts.init(document.getElementById('myChartAge'));
                 // 绘制图表
                 myChart.setOption(this.histogramOption('年龄分布',xName,'人数','年龄',xData));
-                let _this = this;
-                myChart.on('click', function () {
-                    _this.$router.push({
-                        path: '/userList'
-                    });
-                });
             },
             /**
              * 切换标签
