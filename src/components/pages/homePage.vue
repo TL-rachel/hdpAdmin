@@ -164,6 +164,12 @@
                 let myChart = echarts.init(document.getElementById('myChartAge'));
                 // 绘制图表
                 myChart.setOption(this.histogramOption('年龄分布',xName,'人数','年龄',xData));
+                let _this = this;
+                myChart.on('click', function () {
+                    _this.$router.push({
+                        path: '/userList'
+                    });
+                });
             },
             /**
              * 切换标签
@@ -216,7 +222,8 @@
                                 normal: {
                                     show: true,
                                     position: 'inner',
-                                    formatter: '{d}%'
+                                    formatter: '{d}%',
+                                    fontSize: '10'
                                 }
                             },
                             labelLine: {
@@ -303,6 +310,8 @@
                         zoomOnMouseWheel: 'ctrl'
                     }, {
                         start: 0,
+                        height: 16,//这里可以设置dataZoom的尺寸
+                        fillerColor: '#f4f4f4',
                         end: 100
                     }],
                 };
