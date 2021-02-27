@@ -51,7 +51,7 @@
             </el-form>
         </div>
         <div class="video-play">
-            <div id="video-container"></div>
+            <div id="video-container" style="background: #000;"></div>
         </div>
     </div>
 </template>

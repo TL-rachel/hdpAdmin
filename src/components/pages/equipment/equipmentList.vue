@@ -87,6 +87,9 @@
                 page: 1, // 页码
                 loading: false,
                 checkId: [], // 用于批量删除的设备id
+                deviceStatus: this.$route.query.deviceStatus,
+                companyId: this.$route.query.companyId,
+                deviceRegionId: this.$route.query.deviceRegionId,
                 multipleSelection: [],
                 initAllIds: '', // 用于批量检测的设备id
                 jurisdictionList: {
@@ -116,6 +119,11 @@
                         this.jurisdictionList.upDisabled = true;
                     }
                 }
+            }
+        },
+        watch: {
+            $route() {
+                this.getRegionList(1,10);
             }
         },
         methods: {

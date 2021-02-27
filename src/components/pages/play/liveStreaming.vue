@@ -33,7 +33,7 @@
             </el-form>
         </div>
         <div class="video-play">
-            <div id="video-container"></div>
+            <div id="video-container" style="background: #000;"></div>
         </div>
         <div class="clearfix">
             <template v-for="(item,index) in videosList">
@@ -42,15 +42,15 @@
                         <ul class="clearfix">
                             <li><img :src="item.userImage?item.userImage:userImgUrl" alt=""></li>
                             <li>
-                                <div class="user-name">{{item.userName}}</div>
+                                <div class="user-name">{{item.userName?item.userName: '未知用户'}}</div>
                                 <div class="user-rests">FaceId：{{item.faceId}}</div>
                             </li>
                             <li>
-                                <div class="user-rests1">心率 {{item.rate}}</div>
+                                <div class="user-rests1">心率 <span class="user-name">{{item.rate}}</span></div>
                                 <div class="user-rests">检测时间：{{item.checkTime}}</div>
                             </li>
                             <li>
-                                <div class="user-rests1">疲劳度 {{item.fatigue == 0?'正常':'疲劳'}}</div>
+                                <div class="user-rests1">疲劳度 <span class="user-name">{{item.fatigue == 0?'正常':'疲劳'}}</span></div>
                             </li>
                         </ul>
                     </div>

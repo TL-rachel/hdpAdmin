@@ -275,7 +275,12 @@
                     }
                 }
             }
-        }
+        },
+        watch: {
+            $route() {
+                this.getUserList(1,10);
+            }
+        },
     };
 </script>
 
