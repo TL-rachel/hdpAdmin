@@ -1,7 +1,42 @@
 <template>
     <div class="equipmentList">
         <div class="query">
-            <div><i class="icon-picture icon-picture-grabble icon-position"></i><el-input class="query-input user-input icon-position" type="text" placeholder="搜索管理员账号" @blur="getAdminList(1,10)" v-model="userName"></el-input></div>
+            <el-form :inline="true" ref="form" :model="form"
+                     class="demo-form-inline query-btn recorded-broadcast">
+                <el-form-item label="账号" label-width="100px">
+                    <el-input v-model="form.account" class="w200" placeholder="请输入账号"></el-input>
+                </el-form-item>
+
+                <el-form-item label="姓名" label-width="100px">
+                    <el-input v-model="form.username" class="w200" placeholder="请输入姓名"></el-input>
+                </el-form-item>
+
+                <el-form-item label="手机" label-width="100px">
+                    <el-input v-model="form.tel" class="w200" placeholder="请输入手机"></el-input>
+                </el-form-item>
+
+                <el-form-item label="角色" label-width="100px">
+                    <el-select v-model="form.roleId" class="w200" placeholder="请选择角色">
+                        <el-option label="全部" value=""></el-option>
+                        <el-option v-for="(item,index) in options" :key="index" :label="item.label"
+                                   :value="item.value"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="状态" label-width="100px">
+                    <el-select v-model="form.status" class="w200" placeholder="请选择状态">
+                        <el-option label="全部" value=""></el-option>
+                        <el-option label="有效" value="00"></el-option>
+                        <el-option label="无效" value="01"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item>
+                    <el-button style="margin-left: 20px" type="primary" @click="getAdminList(1,10)"><i
+                            class="icon-picture icon-picture-query"></i>查询
+                    </el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+        <div class="query" style="background: transparent;text-align: right">
             <div class="query-btn">
                 <router-link v-if="jurisdictionList.adDisabled" :to="{ path:'/addAdministrator'}">
                     <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
@@ -60,7 +95,13 @@
         name: 'administratorList',
         data() {
             return {
-                userName: '',
+                form: {
+                    account: '', // 账号
+                    username: '', // 姓名
+                    tel: '', // 手机
+                    roleId: '', // 角色id
+                    status: '', // 状态，00:有效，01:无效
+                },
                 tableData: [],
                 options: [],
                 multipleSelection: '',
@@ -126,8 +167,17 @@
                     order: 'desc',
                     sort: 'add_time',
                     page: currentPage,
-                    username: this.userName
+                    account: this.form.account, // 账号
+                    username: this.form.username, // 姓名
+                    tel: this.form.tel, // 手机
+                    roleId: this.form.roleId, // 角色id
+                    status: this.form.status, // 状态，00:有效，01:无效
                 };
+                for (let key in para) {
+                    if (para[key] === '') {
+                        delete para[key];
+                    }
+                }
                 this.loading = true;
                 adminList(para).then(res => {
                     this.loading = false;

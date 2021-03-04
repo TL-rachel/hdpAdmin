@@ -1,7 +1,49 @@
 <template>
     <div class="equipmentList">
         <div class="query">
-            <div><i class="icon-picture icon-picture-grabble icon-position"></i><el-input class="query-input user-input icon-position" type="text" placeholder="搜索管理员账号" @blur="getCompanyList(1,10)" v-model="userName"></el-input></div>
+            <el-form :inline="true" ref="form" :model="form"
+                     class="demo-form-inline query-btn recorded-broadcast">
+                <el-form-item label="企业" label-width="100px">
+                    <el-select v-model="form.companyId" class="w200" placeholder="请选择企业">
+                        <el-option label="全部" value=""></el-option>
+                        <el-option v-for="(item,index) in companyList" :key="index" :label="item.companyName"
+                                   :value="item.id"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="账号" label-width="100px">
+                    <el-input v-model="form.username" class="w200" placeholder="请输入账号"></el-input>
+                </el-form-item>
+                <el-form-item label="姓名" label-width="100px">
+                    <el-input v-model="form.username2" class="w200" placeholder="请输入姓名"></el-input>
+                </el-form-item>
+
+                <el-form-item label="角色" label-width="100px">
+                    <el-select v-model="form.roleIds" class="w200" placeholder="请选择角色">
+                        <el-option label="全部" value=""></el-option>
+                        <el-option v-for="(item,index) in options" :label="item.label" :value="item.value" :key="index"></el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="联系方式" label-width="100px">
+                    <el-input v-model="form.tel" class="w200" placeholder="请输入联系方式"></el-input>
+                </el-form-item>
+
+                <el-form-item label="状态" label-width="100px">
+                    <el-select v-model="form.status" class="w200" placeholder="请选择状态">
+                        <el-option label="全部" value=""></el-option>
+                        <el-option label="有效" value="00"></el-option>
+                        <el-option label="无效" value="01"></el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item>
+                    <el-button style="margin-left: 20px" type="primary" @click="getCompanyList(1,10)"><i
+                            class="icon-picture icon-picture-query"></i>查询
+                    </el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+        <div class="query" style="background: transparent;text-align: right">
             <div class="query-btn">
                 <router-link v-if="jurisdictionList.adDisabled" :to="{ path:'/addCompanyAdministrator'}">
                     <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
@@ -56,14 +98,22 @@
 </template>
 
 <script>
-    import {qyAdminList,qyAdminDelete,qyAdminBatchDelete} from '../../../api/api';
+    import {qyAdminList, qyAdminDelete, qyAdminBatchDelete, roleOptions, companyAllList} from '../../../api/api';
     export default {
         name: 'companyAdministratorList',
         data() {
             return {
-                userName: '',
+                form: {
+                    companyId: '', // 企业名称
+                    username: '', // 账号
+                    username2: '', // 姓名
+                    roleIds: '', // 角色
+                    tel: '', // 联系方式
+                    status: '', // 状态
+                },
                 tableData: [],
                 options: [],
+                companyList: [],
                 multipleSelection: '',
                 total: 0, // 条数
                 page: 1, // 页码
@@ -76,6 +126,24 @@
             };
         },
         created() {
+            // 获取企业
+            companyAllList().then(res => {
+                if (res.data.errno === 0) {
+                    this.companyList = res.data.data;
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: res.data.errmsg,
+                        type: 'error',
+                    });
+                }
+            });
+            // 获取角色列表
+            roleOptions().then(res => {
+                if (res.data.errno === 0) {
+                    this.options = res.data.data;
+                }
+            });
             this.getCompanyList(1,10);
             // 权限
             if (sessionStorage.getItem('assignedPermissions')) {
@@ -120,8 +188,18 @@
                 let para = {
                     limit: pageSize,
                     page: currentPage,
-                    companyName: this.userName
+                    companyId: this.form.companyId, // 企业名称
+                    username: this.form.username, // 账号
+                    username2: this.form.username2, // 姓名
+                    roleIds: this.form.roleIds, // 角色
+                    tel: this.form.tel, // 联系方式
+                    status: this.form.status, // 状态
                 };
+                for (let key in para) {
+                    if (para[key] === '') {
+                        delete para[key];
+                    }
+                }
                 this.loading = true;
                 qyAdminList(para).then(res => {
                     this.loading = false;

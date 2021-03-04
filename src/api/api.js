@@ -66,7 +66,7 @@ export const adminCreate = params => {
 
 // 管理员列表
 export const adminList = params => {
-    return instance.post(`${base}/admin/admin/list`, params);
+    return instance.get(`${base}/admin/admin/list`,{params: params});
 };
 
 // 管理员详情
@@ -147,6 +147,11 @@ export const userBatchDelete = params => {
 // 用户列表
 export const hdUserList = params => {
     return instance.get(`${base}/admin/user/list`,{params: params});
+};
+
+// 管理员列表
+export const adminListAll = params => {
+    return instance.post(`${base}/admin/admin/listAll`,params);
 };
 
 // 所属企业列表

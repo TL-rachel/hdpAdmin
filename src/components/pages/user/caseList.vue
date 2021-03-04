@@ -26,10 +26,63 @@
             </div>
         </div>
         <div class="table-list">
-            <router-link :to="{ path:'/addCase',query:{userId: $route.query.id}}">
-                <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
-            </router-link>
-            <el-button @click="medicalDelete(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+            <el-form :inline="true" ref="form" :model="form"
+                     class="demo-form-inline query-btn recorded-broadcast">
+                <el-form-item label="操作人" label-width="100px">
+                    <el-input v-model="form.operation" class="w200" placeholder="请输入姓名"></el-input>
+                </el-form-item>
+                <div style="display:inline-block;">
+                    <el-form-item label="体检时间" label-width="100px">
+                        <el-date-picker class="w200"
+                                        v-model="form.inspectTimeBegin"
+                                        type="datetime"
+                                        value-format="yyyy-MM-dd HH:mm:ss"
+                                        placeholder="选择开始日期时间">
+                        </el-date-picker>
+                    </el-form-item>
+
+                    <el-form-item label="-">
+                        <el-date-picker class="w200"
+                                        v-model="form.inspectTimeEnd"
+                                        type="datetime"
+                                        format="yyyy-MM-dd HH:mm:ss"
+                                        value-format="yyyy-MM-dd HH:mm:ss"
+                                        placeholder="选择结束日期时间">
+                        </el-date-picker>
+                    </el-form-item>
+                </div>
+                <div style="display:inline-block;">
+                    <el-form-item label="测量时间" label-width="100px">
+                        <el-date-picker class="w200"
+                                        v-model="form.measuringTimeBegin"
+                                        type="datetime"
+                                        value-format="yyyy-MM-dd HH:mm:ss"
+                                        placeholder="选择开始日期时间">
+                        </el-date-picker>
+                    </el-form-item>
+
+                    <el-form-item label="-">
+                        <el-date-picker class="w200"
+                                        v-model="form.measuringTimeEnd"
+                                        type="datetime"
+                                        format="yyyy-MM-dd HH:mm:ss"
+                                        value-format="yyyy-MM-dd HH:mm:ss"
+                                        placeholder="选择结束日期时间">
+                        </el-date-picker>
+                    </el-form-item>
+                </div>
+                <el-form-item>
+                    <el-button style="margin-left: 20px" type="primary" @click="getMedicalCaseList(1,10)"><i
+                            class="icon-picture icon-picture-query"></i>查询
+                    </el-button>
+                </el-form-item>
+            </el-form>
+            <div style="text-align: right">
+                <router-link :to="{ path:'/addCase',query:{userId: $route.query.id}}">
+                    <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
+                </router-link>
+                <el-button @click="medicalDelete(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
+            </div>
             <el-table
                     ref="multipleTable"
                     :data="tableData"
@@ -161,6 +214,13 @@
         name: 'caseList',
         data() {
             return {
+                form: {
+                    inspectTimeBegin: '', // 体检开始时间
+                    inspectTimeEnd: '', // 体检结束时间
+                    measuringTimeBegin: '', // 测量开始时间
+                    measuringTimeEnd: '', // 测量结束时间
+                    operation: '', // 操作人
+                },
                 tableData: [],
                 userData: {},
                 multipleSelection: '',
@@ -257,8 +317,18 @@
                     limit: pageSize,
                     order: 'desc',
                     sort: 'created_time',
-                    page: currentPage
+                    page: currentPage,
+                    inspectTimeBegin: this.form.inspectTimeBegin, // 体检开始时间
+                    inspectTimeEnd: this.form.inspectTimeEnd, // 体检结束时间
+                    measuringTimeBegin: this.form.measuringTimeBegin, // 测量开始时间
+                    measuringTimeEnd: this.form.measuringTimeEnd, // 测量结束时间
+                    operation: this.form.operation, // 操作人
                 };
+                for (let key in para) {
+                    if (para[key] === '') {
+                        delete para[key];
+                    }
+                }
                 this.loading = true;
                 medicalCaseList(para).then(res => {
                     this.loading = false;

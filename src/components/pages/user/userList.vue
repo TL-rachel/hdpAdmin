@@ -1,13 +1,79 @@
 <template>
     <div class="equipmentList">
         <div class="query">
-            <div><i class="icon-picture icon-picture-grabble icon-position"></i><el-input class="query-input user-input icon-position" type="text" placeholder="搜索用户"  @blur="getUserList(1,10)"  v-model="userName"></el-input></div>
+            <el-form :inline="true" ref="form" :model="form"
+                     class="demo-form-inline query-btn recorded-broadcast">
+                <el-form-item label="姓名" label-width="100px">
+                    <el-input v-model="form.userName" class="w200" placeholder="请输入姓名"></el-input>
+                </el-form-item>
+
+                <div style="display:inline-block;">
+                    <el-form-item label="年龄" label-width="100px">
+                        <el-input v-model="form.userAgeBegin" class="w200" placeholder="请输入开始年龄"></el-input>
+                    </el-form-item>
+                    <el-form-item label="-">
+                        <el-input v-model="form.userAgeEnd" class="w200" placeholder="请输入结束年龄"></el-input>
+                    </el-form-item>
+                </div>
+
+                <el-form-item label="性别" label-width="100px">
+                    <el-select v-model="form.userSex" class="w200" placeholder="请选择性别">
+                        <el-option label="全部" value=""></el-option>
+                        <el-option label="男" :value="0"></el-option>
+                        <el-option label="女" :value="1"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="所属企业" label-width="100px">
+                    <el-select v-model="form.companyId" class="w200" placeholder="请选择企业">
+                        <el-option label="全部" value=""></el-option>
+                        <el-option v-for="(item,index) in companyList" :key="index" :label="item.companyName"
+                                   :value="item.id"></el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="手机号" label-width="100px">
+                    <el-input v-model="form.userPhone" class="w200" placeholder="请输入手机号"></el-input>
+                </el-form-item>
+                <div style="display:inline-block;">
+                    <el-form-item label="添加时间" label-width="100px">
+                        <el-date-picker class="w200"
+                                v-model="form.createdTimeBegin"
+                                type="datetime"
+                                value-format="yyyy-MM-dd HH:mm:ss"
+                                placeholder="选择开始日期时间">
+                        </el-date-picker>
+                    </el-form-item>
+
+                    <el-form-item label="-">
+                        <el-date-picker class="w200"
+                                v-model="form.createdTimeEnd"
+                                type="datetime"
+                                format="yyyy-MM-dd HH:mm:ss"
+                                value-format="yyyy-MM-dd HH:mm:ss"
+                                placeholder="选择结束日期时间">
+                        </el-date-picker>
+                    </el-form-item>
+                </div>
+                <el-form-item label="添加人" label-width="100px">
+                    <el-select v-model="form.createdUserId" class="w200" filterable placeholder="请选择添加人">
+                        <el-option label="全部" value=""></el-option>
+                        <el-option v-for="(item,index) in createdUserList" :key="index" :label="item.username"
+                                   :value="item.id"></el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item>
+                    <el-button style="margin-left: 20px" type="primary" @click="getUserList(1,10)"><i
+                            class="icon-picture icon-picture-query"></i>查询
+                    </el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+        <div class="query" style="background: transparent;text-align: right">
             <div class="query-btn">
                 <router-link v-if="jurisdictionList.adDisabled" :to="{ path:'/addUser'}">
                     <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
                 </router-link>
-                <!--<el-button><i class="icon-picture icon-picture-to-lead"></i>批量导入</el-button>
-                <el-button><i class="icon-picture icon-picture-export"></i>批量导出</el-button>-->
                 <el-button v-if="jurisdictionList.bfDisabled" @click="batchFaceId()"><i class="icon-picture icon-picture-update"></i>一键更新faceId</el-button>
                 <el-button v-if="jurisdictionList.dtDisabled" @click="userDelete(multipleSelection,2)"><i class="icon-picture icon-picture-delete"></i>批量删除</el-button>
             </div>
@@ -94,13 +160,25 @@
 </template>
 
 <script>
-    import {hdUserList, userBatchDelete, userDelete,userBatchFaceId} from '../../../api/api';
+    import {hdUserList, userBatchDelete, userDelete, userBatchFaceId, companyAllList,adminListAll} from '../../../api/api';
     export default {
         name: 'userList',
         data() {
             return {
-                userName: '',
+                form: {
+                    userName: '', // 用户姓名
+                    userAgeBegin: '', // 开始年龄
+                    userAgeEnd: '', // 结束年龄
+                    userSex: '', // 性别
+                    userPhone: '', // 手机号
+                    companyId: '', // 企业ID
+                    createdTimeBegin: '', // 创建开始时间
+                    createdTimeEnd: '', // 创建结束时间
+                    createdUserId: '', // 添加人
+                },
                 tableData: [],
+                companyList: [], // 企业列表
+                createdUserList: [], // 创建人列表
                 multipleSelection: '',
                 total: 0, // 条数
                 page: 1, // 页码
@@ -120,6 +198,19 @@
             };
         },
         created() {
+            // 获取更新人
+            adminListAll().then(res => {
+                if (res.data.errno === 0) {
+                    this.createdUserList = res.data.data;
+                }
+            });
+            this.getCompanyList();
+            if (this.$route.query.userSex) {
+                this.form.userSex = Number(this.$route.query.userSex);
+            }
+            if (this.$route.query.companyId) {
+                this.form.companyId = this.$route.query.companyId;
+            }
             this.getUserList(1,10);
             // 权限
             if (sessionStorage.getItem('assignedPermissions')) {
@@ -144,6 +235,23 @@
             }
         },
         methods: {
+            /**
+             * 获取企业
+             */
+            getCompanyList() {
+                // 获取企业
+                companyAllList().then(res => {
+                    if (res.data.errno === 0) {
+                        this.companyList = res.data.data;
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: res.data.errmsg,
+                            type: 'error',
+                        });
+                    }
+                });
+            },
             /**
              * 用户一键更新faceId
              */
@@ -236,10 +344,21 @@
                     order: 'desc',
                     sort: 'created_time',
                     page: currentPage,
-                    userName: this.userName,
-                    userSex: this.$route.query.userSex ? this.$route.query.userSex : '',
-                    companyId: this.$route.query.companyId ? this.$route.query.companyId : '',
+                    userName: this.form.userName, // 用户姓名
+                    userAgeBegin: this.form.userAgeBegin, // 开始年龄
+                    userAgeEnd: this.form.userAgeEnd, // 结束年龄
+                    userSex: this.form.userSex, // 性别
+                    userPhone: this.form.userPhone, // 手机号
+                    companyId: this.form.companyId, // 企业ID
+                    createdTimeBegin: this.form.createdTimeBegin, // 创建开始时间
+                    createdTimeEnd: this.form.createdTimeEnd, // 创建结束时间
+                    createdUserId: this.form.createdUserId // 创建人
                 };
+                for (let key in para) {
+                    if (para[key] === '') {
+                        delete para[key];
+                    }
+                }
                 this.loading = true;
                 hdUserList(para).then(res => {
                     this.loading = false;
@@ -312,5 +431,12 @@
 
     .el-table .cell {
         white-space: pre-line;
+    }
+    .query {
+        background: #fff;
+        padding: 15px 10px 0 10px;
+    }
+    .el-button {
+        margin-left: 10px;
     }
 </style>

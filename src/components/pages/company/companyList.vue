@@ -1,7 +1,58 @@
 <template>
     <div class="equipmentList">
         <div class="query">
-            <div><i class="icon-picture icon-picture-grabble icon-position"></i><el-input class="query-input user-input icon-position" type="text" placeholder="搜索企业名称" @blur="getCompanyList(1,10)" v-model="userName"></el-input></div>
+            <el-form :inline="true" ref="form" :model="form"
+                     class="demo-form-inline query-btn recorded-broadcast">
+                <el-form-item label="企业名称" label-width="100px">
+                    <el-input v-model="form.companyName" class="w200" placeholder="请输入企业名称"></el-input>
+                </el-form-item>
+                <el-form-item label="社会代码" label-width="100px">
+                    <el-input v-model="form.companyCode" class="w200" placeholder="请输入社会代码"></el-input>
+                </el-form-item>
+                <el-form-item label="联系人" label-width="100px">
+                    <el-input v-model="form.companyContacts" class="w200" placeholder="请输入联系人"></el-input>
+                </el-form-item>
+                <el-form-item label="联系电话" label-width="100px">
+                    <el-input v-model="form.companyTele" class="w200" placeholder="请输入联系电话"></el-input>
+                </el-form-item>
+
+                <div style="display:inline-block;">
+                    <el-form-item label="添加时间" label-width="100px">
+                        <el-date-picker class="w200"
+                                        v-model="form.companyBeginTime"
+                                        type="datetime"
+                                        value-format="yyyy-MM-dd HH:mm:ss"
+                                        placeholder="选择开始日期时间">
+                        </el-date-picker>
+                    </el-form-item>
+
+                    <el-form-item label="-">
+                        <el-date-picker class="w200"
+                                        v-model="form.companyEndTime"
+                                        type="datetime"
+                                        format="yyyy-MM-dd HH:mm:ss"
+                                        value-format="yyyy-MM-dd HH:mm:ss"
+                                        placeholder="选择结束日期时间">
+                        </el-date-picker>
+                    </el-form-item>
+                </div>
+                <el-form-item label="审核状态" label-width="100px">
+                    <el-select v-model="form.companyStatus" class="w200" placeholder="请选择审核状态">
+                        <el-option label="全部" value=""></el-option>
+                        <el-option label="待审核" value="0"></el-option>
+                        <el-option label="通过" value="1"></el-option>
+                        <el-option label="驳回" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item>
+                    <el-button style="margin-left: 20px" type="primary" @click="getCompanyList(1,10)"><i
+                            class="icon-picture icon-picture-query"></i>查询
+                    </el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+        <div class="query" style="background: transparent;text-align: right">
             <div class="query-btn">
                 <router-link v-if="jurisdictionList.adDisabled" :to="{ path:'/addCompany'}">
                     <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
@@ -66,7 +117,15 @@
         name: 'companyList',
         data() {
             return {
-                userName: '',
+                form: {
+                    companyName: '', // 企业名称
+                    companyCode: '', // 社会代码
+                    companyContacts: '', // 联系人
+                    companyTele: '', // 联系电话
+                    companyBeginTime: '', // 开始时间
+                    companyEndTime: '', // 结束时间
+                    companyStatus: '', // 审核状态
+                },
                 tableData: [],
                 options: [],
                 multipleSelection: '',
@@ -128,8 +187,19 @@
                 let para = {
                     limit: pageSize,
                     page: currentPage,
-                    companyName: this.userName
+                    companyName: this.form.companyName, // 企业名称
+                    companyCode: this.form.companyCode, // 社会代码
+                    companyContacts: this.form.companyContacts, // 联系人
+                    companyTele: this.form.companyTele, // 联系电话
+                    companyBeginTime: this.form.companyBeginTime, // 开始时间
+                    companyEndTime: this.form.companyEndTime, // 结束时间
+                    companyStatus: this.form.companyStatus, // 审核状态
                 };
+                for (let key in para) {
+                    if (para[key] === '') {
+                        delete para[key];
+                    }
+                }
                 this.loading = true;
                 hdCompanyList(para).then(res => {
                     this.loading = false;

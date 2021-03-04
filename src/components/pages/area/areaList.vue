@@ -1,9 +1,62 @@
 <template>
     <div class="equipmentList">
         <div class="query">
-            <div>
-                <i class="icon-picture icon-picture-grabble icon-position"></i><el-input class="query-input icon-position" type="text" placeholder="搜索区域" @blur="getRegionList(1,10)" v-model="regionName"></el-input>
-            </div>
+            <el-form :inline="true" ref="form" :model="form"
+                     class="demo-form-inline query-btn recorded-broadcast">
+                <el-form-item label="区域名称" label-width="100px">
+                    <el-input v-model="form.regionName" class="w200" placeholder="请输入区域名称"></el-input>
+                </el-form-item>
+
+                <el-form-item label="区域位置" label-width="100px">
+                    <el-input v-model="form.regionPosition" class="w200" placeholder="请输入区域位置"></el-input>
+                </el-form-item>
+                <el-form-item label="区域负责人" label-width="100px">
+                    <el-input v-model="form.regionLead" class="w200" placeholder="请输入区域负责人"></el-input>
+                </el-form-item>
+                <el-form-item label="负责人联系方式" label-width="120px">
+                    <el-input v-model="form.leadPhone" class="w200" placeholder="请输入联系方式"></el-input>
+                </el-form-item>
+                <el-form-item label="操作人" label-width="100px">
+                    <el-input v-model="form.regionOperation" class="w200" placeholder="请输入操作人"></el-input>
+                </el-form-item>
+
+                <el-form-item label="所属企业" label-width="100px">
+                    <el-select v-model="form.companyId" class="w200" placeholder="请选择企业">
+                        <el-option label="全部" value=""></el-option>
+                        <el-option v-for="(item,index) in companyList" :key="index" :label="item.companyName"
+                                   :value="item.id"></el-option>
+                    </el-select>
+                </el-form-item>
+
+                <div style="display:inline-block;">
+                    <el-form-item label="添加时间" label-width="100px">
+                        <el-date-picker class="w200"
+                                        v-model="form.regionBeginTime"
+                                        type="datetime"
+                                        value-format="yyyy-MM-dd HH:mm:ss"
+                                        placeholder="选择开始日期时间">
+                        </el-date-picker>
+                    </el-form-item>
+
+                    <el-form-item label="-">
+                        <el-date-picker class="w200"
+                                        v-model="form.regionEndTime"
+                                        type="datetime"
+                                        format="yyyy-MM-dd HH:mm:ss"
+                                        value-format="yyyy-MM-dd HH:mm:ss"
+                                        placeholder="选择结束日期时间">
+                        </el-date-picker>
+                    </el-form-item>
+                </div>
+
+                <el-form-item>
+                    <el-button style="margin-left: 20px" type="primary" @click="getRegionList(1,10)"><i
+                            class="icon-picture icon-picture-query"></i>查询
+                    </el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+        <div class="query" style="background: transparent;text-align: right">
             <div class="query-btn">
                 <router-link v-if="jurisdictionList.adDisabled" :to="{ path:'/addArea'}">
                     <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
@@ -69,15 +122,25 @@
 </template>
 
 <script>
-    import {regionBatchDelete, regionDelete, regionList} from '../../../api/api';
+    import {companyAllList, regionBatchDelete, regionDelete, regionList} from '../../../api/api';
 
     export default {
         name: 'areaList',
         data() {
             return {
-                regionName: '',
+                form: {
+                    regionName: '', // 区域名称
+                    regionPosition: '', // 区域位置
+                    regionLead: '', // 区域负责人
+                    leadPhone: '', // 负责人联系方式
+                    regionOperation: '', // 操作人
+                    companyId: '', // 所属企业
+                    regionBeginTime: '', // 开始时间
+                    regionEndTime: '', // 结束时间
+                },
                 areaList: [],
                 multipleSelection: [],
+                companyList: [], // 企业列表
                 total: 0, // 条数
                 page: 1, // 页码
                 loading: false,
@@ -91,6 +154,18 @@
         },
         created() {
             this.getRegionList(1,10);
+            // 获取企业
+            companyAllList().then(res => {
+                if (res.data.errno === 0) {
+                    this.companyList = res.data.data;
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: res.data.errmsg,
+                        type: 'error',
+                    });
+                }
+            });
             // 权限
             if (sessionStorage.getItem('assignedPermissions')) {
                 let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));
@@ -201,8 +276,20 @@
                 let para = {
                     limit: pageSize,
                     page: currentPage,
-                    regionName: this.regionName
+                    regionName: this.form.regionName, // 区域名称
+                    regionPosition: this.form.regionPosition, // 区域位置
+                    regionLead: this.form.regionLead, // 区域负责人
+                    leadPhone: this.form.leadPhone, // 负责人联系方式
+                    regionOperation: this.form.regionOperation, // 操作人
+                    companyId: this.form.companyId, // 所属企业
+                    regionBeginTime: this.form.regionBeginTime, // 开始时间
+                    regionEndTime: this.form.regionEndTime, // 结束时间
                 };
+                for (let key in para) {
+                    if (para[key] === '') {
+                        delete para[key];
+                    }
+                }
                 regionList(para).then(res => {
                     if (res.data.errno === 0) {
                         this.areaList = res.data.data.items;

@@ -1,7 +1,69 @@
 <template>
     <div class="equipmentList">
         <div class="query">
-            <div><i class="icon-picture icon-picture-grabble icon-position"></i><el-input class="query-input icon-position" type="text" placeholder="搜索设备" @blur="getRegionList(1,10)" v-model="equipmentName"></el-input></div>
+            <el-form :inline="true" ref="form" :model="form"
+                     class="demo-form-inline query-btn recorded-broadcast">
+                <el-form-item label="设备名称" label-width="100px">
+                    <el-input v-model="form.deviceName" class="w200" placeholder="请输入名称"></el-input>
+                </el-form-item>
+                <el-form-item label="设备编码" label-width="100px">
+                    <el-input v-model="form.deviceCode" class="w200" placeholder="请输入编码"></el-input>
+                </el-form-item>
+                <el-form-item label="负责人" label-width="100px">
+                    <el-input v-model="form.deviceLead" class="w200" placeholder="请输入负责人"></el-input>
+                </el-form-item>
+                <el-form-item label="所属企业" label-width="100px">
+                    <el-select v-model="form.companyId" class="w200" @change="getRegion(form.companyId)" placeholder="请选择企业">
+                        <el-option label="全部" value=""></el-option>
+                        <el-option v-for="(item,index) in companyList" :key="index" :label="item.companyName"
+                                   :value="item.id"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="设备区域" label-width="100px">
+                    <el-select v-model="form.deviceRegionId" class="w200" filterable placeholder="请选择负责人">
+                        <el-option label="全部" value=""></el-option>
+                        <el-option v-for="(item,index) in allRegions" :key="index" :label="item.regionName"
+                                   :value="item.id"></el-option>
+                    </el-select>
+                </el-form-item>
+
+                <div style="display:inline-block;">
+                    <el-form-item label="添加时间" label-width="100px">
+                        <el-date-picker class="w200"
+                                        v-model="form.deviceBeginTime"
+                                        type="datetime"
+                                        value-format="yyyy-MM-dd HH:mm:ss"
+                                        placeholder="选择开始日期时间">
+                        </el-date-picker>
+                    </el-form-item>
+
+                    <el-form-item label="-">
+                        <el-date-picker class="w200"
+                                        v-model="form.deviceEndTime"
+                                        type="datetime"
+                                        format="yyyy-MM-dd HH:mm:ss"
+                                        value-format="yyyy-MM-dd HH:mm:ss"
+                                        placeholder="选择结束日期时间">
+                        </el-date-picker>
+                    </el-form-item>
+
+                    <el-form-item label="设备状态" label-width="100px">
+                        <el-select v-model="form.deviceStatus" class="w200" placeholder="请选择状态">
+                            <el-option label="全部" value=""></el-option>
+                            <el-option label="正常" value="0"></el-option>
+                            <el-option label="断开" value="1"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </div>
+
+                <el-form-item>
+                    <el-button style="margin-left: 20px" type="primary" @click="getRegionList(1,10)"><i
+                            class="icon-picture icon-picture-query"></i>查询
+                    </el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+        <div class="query" style="background: transparent;text-align: right">
            <div class="query-btn">
                <router-link v-if="jurisdictionList.adDisabled" :to="{ path:'/addEquipment'}">
                    <el-button><i class="icon-picture icon-picture-add"></i> 添加</el-button>
@@ -75,22 +137,37 @@
 </template>
 
 <script>
-    import {deviceList, deviceDelete, deviceBatchDelete, batchCheckDevicePath} from '../../../api/api';
+    import {
+        deviceList,
+        deviceDelete,
+        deviceBatchDelete,
+        batchCheckDevicePath,
+        companyAllList,
+        regionAllRegions
+    } from '../../../api/api';
     export default {
         name: 'equipmentList',
         data() {
             return {
-                equipmentName: '', // 查询的设备名称
+                form: {
+                    deviceCode: '', // 设备编码
+                    deviceName: '', // 设备名称
+                    deviceStatus: '', // 设备状态
+                    deviceLead: '', // 负责人
+                    deviceRegionId: '', // 区域id
+                    companyId: '', // 企业id
+                    deviceBeginTime: '', // 开始时间
+                    deviceEndTime: '', // 结束时间
+                },
                 tags: [],
                 equipmentList: [], // 初始化所有设备列表
                 total: 0, // 条数
                 page: 1, // 页码
                 loading: false,
                 checkId: [], // 用于批量删除的设备id
-                deviceStatus: this.$route.query.deviceStatus,
-                companyId: this.$route.query.companyId,
-                deviceRegionId: this.$route.query.deviceRegionId,
                 multipleSelection: [],
+                companyList: [], // 企业列表
+                allRegions: [], // 区域列表
                 initAllIds: '', // 用于批量检测的设备id
                 jurisdictionList: {
                     adDisabled: false,
@@ -102,6 +179,16 @@
             };
         },
         created() {
+            this.getCompanyList();
+            if (this.$route.query.deviceStatus) {
+                this.form.deviceStatus = this.$route.query.deviceStatus;
+            }
+            if (this.$route.query.companyId) {
+                this.form.companyId = this.$route.query.companyId;
+            }
+            if (this.$route.query.deviceRegionId) {
+                this.form.deviceRegionId = this.$route.query.deviceRegionId;
+            }
             this.getRegionList(1,10);
             // 权限
             if (sessionStorage.getItem('assignedPermissions')) {
@@ -127,6 +214,43 @@
             }
         },
         methods: {
+            /**
+             * 获取区域
+             * @param {Number} companyId 企业id
+             */
+            getRegion(companyId) {
+                    this.form.deviceRegionId = '';
+                    this.allRegions = [];
+                // 获取区域列表
+                regionAllRegions({companyId: companyId}).then(res => {
+                    if (res.data.errno === 0) {
+                        this.allRegions = res.data.data;
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: '区域列表' + res.data.errmsg,
+                            type: 'error'
+                        });
+                    }
+                });
+            },
+            /**
+             * 获取企业
+             */
+            getCompanyList() {
+                // 获取企业
+                companyAllList().then(res => {
+                    if (res.data.errno === 0) {
+                        this.companyList = res.data.data;
+                    } else {
+                        this.$message({
+                            showClose: true,
+                            message: res.data.errmsg,
+                            type: 'error',
+                        });
+                    }
+                });
+            },
             // 批量检测功能
             getCheckDevicePath() {
                 batchCheckDevicePath().then(res => {
@@ -239,11 +363,20 @@
                 let para = {
                     limit: pageSize,
                     page: currentPage,
-                    deviceName: this.equipmentName,
-                    deviceStatus: this.$route.query.deviceStatus ? this.$route.query.deviceStatus : '',
-                    companyId: this.$route.query.companyId ? this.$route.query.companyId : '',
-                    deviceRegionId: this.$route.query.deviceRegionId ? this.$route.query.deviceRegionId : ''
+                    deviceCode: this.form.deviceCode, // 设备编码
+                    deviceName: this.form.deviceName, // 设备名称
+                    deviceStatus: this.form.deviceStatus, // 设备状态
+                    deviceLead: this.form.deviceLead, // 负责人
+                    deviceRegionId: this.form.deviceRegionId, // 区域id
+                    companyId: this.form.companyId, // 企业id
+                    deviceBeginTime: this.form.deviceBeginTime, // 开始时间
+                    deviceEndTime: this.form.deviceEndTime, // 结束时间
                 };
+                for (let key in para) {
+                    if (para[key] === '') {
+                        delete para[key];
+                    }
+                }
                 this.loading = true;
                 deviceList(para).then(res => {
                     this.loading = false;
@@ -277,8 +410,6 @@
         zoom: 1;
     }
     .query {
-        display: flex;
-        justify-content: space-between;
         .query-input {
             width: 772px;
             height: 36px;

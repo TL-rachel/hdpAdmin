@@ -314,7 +314,7 @@
         .device-user {
             width: 545px;
             height: 100px;
-            margin: 20px 20px 20px 0;
+            margin: 20px 10px 20px 0;
             background-color: rgba(255, 255, 255, 1);
             box-shadow: 0px 2px 5px 0px rgba(188, 189, 190, 0.21);
             float: left;

@@ -2,15 +2,67 @@
     <div class="equipmentList">
         <div class="query">
             <div>
-                <el-form :inline="true" class="demo-form-inline query-btn">
-                    <el-form-item label="">
-                        <el-input class="query-input w200" type="text" placeholder="请输入姓名" v-model="userName"></el-input>
+                <el-form :inline="true" ref="form" :model="form"
+                         class="demo-form-inline query-btn recorded-broadcast">
+                    <el-form-item label="姓名" label-width="100px">
+                        <el-input v-model="form.userName" class="w200" placeholder="请输入姓名"></el-input>
                     </el-form-item>
-                    <el-form-item label="">
-                        <el-input class="query-input w200" type="text" placeholder="请输入身份证" v-model="certificatesNum"></el-input>
+
+                    <div style="display:inline-block;">
+                        <el-form-item label="年龄" label-width="100px">
+                            <el-input v-model="form.userAgeBegin" class="w200" placeholder="请输入开始年龄"></el-input>
+                        </el-form-item>
+                        <el-form-item label="-">
+                            <el-input v-model="form.userAgeEnd" class="w200" placeholder="请输入结束年龄"></el-input>
+                        </el-form-item>
+                    </div>
+
+                    <el-form-item label="性别" label-width="100px">
+                        <el-select v-model="form.userSex" class="w200" placeholder="请选择性别">
+                            <el-option label="全部" value=""></el-option>
+                            <el-option label="男" :value="0"></el-option>
+                            <el-option label="女" :value="1"></el-option>
+                        </el-select>
                     </el-form-item>
+                    <el-form-item label="心率" label-width="100px">
+                        <el-select v-model="form.heartRate" class="w200" placeholder="请选择心率">
+                            <el-option label="全部" value=""></el-option>
+                            <el-option label="正常" :value="0"></el-option>
+                            <el-option label="反常" :value="1"></el-option>
+                            <el-option label="危险" :value="2"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="疲劳度" label-width="100px">
+                        <el-select v-model="form.fatigue" class="w200" placeholder="请选择疲劳度">
+                            <el-option label="全部" value=""></el-option>
+                            <el-option label="正常" :value="0"></el-option>
+                            <el-option label="疲劳" :value="1"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <div style="display:inline-block;">
+                        <el-form-item label="检测时间" label-width="100px">
+                            <el-date-picker class="w200"
+                                            v-model="form.checkTimeBegin"
+                                            type="datetime"
+                                            value-format="yyyy-MM-dd HH:mm:ss"
+                                            placeholder="选择开始日期时间">
+                            </el-date-picker>
+                        </el-form-item>
+
+                        <el-form-item label="-">
+                            <el-date-picker class="w200"
+                                            v-model="form.checkTimeEnd"
+                                            type="datetime"
+                                            format="yyyy-MM-dd HH:mm:ss"
+                                            value-format="yyyy-MM-dd HH:mm:ss"
+                                            placeholder="选择结束日期时间">
+                            </el-date-picker>
+                        </el-form-item>
+                    </div>
                     <el-form-item>
-                        <el-button type="primary" @click="getHealthDataList(page,10)"><i class="icon-picture icon-picture-query"></i>查询</el-button>
+                        <el-button style="margin-left: 20px" type="primary" @click="getHealthDataList(1,10)"><i
+                                class="icon-picture icon-picture-query"></i>查询
+                        </el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -55,12 +107,12 @@
                         <router-link v-if="scope.row.faceId" :to="{ path:'/fatigueList',query: {obj: scope.row}}">
                             <span class="normality" v-if="scope.row.fatigue == 0">正常</span>
                             <span class="abnormality" v-else-if="scope.row.fatigue == 1">疲劳</span>
-                            <span :title="scope.row.rate?scope.row.rate:'无检测数据'" v-else>{{scope.row.fatigue?scope.row.fatigue:'/'}}</span>
+                            <span :title="(scope.row.fatigue && scope.row.fatigue != -1)?scope.row.fatigue:'无检测数据'" v-else>{{(scope.row.fatigue && scope.row.fatigue != -1)?scope.row.fatigue:'/'}}</span>
                         </router-link>
                         <template v-else>
                             <span class="normality" v-if="scope.row.fatigue == 0">正常</span>
                             <span class="abnormality" v-else-if="scope.row.fatigue == 1">疲劳</span>
-                            <span :title="scope.row.rate?scope.row.rate:'无检测数据'" v-else>{{scope.row.fatigue?scope.row.fatigue:'/'}}</span>
+                            <span :title="(scope.row.fatigue && scope.row.fatigue != -1)?scope.row.rate:'无检测数据'" v-else>{{(scope.row.fatigue && scope.row.fatigue != -1)?scope.row.fatigue:'/'}}</span>
                         </template>
                     </template>
                 </el-table-column>
@@ -99,8 +151,16 @@
         name: 'healthDataList',
         data() {
             return {
-                userName: '', // 姓名
-                certificatesNum: '', // 身份证
+                form: {
+                    checkTimeBegin: '', // 检测开始时间
+                    checkTimeEnd: '', // 检测结束时间
+                    fatigue: '', // 疲劳度(0-正常；1-疲劳)
+                    heartRate: '', // 心率0-正常;1-反常;2-危险
+                    userAgeBegin: '', // 开始年龄
+                    userAgeEnd: '', // 结束年龄
+                    userName: '', // 姓名
+                    userSex: '', // 性别，0-男；1-女
+                },
                 tableData: [],
                 total: 0, // 条数
                 page: 1, // 页码
@@ -130,9 +190,20 @@
                     order: 'desc',
                     sort: 'created_time',
                     page: currentPage,
-                    userName: this.userName,
-                    certificatesNum: this.certificatesNum
+                    checkTimeBegin: this.form.checkTimeBegin, // 检测开始时间
+                    checkTimeEnd: this.form.checkTimeEnd, // 检测结束时间
+                    fatigue: this.form.fatigue, // 疲劳度(0-正常；1-疲劳)
+                    heartRate: this.form.heartRate, // 心率0-正常;1-反常;2-危险
+                    userAgeBegin: this.form.userAgeBegin, // 开始年龄
+                    userAgeEnd: this.form.userAgeEnd, // 结束年龄
+                    userName: this.form.userName, // 姓名
+                    userSex: this.form.userSex, // 性别，0-男；1-女
                 };
+                for (let key in para) {
+                    if (para[key] === '') {
+                        delete para[key];
+                    }
+                }
                 this.loading = true;
                 userHealthDataList(para).then(res => {
                     this.loading = false;
