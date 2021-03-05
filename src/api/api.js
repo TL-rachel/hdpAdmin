@@ -151,7 +151,7 @@ export const hdUserList = params => {
 
 // 管理员列表
 export const adminListAll = params => {
-    return instance.post(`${base}/admin/admin/listAll`,params);
+    return instance.get(`${base}/admin/admin/listAll`,{params: params});
 };
 
 // 所属企业列表
