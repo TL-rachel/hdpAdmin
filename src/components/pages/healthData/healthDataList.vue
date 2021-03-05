@@ -95,10 +95,16 @@
                 <el-table-column prop="rate" label="心率" width="180">
                     <template slot-scope="scope">
                         <router-link v-if="scope.row.faceId" :to="{ path:'/heartRateList',query: {obj: scope.row}}">
-                            <span :title="scope.row.rate?scope.row.rate:'无检测数据'" :class="scope.row.rate > 120 && scope.row.rate < 70 ? 'abnormality' : 'normality'">{{scope.row.rate?scope.row.rate:'/'}}</span>
+                            <span v-if="scope.row.rate == 0" class="normality">正常</span>
+                            <span v-else-if="scope.row.rate == 1" class="abnormality">反常</span>
+                            <span v-else-if="scope.row.rate == 2" class="abnormality">危险</span>
+                            <span v-else title="无检测数据" class="normality">/</span>
                         </router-link>
                         <template v-else>
-                            <span :title="scope.row.rate?scope.row.rate:'无检测数据'" :class="scope.row.rate > 120 && scope.row.rate < 70 ? 'abnormality' : 'normality'">{{scope.row.rate?scope.row.rate:'/'}}</span>
+                            <span v-if="scope.row.rate == 0" class="normality">正常</span>
+                            <span v-else-if="scope.row.rate == 1" class="abnormality">反常</span>
+                            <span v-else-if="scope.row.rate == 2" class="abnormality">危险</span>
+                            <span v-else title="无检测数据" class="normality">/</span>
                         </template>
                     </template>
                 </el-table-column>
