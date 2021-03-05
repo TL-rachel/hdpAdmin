@@ -520,4 +520,7 @@
             }
         }
     }
+    .el-table .cell {
+        white-space: normal;
+    }
 </style>

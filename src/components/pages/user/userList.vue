@@ -211,6 +211,10 @@
             if (this.$route.query.companyId) {
                 this.form.companyId = this.$route.query.companyId;
             }
+            if (this.$route.query.userAgeBegin) {
+                this.form.userAgeBegin = this.$route.query.userAgeBegin;
+                this.form.userAgeEnd = this.$route.query.userAgeEnd;
+            }
             this.getUserList(1,10);
             // 权限
             if (sessionStorage.getItem('assignedPermissions')) {

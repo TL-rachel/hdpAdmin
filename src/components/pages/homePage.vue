@@ -225,6 +225,24 @@
                     let myChart = echarts.init(document.getElementById('myChartAge'));
                     // 绘制图表
                     myChart.setOption(this.histogramOption('年龄分布',xName,'人数','年龄',xData));
+                    let _this = this;
+                    myChart.on('click', function (res) {
+                        let userAgeBegin = '';
+                        let userAgeEnd = '';
+                        if (res.name.indexOf('100') === -1) {
+                            userAgeBegin = res.name.substring(0,res.name.indexOf('-'));
+                            userAgeEnd = res.name.substring(res.name.indexOf('-') + 1,res.name.indexOf('-') + 3);
+                        } else {
+                            userAgeBegin = res.name.substring(0,3);
+                        }
+                        _this.$router.push({
+                            path: '/userList',
+                            query: {
+                                userAgeBegin: userAgeBegin,
+                                userAgeEnd: userAgeEnd
+                            }
+                        });
+                    });
                 }
             },
             /**
