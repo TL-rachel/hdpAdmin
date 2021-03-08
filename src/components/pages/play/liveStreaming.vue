@@ -100,17 +100,6 @@
         created() {
             // 初始化获取企业
             this.getCompanyList();
-            this.setIntervalExample = setInterval(() => {
-                setTimeout(() => {
-                    if (this.videosListFlag) {
-                        queryDeviceRateAndFatigue({deviceId: this.recordForm.deviceId}).then(res => {
-                            if (res.data.errno === 0) {
-                                this.videosList = res.data.data;
-                            }
-                        });
-                    }
-                }, 0);
-            }, 3000);
         },
         mounted() {
             this.initGetDevice();
@@ -238,6 +227,17 @@
                                 console.log('player', player);
                                 this.videosListFlag = true;
                                 // this.videoUrl = res.data.data[0].devicePath;
+                                this.setIntervalExample = setInterval(() => {
+                                    setTimeout(() => {
+                                        if (this.videosListFlag) {
+                                            queryDeviceRateAndFatigue({deviceId: this.recordForm.deviceId}).then(res => {
+                                                if (res.data.errno === 0) {
+                                                    this.videosList = res.data.data;
+                                                }
+                                            });
+                                        }
+                                    }, 0);
+                                }, 3000);
                             } else {
                                 this.$message({
                                     showClose: true,

@@ -95,13 +95,13 @@
                 <el-table-column prop="rate" label="心率" width="180">
                     <template slot-scope="scope">
                         <router-link v-if="scope.row.faceId" :to="{ path:'/heartRateList',query: {obj: scope.row}}">
-                            <span v-if="scope.row.rate == 0" class="normality">正常</span>
+                            <span v-if="scope.row.rate*1 === 0" class="normality">正常</span>
                             <span v-else-if="scope.row.rate == 1" class="abnormality">反常</span>
                             <span v-else-if="scope.row.rate == 2" class="abnormality">危险</span>
                             <span v-else title="无检测数据" class="normality">/</span>
                         </router-link>
                         <template v-else>
-                            <span v-if="scope.row.rate == 0" class="normality">正常</span>
+                            <span v-if="scope.row.rate*1 === 0" class="normality">正常</span>
                             <span v-else-if="scope.row.rate == 1" class="abnormality">反常</span>
                             <span v-else-if="scope.row.rate == 2" class="abnormality">危险</span>
                             <span v-else title="无检测数据" class="normality">/</span>
@@ -111,14 +111,14 @@
                 <el-table-column prop="fatigue" label="疲劳度" min-width="60">
                     <template slot-scope="scope">
                         <router-link v-if="scope.row.faceId" :to="{ path:'/fatigueList',query: {obj: scope.row}}">
-                            <span class="normality" v-if="scope.row.fatigue == 0">正常</span>
+                            <span class="normality" v-if="scope.row.fatigue*1 === 0">正常</span>
                             <span class="abnormality" v-else-if="scope.row.fatigue == 1">疲劳</span>
-                            <span :title="(scope.row.fatigue && scope.row.fatigue != -1)?scope.row.fatigue:'无检测数据'" v-else>{{(scope.row.fatigue && scope.row.fatigue != -1)?scope.row.fatigue:'/'}}</span>
+                            <span title="无检测数据" v-else> / </span>
                         </router-link>
                         <template v-else>
-                            <span class="normality" v-if="scope.row.fatigue == 0">正常</span>
+                            <span class="normality" v-if="scope.row.fatigue*1 === 0">正常</span>
                             <span class="abnormality" v-else-if="scope.row.fatigue == 1">疲劳</span>
-                            <span :title="(scope.row.fatigue && scope.row.fatigue != -1)?scope.row.rate:'无检测数据'" v-else>{{(scope.row.fatigue && scope.row.fatigue != -1)?scope.row.fatigue:'/'}}</span>
+                            <span title="无检测数据" v-else> / </span>
                         </template>
                     </template>
                 </el-table-column>
