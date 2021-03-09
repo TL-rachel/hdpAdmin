@@ -140,19 +140,19 @@ export default {
         background-image: url("../../common/image/navi_system_selected.png");
     }
     .is-active .icon-picture.icon-picture-nav-home {
-        background-image: url("../../common/image/navi_home_selected.png");
+        background-image: url("../../common/image/navi_home_selected_white.png");
     }
     .is-active .icon-picture.icon-picture-nav-enterprise {
-        background-image: url("../../common/image/navi_enterprise_selected.png");
+        background-image: url("../../common/image/navi_enterprise_selected_white.png");
     }
     .is-active .icon-picture.icon-picture-nav-equipment {
-        background-image: url("../../common/image/navi_navi_equipment_selected.png");
+        background-image: url("../../common/image/navi_navi_equipment_selected_white.png");
     }
     .is-active .icon-picture.icon-picture-nav-people {
-        background-image: url("../../common/image/navi_people_selected.png");
+        background-image: url("../../common/image/navi_people_selected_white.png");
     }
     .is-active .icon-picture.icon-picture-nav-system {
-        background-image: url("../../common/image/navi_system_selected.png");
+        background-image: url("../../common/image/navi_system_selected_white.png");
     }
     .el-pagination.is-background .btn-prev, .el-pagination.is-background .btn-next, .el-pagination.is-background .el-pager li {
         background-color: #f8fafb;

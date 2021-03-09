@@ -40,7 +40,7 @@
                 <div class="device-user" :key="index">
                     <div class="user-detail">
                         <ul class="clearfix">
-                            <li><img :src="item.userImage?item.userImage:userImgUrl" alt=""></li>
+                            <li><img :src="item.userImage1?item.userImage1:userImgUrl" alt=""></li>
                             <li>
                                 <div class="user-name">{{item.userName?item.userName: '未知用户'}}</div>
                                 <div class="user-rests">FaceId：{{item.faceId}}</div>

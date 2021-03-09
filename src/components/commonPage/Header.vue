@@ -1,8 +1,8 @@
 <template>
     <div class="main_top">
         <div class="header-left">
-            <img style="height: 52px;" src="../../common/image/logo-big.png" alt="">
-            <span style="height: 40px;line-height: 40px;color: #4D7CFE;font-size: 16px;margin-left: 10px;">智能健康管理系统</span>
+            <img style="height: 48px;" src="../../common/image/logo-big.png" alt="">
+            <span style="height: 40px;line-height: 40px;color: #ffffff;font-size: 16px;margin-left: 10px;">智能健康管理系统</span>
         </div>
         <div class="header-right">
             <div class="header-bar-left">
@@ -118,5 +118,8 @@ export default {
     .el-menu--horizontal {
         left: unset!important;
         right: 30px!important;
+    }
+    .header-left {
+        background: #313C56;
     }
 </style>

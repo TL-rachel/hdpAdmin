@@ -4,7 +4,7 @@
             class="sidebar-el-menu"
             :default-active="onRoutes"
             :collapse="collapse"
-            background-color="#fff"
+            background-color="#313C56"
             text-color="#778CA2"
             active-text-color="#f3f7fa"
             unique-opened
@@ -257,10 +257,10 @@ export default {
 }
     .el-menu-item.is-active,
     .el-submenu.is-active .el-submenu__title {
-        border-left: 3px solid #4D7CFE;
-        padding-left: 14px!important;
-        background-color: #F2F7FA!important;
-        color: #4D7CFE!important;
+        /*border-left: 3px solid #4D7CFE;*/
+        /*padding-left: 14px!important;*/
+        /*background-color: #4D7CFE!important;*/
+        color: #ffffff!important;
     }
     .el-submenu .el-menu .el-menu-item.is-active {
         border: 0;
@@ -270,5 +270,11 @@ export default {
     .menudian {
         font-size: 14px;
         margin-right: 5px;
+    }
+    .el-submenu .el-menu .el-menu-item.is-active {
+        background-color: #4D7CFE!important;
+    }
+    .el-menu-item.is-active {
+        background-color: #4D7CFE!important;
     }
 </style>
