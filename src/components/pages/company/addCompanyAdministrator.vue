@@ -43,7 +43,13 @@
 </template>
 
 <script>
-    import {qyAdminUpdate, roleOptions, qyAdminCreate, hdCompanyList,qyAdminRead} from '../../../api/api';
+    import {
+        qyAdminUpdate,
+        roleOptions,
+        qyAdminCreate,
+        qyAdminRead,
+        companyAllList
+    } from '../../../api/api';
     export default {
         name: 'addAdministrator',
         data() {
@@ -100,8 +106,20 @@
                     this.options = res.data.data;
                 }
             });
+            // 获取企业
+            companyAllList().then(res => {
+                if (res.data.errno === 0) {
+                    this.companyList = res.data.data;
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: res.data.errmsg,
+                        type: 'error',
+                    });
+                }
+            });
             // 获取归属企业列表
-            hdCompanyList({page: 1,limit: 1000,sort: 'created_time',order: 'desc'}).then(res => {
+           /* hdCompanyList({page: 1,limit: 1000,sort: 'created_time',order: 'desc'}).then(res => {
                 if (res.data.errno === 0) {
                     this.companyList = res.data.data.items;
                 } else {
@@ -111,13 +129,13 @@
                         type: 'error'
                     });
                 }
-            });
+            });*/
             // 获取详情
             if (this.$route.query.id) {
                 qyAdminRead({id: this.$route.query.id}).then(res => {
                     if (res.data.errno === 0) {
                         this.ruleForm = res.data.data;
-                        this.ruleForm.roleId = res.data.data.roleIds[0];
+                        this.ruleForm.roleId = res.data.data.roleName;
                     } else {
                         this.$message({
                             showClose: true,
@@ -158,6 +176,7 @@
                         if (this.submitBtn) {
                             this.submitBtn = false;
                             if (this.$route.query.id) {
+                                delete para.roleIds;
                                 // 编辑
                                 qyAdminUpdate(para).then(res => {
                                     if (res.data.errno === 0) {

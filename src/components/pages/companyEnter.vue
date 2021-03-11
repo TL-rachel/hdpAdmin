@@ -44,7 +44,6 @@
                             :action="actionUrl"
                             ref="upload1"
                             multiple
-                            accept = "application/pdf"
                             :on-success="handleAvatarSuccess1"
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
@@ -59,7 +58,6 @@
                             :action="actionUrl"
                             ref="upload2"
                             multiple
-                            accept = "application/pdf"
                             :on-success="handleAvatarSuccess2"
                             :limit="1">
                         <el-button size="small" class="upload-case" type="primary">选择文件</el-button>
@@ -141,7 +139,7 @@
             handleAvatarSuccess1(res, file) {
                 if (file.response.data[0].url) {
                     this.form.companyPatha = file.response.data[0].url;
-                    this.form.companyFileaName = file.response.data[0].fileName;
+                    this.form.companyPathaName = file.response.data[0].fileName;
                     this.$refs.upload1.clearFiles();
                 } else {
                     this.$message({
@@ -155,7 +153,7 @@
             handleAvatarSuccess2(res, file) {
                 if (file.response.data[0].url) {
                     this.form.companyPathb = file.response.data[0].url;
-                    this.form.companyFilebName = file.response.data[0].fileName;
+                    this.form.companyPathbName = file.response.data[0].fileName;
                     this.$refs.upload2.clearFiles();
                 } else {
                     this.$message({
@@ -178,6 +176,8 @@
                     companyPrincipal: '', // 企业主要管理员 多个人员逗号隔开
                     companyPatha: '', // 资格证明附件地址
                     companyPathb: '', // 网络资格人授权证明
+                    companyPathaName: '', // 资格证明附件地址
+                    companyFilebName: '', // 网络资格人授权证明
                 }
             },
             /**
