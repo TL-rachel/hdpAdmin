@@ -114,7 +114,7 @@
                         <router-link :to="{ path:'/addCompanyAuditRead',query: {id:scope.row.id,type:3}}">
                             <a class="operation-table">查看</a>
                         </router-link>
-                        <a v-if="jurisdictionList.dtDisabled" class="operation-table" @click="deleteCompany(scope.row,1)">删除</a>
+                        <!--<a v-if="jurisdictionList.dtDisabled" class="operation-table" @click="deleteCompany(scope.row,1)">删除</a>-->
                     </template>
                 </el-table-column>
             </el-table>

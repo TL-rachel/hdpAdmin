@@ -35,7 +35,9 @@
         <div class="video-play">
             <div id="video-container" style="background: #000;"></div>
         </div>
-        <div class="clearfix">
+        <div class="clearfix videos-detail">
+            <span class="detail-state">今日数据</span>
+            <span style="margin: 15px 0;display:inline-block;" v-if="Object.keys(videosList).length === 0">未检测到人脸数据</span>
             <template v-for="(item,index) in videosList">
                 <div class="device-user" :key="index">
                     <div class="user-detail">
@@ -45,7 +47,31 @@
                                 <div class="user-name">{{item.userName?item.userName: '未知用户'}}</div>
                                 <div class="user-rests">FaceId：{{item.faceId}}</div>
                             </li>
-                            <li style="width: 160px;">
+                            <li style="width: 140px;">
+                                <div class="user-rests1">心率 <span class="user-name">{{item.rate}}</span></div>
+                                <div class="user-rests" style="width: 250px;">检测时间：{{item.checkTime}}</div>
+                            </li>
+                            <li>
+                                <div class="user-rests1">疲劳度 <span class="user-name">{{item.fatigue == 0?'正常':'疲劳'}}</span></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </template>
+        </div>
+        <div class="clearfix videos-detail">
+            <span class="detail-state">历史数据</span>
+            <span style="margin: 15px 0;display:inline-block;" v-if="Object.keys(videosOldList).length === 0">未检测到人脸数据</span>
+            <template v-for="(item,index) in videosOldList">
+                <div class="device-user" :key="index">
+                    <div class="user-detail">
+                        <ul class="clearfix">
+                            <li><img :src="item.userImage1?item.userImage1:userImgUrl" alt=""></li>
+                            <li>
+                                <div class="user-name">{{item.userName?item.userName: '未知用户'}}</div>
+                                <div class="user-rests">FaceId：{{item.faceId}}</div>
+                            </li>
+                            <li style="width: 140px;">
                                 <div class="user-rests1">心率 <span class="user-name">{{item.rate}}</span></div>
                                 <div class="user-rests" style="width: 250px;">检测时间：{{item.checkTime}}</div>
                             </li>
@@ -62,7 +88,7 @@
 
 <script>
     import EZUIKit from 'ezuikit-js';
-    import {companyAllList, allRegions, allDevice, queryVideos,queryDeviceRateAndFatigue} from '../../../api/api';
+    import {companyAllList, allRegions, allDevice, queryVideos,queryDeviceRateAndFatigue,queryRateAndFatigueOld} from '../../../api/api';
 
     export default {
         name: 'liveStreaming',
@@ -89,6 +115,7 @@
                 deviceList: {}, // 设备列表
                 videosListFlag: false, // 设备用户信息
                 videosList: {}, // 设备用户信息
+                videosOldList: {}, // 设备非当日历史最新的九条心率和疲劳度
                 videoUrl: '', // 视频播放地址
                 setIntervalExample: null, // 定时器
                 setTimeout: null, // 定时器
@@ -238,6 +265,11 @@
                                         }
                                     }, 0);
                                 }, 3000);
+                                queryRateAndFatigueOld({deviceId: this.recordForm.deviceId}).then(res => {
+                                    if (res.data.errno === 0) {
+                                        this.videosOldList = res.data.data;
+                                    }
+                                })
                             } else {
                                 this.$message({
                                     showClose: true,

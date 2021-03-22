@@ -22,7 +22,7 @@
             </div>
             <div class="user-property">
                 <div class="user-custom">BMI</div>
-                <div>{{userData.user_bmi}}</div>
+                <div>{{userData.userBmi}}</div>
             </div>
         </div>
         <div class="table-list">

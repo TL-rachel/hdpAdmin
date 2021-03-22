@@ -425,6 +425,11 @@ export const medicalCaseBatchDelete = params => {
 
 // 查询设备前十用户的心率和疲劳度接口
 export const queryDeviceRateAndFatigue = params => {
-    return instance.get(`${base}/admin/hd_device/queryDeviceRateAndFatigue`,{params: params});
+    return instance.get(`${base}/admin/hd_device/queryRateAndFatigueToday`,{params: params});
+};
+
+// 查询设备非当日历史最新的九条心率和疲劳度
+export const queryRateAndFatigueOld = params => {
+    return instance.get(`${base}/admin/hd_device/queryRateAndFatigueOld`,{params: params});
 };
 /* eslint-disable */

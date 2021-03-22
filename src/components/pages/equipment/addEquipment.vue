@@ -90,7 +90,15 @@
 </template>
 
 <script>
-    import {deviceCreate, deviceUpdate, deviceRead, regionAllRegions, hdCompanyList,getCommonValues,checkDevicePath} from '../../../api/api';
+    import {
+        deviceCreate,
+        deviceUpdate,
+        deviceRead,
+        regionAllRegions,
+        getCommonValues,
+        checkDevicePath,
+        companyAllList
+    } from '../../../api/api';
     export default {
         name: 'addEquipment',
         data() {
@@ -181,7 +189,18 @@
         },
         created() {
             // 获取归属企业列表
-            hdCompanyList({page: 1,limit: 1000,sort: 'created_time',order: 'desc'}).then(res => {
+            companyAllList().then(res => {
+                if (res.data.errno === 0) {
+                    this.companyList = res.data.data;
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: '归属企业列表' + res.data.errmsg,
+                        type: 'error',
+                    });
+                }
+            });
+            /*hdCompanyList({page: 1,limit: 1000,sort: 'created_time',order: 'desc'}).then(res => {
                 if (res.data.errno === 0) {
                     this.companyList = res.data.data.items;
                 } else {
@@ -191,7 +210,7 @@
                         type: 'error'
                     });
                 }
-            });
+            });*/
             // 设备类型
             getCommonValues({type: '00'}).then(res => {
                 if (res.data.errno === 0) {

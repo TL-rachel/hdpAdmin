@@ -32,7 +32,7 @@
 </template>
 
 <script>
-    import {regionCreate, regionUpdate, regionRead, hdCompanyList} from '../../../api/api';
+    import {regionCreate, regionUpdate, regionRead, companyAllList} from '../../../api/api';
     export default {
         name: 'addArea',
         data() {
@@ -90,7 +90,18 @@
                 });
             }
             // 获取归属企业列表
-            hdCompanyList({page: 1,limit: 1000,sort: 'created_time',order: 'desc'}).then(res => {
+            companyAllList().then(res => {
+                if (res.data.errno === 0) {
+                    this.companyList = res.data.data;
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: '归属企业列表' + res.data.errmsg,
+                        type: 'error',
+                    });
+                }
+            });
+            /*hdCompanyList({page: 1,limit: 1000,sort: 'created_time',order: 'desc'}).then(res => {
                 if (res.data.errno === 0) {
                     this.companyList = res.data.data.items;
                 } else {
@@ -100,7 +111,7 @@
                         type: 'error'
                     });
                 }
-            });
+            });*/
             // 权限
             if (sessionStorage.getItem('assignedPermissions')) {
                 let assignedPermissions = JSON.parse(sessionStorage.getItem('assignedPermissions'));

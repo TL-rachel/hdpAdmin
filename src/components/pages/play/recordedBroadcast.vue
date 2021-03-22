@@ -359,7 +359,7 @@
         }
 
         .device-user {
-            width: 545px;
+            width: 520px;
             height: 100px;
             margin: 20px 10px 20px 0;
             background-color: rgba(255, 255, 255, 1);
@@ -399,6 +399,22 @@
                         margin-top: 10px;
                     }
                 }
+            }
+        }
+        .videos-detail {
+            border: 1px solid #cccccc;
+            width: e('calc(100% - 20px)');
+            padding: 0 15px;
+            margin-top: 10px;
+            position: relative;
+            border-radius: 5px;
+            .detail-state {
+                position: absolute;
+                background: #f8fafb;
+                top: -10px;
+                display: inline-block;
+                padding: 0 20px;
+                color: #cccccc;
             }
         }
     }

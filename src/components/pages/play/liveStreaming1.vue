@@ -312,7 +312,7 @@
             }
         }
         .device-user {
-            width: 545px;
+            width: 520px;
             height: 100px;
             margin: 20px 10px 20px 0;
             background-color: rgba(255, 255, 255, 1);
@@ -322,7 +322,7 @@
                 padding: 20px 0;
                 li {
                     float: left;
-                    margin-left: 20px;
+                    margin-left: 16px;
                     img {
                         width: 64px;
                         height: 64px;

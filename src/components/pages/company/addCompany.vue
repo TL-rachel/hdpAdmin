@@ -97,10 +97,10 @@
                 </el-form-item>
 
                 <el-form-item v-if="$route.query.id?true:false" label="企业入驻时间" label-width="140px" prop="intoTime">
-                    <el-date-picker type="date" class="w420" :disabled="$route.query.type?true:false" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.intoTime"></el-date-picker>
+                    <el-date-picker type="date" class="w420" disabled placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.intoTime"></el-date-picker>
                 </el-form-item>
                 <el-form-item v-if="$route.query.id?true:false" label="更新时间" label-width="140px" prop="updatedTime">
-                    <el-date-picker type="date" class="w420" :disabled="$route.query.type?true:false" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.updatedTime"></el-date-picker>
+                    <el-date-picker type="date" class="w420" disabled placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.updatedTime"></el-date-picker>
                 </el-form-item>
 
                 <el-form-item class="operation-btn" label-width="0">
